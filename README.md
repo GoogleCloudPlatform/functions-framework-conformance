@@ -1,3 +1,10 @@
+# Functions Framework Conformance
+
+This project contains tooling for conformance and validation of Function Frameworks to the Functions
+Framework contract.
+
+## Quickstart
+
 1. Create a set of locally-runnable test functions (one for each type). Each
    function write its inputs to the file `function_output.json`.
 
