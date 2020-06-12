@@ -29,7 +29,7 @@ const (
 
 // The HTTP function should copy the contents of the request into the response.
 func validateHTTP(url string) error {
-	req := `{"res": "PASS"}`
+	req := `{"res":"PASS"}`
 	err := sendHTTP(url, req)
 	if err != nil {
 		return fmt.Errorf("failed to get response: %v", err)
@@ -38,8 +38,8 @@ func validateHTTP(url string) error {
 	if err != nil {
 		return fmt.Errorf("reading output file: %v", err)
 	}
-	if string(output) != "PASS" {
-		return fmt.Errorf("unexpected HTTP data: got %q, want 'PASS'", output)
+	if string(output) != req {
+		return fmt.Errorf("unexpected HTTP data: got %s, want %s", output, req)
 	}
 	return nil
 }
