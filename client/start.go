@@ -54,7 +54,7 @@ func sendHTTP(url, data string) error {
 	if err != nil {
 		return fmt.Errorf("failed to send HTTP request: %v", err)
 	}
-	if resp.StatusCode != 200 {
+	if resp.StatusCode < 200 || resp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
 			return fmt.Errorf("reading HTTP response body: %v", err)

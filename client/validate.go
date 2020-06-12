@@ -29,7 +29,7 @@ const (
 
 // The HTTP function should copy the contents of the request into the response.
 func validateHTTP(url string) error {
-	req := "PASS"
+	req := `{"res": "PASS"}`
 	err := sendHTTP(url, req)
 	if err != nil {
 		return fmt.Errorf("failed to get response: %v", err)
@@ -44,11 +44,12 @@ func validateHTTP(url string) error {
 	return nil
 }
 
-func validateEvents(url, functionType string) error {
+func validateLegacyEvents(url string) error {
 	allEvents, err := events.AllEvents()
 	if err != nil {
 		return err
 	}
+
 	for _, le := range allEvents {
 		for _, build := range le.Builders {
 			leJSON, err := json.Marshal(build(le))
@@ -67,6 +68,15 @@ func validateEvents(url, functionType string) error {
 				return fmt.Errorf("unexpected legacy event: %v", err)
 			}
 		}
+	}
+
+	return nil
+}
+
+func validateCloudEvents(url string) error {
+	allEvents, err := events.AllEvents()
+	if err != nil {
+		return err
 	}
 
 	for _, ce := range allEvents {
@@ -99,18 +109,20 @@ func validate(url, functionType string) error {
 	case "ce":
 		// Validate CloudEvent signature, if provided
 		log.Printf("CloudEvent validation started...")
-		if err := validateEvents(url, "cloudevent"); err != nil {
+		if err := validateCloudEvents(url); err != nil {
 			return err
 		}
 		log.Printf("CloudEvent validation passed!")
+		return nil
 	case "legacyevent":
 	case "le":
 		// Validate legacy event signature, if provided
 		log.Printf("Legacy event validation started...")
-		if err := validateEvents(url, "legacyevent"); err != nil {
+		if err := validateLegacyEvents(url); err != nil {
 			return err
 		}
 		log.Printf("Legacy event validation passed!")
+		return nil
 	}
 	return fmt.Errorf("Expected type to be one of 'http', 'cloudevent', or 'legacyevent', got %s", functionType)
 }

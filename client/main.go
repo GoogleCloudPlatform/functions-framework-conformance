@@ -30,15 +30,17 @@ func main() {
 	log.Printf("Validating %q for %s...", *cmd, *functionType)
 
 	shutdown, err := start(*cmd)
+	defer shutdown()
+
 	if err != nil {
-		log.Fatalf("unable to start server: %v", err)
+		log.Printf("unable to start server: %v", err)
+		return
 	}
 
 	if err := validate("http://localhost:8080", *functionType); err != nil {
-		shutdown()
-		log.Fatalf("Validation failure: %v", err)
+		log.Printf("Validation failure: %v", err)
+		return
 	}
 
 	log.Printf("All validation passed!")
-	shutdown()
 }
