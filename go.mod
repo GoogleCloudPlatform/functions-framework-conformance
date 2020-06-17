@@ -1,4 +1,4 @@
-module example.com/event-validation
+module github.com/GoogleCloudPlatform/functions-framework-conformance
 
 go 1.14
 

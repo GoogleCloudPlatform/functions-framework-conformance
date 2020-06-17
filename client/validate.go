@@ -20,7 +20,7 @@ import (
 	"io/ioutil"
 	"log"
 
-	"example.com/event-validation/events"
+	"github.com/GoogleCloudPlatform/functions-framework-conformance/events"
 )
 
 const (
