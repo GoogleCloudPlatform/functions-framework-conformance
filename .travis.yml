@@ -1,12 +1,12 @@
 language: go
 
 go:
-- 1.13
+- 1.14
 
 env:
 - GO111MODULE=on
 
-go_import_path: github.com/GoogleCloudPlatform/functions-framework-con
+go_import_path: github.com/GoogleCloudPlatform/functions-framework-conformance
 
 before_script: go mod vendor
 
@@ -14,5 +14,4 @@ script:
 - go test -v ./...
 - go vet ./...
 - find . -not \( \( -wholename './.git' -o -wholename '*/vendor/*' \) -prune \) -name '*.go' | xargs gofmt -s -d
-- run_conformance_test.sh
 
