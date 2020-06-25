@@ -17,7 +17,9 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
+	"os"
 )
 
 var (
@@ -25,22 +27,25 @@ var (
 	functionType = flag.String("type", "http", "type of function to validate (must be 'http', 'cloudevent', or 'legacyevent'")
 )
 
-func main() {
-	flag.Parse()
+func runValidation() error {
 	log.Printf("Validating %q for %s...", *cmd, *functionType)
 
 	shutdown, err := start(*cmd)
 	defer shutdown()
 
 	if err != nil {
-		log.Printf("unable to start server: %v", err)
-		return
+		return fmt.Errorf("unable to start server: %v", err)
 	}
 
 	if err := validate("http://localhost:8080", *functionType); err != nil {
-		log.Printf("Validation failure: %v", err)
-		return
+		return fmt.Errorf("Validation failure: %v", err)
 	}
 
 	log.Printf("All validation passed!")
+	return nil
+}
+
+func main() {
+	flag.Parse()
+	os.Exit(runValidation())
 }
