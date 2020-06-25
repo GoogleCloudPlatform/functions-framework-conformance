@@ -1,0 +1,3 @@
+# Ignore the built client
+client/client
+client/client.exe
