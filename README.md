@@ -15,8 +15,8 @@ Framework contract.
      to JSON in the format of `{"data": ...data..., "context": ...context...}`
      and write the resulting string.
 
-1. Build the test client: `cd framework_validation/client && go build`. This
-   will create a `client` binary in `framework_validation`.
+1. Build the test client: `cd functions-framework-conformance/client && go build`. This
+   will create a `client` binary in `functions-framework-conformance/client`.
 
 1. Invoke the client binary with the command to run your function server and the
    type of the function.
@@ -24,11 +24,17 @@ Framework contract.
    For example, to test a Go HTTP function, you would invoke:
 
    ```sh
-   /path/to/framework_validation/client/client -cmd "go run ." -type http
+   /path/to/functions-framework-conformance/client/client -cmd "go run ." -type http
    ```
 
    For example, to test a .NET CloudEvent function, you would invoke:
 
    ```sh
-   /path/to/framework_validation/client/client -cmd "dotnet run MyFunction" -type cloudevent
+   /path/to/functions-framework-conformance/client/client -cmd "dotnet run MyFunction" -type cloudevent
+   ```
+
+   For example, to test a Node.js legacy event function, you would invoke:
+
+   ```sh
+   /path/to/functions-framework-conformance/client/client -cmd "npx @google-cloud/functions-framework --target MyFunction --signature-type=event" -type legacyevent
    ```
