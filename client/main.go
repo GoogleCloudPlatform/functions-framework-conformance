@@ -47,5 +47,7 @@ func runValidation() error {
 
 func main() {
 	flag.Parse()
-	os.Exit(runValidation())
+	if err := runValidation(); err != nil {
+		os.Exit(1)
+	}
 }
