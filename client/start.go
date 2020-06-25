@@ -61,7 +61,7 @@ func start(c string) (func(), error) {
 
 	shutdown := func() {
 		if err := cmd.Process.Kill(); err != nil {
-			log.Fatalf("failed to kill process: ", err)
+			log.Fatalf("failed to kill process: %v", err)
 		}
 		stdout.Close()
 		stderr.Close()
