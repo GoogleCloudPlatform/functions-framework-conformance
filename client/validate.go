@@ -106,7 +106,6 @@ func validate(url, functionType string) error {
 		log.Printf("HTTP validation passed!")
 		return nil
 	case "cloudevent":
-	case "ce":
 		// Validate CloudEvent signature, if provided
 		log.Printf("CloudEvent validation started...")
 		if err := validateCloudEvents(url); err != nil {
@@ -115,7 +114,6 @@ func validate(url, functionType string) error {
 		log.Printf("CloudEvent validation passed!")
 		return nil
 	case "legacyevent":
-	case "le":
 		// Validate legacy event signature, if provided
 		log.Printf("Legacy event validation started...")
 		if err := validateLegacyEvents(url); err != nil {
