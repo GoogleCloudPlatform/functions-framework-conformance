@@ -48,7 +48,6 @@ func runValidation() error {
 func main() {
 	flag.Parse()
 	if err := runValidation(); err != nil {
-		log.Printf("%v", err)
-		os.Exit(1)
+		log.Fatalf("%v", err)
 	}
 }
