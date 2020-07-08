@@ -19,7 +19,6 @@ import (
 	"flag"
 	"fmt"
 	"log"
-	"os"
 )
 
 var (
