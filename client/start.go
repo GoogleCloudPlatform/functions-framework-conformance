@@ -21,6 +21,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"os/exec"
 	"strings"
 	"time"
@@ -28,10 +29,28 @@ import (
 	cloudevents "github.com/cloudevents/sdk-go/v2"
 )
 
+const (
+	stdoutFile = "serverlog_stdout.txt"
+	stderrFile = "serverlog_stderr.txt"
+)
+
 func start(c string) (func(), error) {
 	args := strings.Fields(c)
 	cmd := exec.Command(args[0], args[1:]...)
-	err := cmd.Start()
+
+	stdout, err := os.Create(stdoutFile)
+	if err != nil {
+		return nil, err
+	}
+	cmd.Stdout = stdout
+
+	stderr, err := os.Create(stderrFile)
+	if err != nil {
+		return nil, err
+	}
+	cmd.Stderr = stderr
+
+	err = cmd.Start()
 	if err != nil {
 		return nil, err
 	}
@@ -42,9 +61,11 @@ func start(c string) (func(), error) {
 
 	shutdown := func() {
 		if err := cmd.Process.Kill(); err != nil {
-			log.Fatal("failed to kill process: ", err)
+			log.Fatalf("failed to kill process: %v", err)
 		}
-		log.Printf("Framework server shut down.")
+		stdout.Close()
+		stderr.Close()
+		log.Printf("Framework server shut down. Wrote logs to %v and %v.", stdoutFile, stderrFile)
 	}
 	return shutdown, nil
 }
