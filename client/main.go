@@ -19,7 +19,6 @@ import (
 	"flag"
 	"fmt"
 	"log"
-	"os"
 )
 
 var (
@@ -49,6 +48,6 @@ func runValidation() error {
 func main() {
 	flag.Parse()
 	if err := runValidation(); err != nil {
-		os.Exit(1)
+		log.Fatalf("%v", err)
 	}
 }
