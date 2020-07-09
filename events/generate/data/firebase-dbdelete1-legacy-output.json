@@ -1,0 +1,14 @@
+{
+  "data": {
+    "data": {
+      "grandchild": "other changed"
+    },
+    "delta": null
+  },
+  "context": {
+    "resource": "projects/_/instances/my-project-id/refs/gcf-test/xyz",
+    "timestamp": "2020-05-21T11:53:45.337Z",
+    "eventType": "providers/google.firebase.database/eventTypes/ref.delete",
+    "eventId": "oIcVXHEMZfhQMNs/yD4nwpuKE0s="
+  }
+}

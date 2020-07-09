@@ -23,8 +23,9 @@ import (
 )
 
 var (
-	cmd          = flag.String("cmd", "", "command to run a Functions Framework server at localhost:8080")
-	functionType = flag.String("type", "http", "type of function to validate (must be 'http', 'cloudevent', or 'legacyevent'")
+	cmd             = flag.String("cmd", "", "command to run a Functions Framework server at localhost:8080")
+	functionType    = flag.String("type", "http", "type of function to validate (must be 'http', 'cloudevent', or 'legacyevent'")
+	validateMapping = flag.Bool("validate-mapping", true, "whether to validate mapping from legacy->cloud events and vice versa (as applicable)")
 )
 
 func runValidation() error {
@@ -37,7 +38,7 @@ func runValidation() error {
 		return fmt.Errorf("unable to start server: %v", err)
 	}
 
-	if err := validate("http://localhost:8080", *functionType); err != nil {
+	if err := validate("http://localhost:8080", *functionType, *validateMapping); err != nil {
 		return fmt.Errorf("Validation failure: %v", err)
 	}
 

@@ -25,6 +25,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/GoogleCloudPlatform/functions-framework-conformance/events"
 	cloudevents "github.com/cloudevents/sdk-go/v2"
 )
 
@@ -49,8 +50,22 @@ func start(c string) (func(), error) {
 	return shutdown, nil
 }
 
-func sendHTTP(url, data string) error {
-	resp, err := http.Post(url, "application/json", bytes.NewBuffer([]byte(data)))
+func send(url string, t events.EventType, data []byte) error {
+	switch t {
+	case events.LegacyEvent:
+		return sendHTTP(url, data)
+	case events.CloudEvent:
+		ce, err := events.BuildCloudEvent(data)
+		if err != nil {
+			return fmt.Errorf("building cloudevent: %v", err)
+		}
+		return sendCE(url, *ce)
+	}
+	return nil
+}
+
+func sendHTTP(url string, data []byte) error {
+	resp, err := http.Post(url, "application/json", bytes.NewBuffer(data))
 	if err != nil {
 		return fmt.Errorf("failed to send HTTP request: %v", err)
 	}

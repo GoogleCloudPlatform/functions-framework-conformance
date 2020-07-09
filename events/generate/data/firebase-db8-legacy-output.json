@@ -1,0 +1,32 @@
+{
+  "data": {
+    "data": {
+      "gcf-test": {
+        "abc": 10,
+        "child1": "value1",
+        "xyz": {
+          "deeply": {
+            "abc": 11
+          },
+          "grandchild": "other changed"
+        }
+      },
+      "not-gcf-test": "Foo"
+    },
+    "delta": {
+      "gcf-test": {
+        "xyz": {
+          "deeply": {
+            "abc": 12
+          }
+        }
+      }
+    }
+  },
+  "context": {
+    "resource": "projects/_/instances/my-project-id/refs/",
+    "timestamp": "2020-05-21T11:33:01.789Z",
+    "eventType": "providers/google.firebase.database/eventTypes/ref.write",
+    "eventId": "MazIvLoUshV35XHwjH+2rfP7uvk="
+  }
+}

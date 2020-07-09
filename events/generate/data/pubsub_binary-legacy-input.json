@@ -1,4 +1,4 @@
-﻿{
+{
    "context": {
       "eventId":"1144231683168617",
       "timestamp":"2020-05-06T07:33:34.556Z",
@@ -11,9 +11,6 @@
    },
    "data": {
       "@type": "type.googleapis.com/google.pubsub.v1.PubsubMessage",
-      "attributes": {
-         "attr1":"attr1-value"
-      },
-      "data": "dGVzdCBtZXNzYWdlIDM="
+      "data": "AQIDBA=="
    }
 }
