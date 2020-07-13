@@ -12,7 +12,8 @@ import (
 )
 
 var (
-	tmpl = template.Must(template.New("events").Parse(eventDataTemplate))
+	// Use [[ and ]] as deliminators, as we're writing struct definitions with many {}.
+	tmpl = template.Must(template.New("events").Delims("[[", "]]").Parse(eventDataTemplate))
 )
 
 const (
@@ -28,27 +29,26 @@ package events
 
 type EventData struct {
 	LegacyEvent []byte
-	CloudEvent []byte
+	CloudEvent  []byte
 }
 
 type Event struct {
-	Input EventData
+	Input  EventData
 	Output EventData
 }
 
-var Events = map[string]Event{
-		{{ range $k, $v := . }}"{{ $k }}": Event{
-			Input: EventData{
-				LegacyEvent: {{ if $v.LegacyInput }}{{ $v.LegacyInput }}{{ else }} nil {{ end }},
-				CloudEvent: {{ if $v.CloudEventInput }}{{ $v.CloudEventInput }}{{ else }} nil {{ end }},
-			},
-			Output: EventData{
-				LegacyEvent: {{ if $v.LegacyOutput }}{{ $v.LegacyOutput }}{{ else }} nil {{ end }},
-				CloudEvent: {{ if $v.CloudEventOutput }}{{ $v.CloudEventOutput }}{{ else }} nil {{ end }},
-			},
+var Events = map[string]Event{[[ range $k, $v := . ]]
+	"[[ $k ]]": {
+		Input: EventData{[[ if $v.LegacyInput ]]
+			LegacyEvent: [[ $v.LegacyInput ]],[[ end ]][[ if $v.CloudEventInput ]]
+			CloudEvent: [[ $v.CloudEventInput ]],[[ end ]]
 		},
-		{{ end }}
-}
+		Output: EventData{[[ if $v.LegacyOutput ]]
+			LegacyEvent: [[ $v.LegacyOutput ]],[[ end ]][[ if $v.CloudEventOutput ]]
+			CloudEvent: [[ $v.CloudEventOutput ]],[[ end ]]
+		},
+	},
+[[ end ]]}
 `
 )
 
@@ -111,6 +111,9 @@ func main() {
 		}
 
 		name, t := breakdownFileName(info.Name())
+		if name == "" {
+			return nil
+		}
 		ed, ok := events[name]
 		if !ok {
 			ed = &eventData{}

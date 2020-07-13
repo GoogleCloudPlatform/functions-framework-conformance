@@ -4,28 +4,18 @@ package events
 
 type EventData struct {
 	LegacyEvent []byte
-	CloudEvent []byte
+	CloudEvent  []byte
 }
 
 type Event struct {
-	Input EventData
+	Input  EventData
 	Output EventData
 }
 
 var Events = map[string]Event{
-		"": Event{
-			Input: EventData{
-				LegacyEvent:  nil ,
-				CloudEvent:  nil ,
-			},
-			Output: EventData{
-				LegacyEvent:  nil ,
-				CloudEvent:  nil ,
-			},
-		},
-		"firebase-auth": Event{
-			Input: EventData{
-				LegacyEvent: []byte(`{
+	"firebase-auth": {
+		Input: EventData{
+			LegacyEvent: []byte(`{
   "data": {
     "email": "test@nowhere.com",
     "metadata": {
@@ -48,7 +38,7 @@ var Events = map[string]Event{
   "timestamp": "2020-05-26T10:42:27.088Z"
 }
 `),
-				CloudEvent: []byte(`{
+			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "com.google.cloud.pubsub.topic.publish.v0",
   "source": "http://pubsub.googleapis.com/projects/sample-project/topics/gcf-test",
@@ -71,9 +61,9 @@ var Events = map[string]Event{
   }
 }
 `),
-			},
-			Output: EventData{
-				LegacyEvent: []byte(`{
+		},
+		Output: EventData{
+			LegacyEvent: []byte(`{
   "data": {
     "email": "test@nowhere.com",
     "metadata": {
@@ -96,7 +86,7 @@ var Events = map[string]Event{
   }
 }
 `),
-				CloudEvent: []byte(`{
+			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "com.google.cloud.pubsub.topic.publish.v0",
   "source": "http://pubsub.googleapis.com/projects/sample-project/topics/gcf-test",
@@ -119,11 +109,12 @@ var Events = map[string]Event{
   }
 }
 `),
-			},
 		},
-		"firebase-db1": Event{
-			Input: EventData{
-				LegacyEvent: []byte(`{
+	},
+
+	"firebase-db1": {
+		Input: EventData{
+			LegacyEvent: []byte(`{
   "eventType": "providers/google.firebase.database/eventTypes/ref.write",
   "params": {
     "child": "xyz"
@@ -142,10 +133,9 @@ var Events = map[string]Event{
   "eventId": "/SnHth9OSlzK1Puj85kk4tDbF90="
 }
 `),
-				CloudEvent:  nil ,
-			},
-			Output: EventData{
-				LegacyEvent: []byte(`{
+		},
+		Output: EventData{
+			LegacyEvent: []byte(`{
   "data": {
     "data": null,
     "delta": {
@@ -160,12 +150,12 @@ var Events = map[string]Event{
   }
 }
 `),
-				CloudEvent:  nil ,
-			},
 		},
-		"firebase-db2": Event{
-			Input: EventData{
-				LegacyEvent: []byte(`{
+	},
+
+	"firebase-db2": {
+		Input: EventData{
+			LegacyEvent: []byte(`{
   "eventType": "providers/google.firebase.database/eventTypes/ref.write",
   "params": {
     "child": "xyz"
@@ -186,10 +176,9 @@ var Events = map[string]Event{
   "eventId": "xaU5mk9HaahKU/T/XlPo/1ansu8="
 }
 `),
-				CloudEvent:  nil ,
-			},
-			Output: EventData{
-				LegacyEvent: []byte(`{
+		},
+		Output: EventData{
+			LegacyEvent: []byte(`{
   "data": {
     "data": {
       "grandchild": "other"
@@ -206,12 +195,12 @@ var Events = map[string]Event{
   }
 }
 `),
-				CloudEvent:  nil ,
-			},
 		},
-		"firebase-db3": Event{
-			Input: EventData{
-				LegacyEvent: []byte(`{
+	},
+
+	"firebase-db3": {
+		Input: EventData{
+			LegacyEvent: []byte(`{
   "eventType": "providers/google.firebase.database/eventTypes/ref.write",
   "params": {
     "child": "abc"
@@ -228,10 +217,9 @@ var Events = map[string]Event{
   "eventId": "kbAmkXNSQhmARA0JB5lcCt1Zpsg="
 }
 `),
-				CloudEvent:  nil ,
-			},
-			Output: EventData{
-				LegacyEvent: []byte(`{
+		},
+		Output: EventData{
+			LegacyEvent: []byte(`{
   "data": {
     "data": null,
     "delta": 10
@@ -244,12 +232,12 @@ var Events = map[string]Event{
   }
 }
 `),
-				CloudEvent:  nil ,
-			},
 		},
-		"firebase-db4": Event{
-			Input: EventData{
-				LegacyEvent: []byte(`{
+	},
+
+	"firebase-db4": {
+		Input: EventData{
+			LegacyEvent: []byte(`{
   "eventType": "providers/google.firebase.database/eventTypes/ref.write",
   "params": {
     "child": "xyz"
@@ -275,10 +263,9 @@ var Events = map[string]Event{
   "eventId": "AlEKy6dsGnn48ubD7Y5QOoROj4U="
 }
 `),
-				CloudEvent:  nil ,
-			},
-			Output: EventData{
-				LegacyEvent: []byte(`{
+		},
+		Output: EventData{
+			LegacyEvent: []byte(`{
   "data": {
     "data": {
       "grandchild": "other changed"
@@ -300,12 +287,12 @@ var Events = map[string]Event{
   }
 }
 `),
-				CloudEvent:  nil ,
-			},
 		},
-		"firebase-db5": Event{
-			Input: EventData{
-				LegacyEvent: []byte(`{
+	},
+
+	"firebase-db5": {
+		Input: EventData{
+			LegacyEvent: []byte(`{
   "eventType": "providers/google.firebase.database/eventTypes/ref.write",
   "params": {
     "child": "xyz"
@@ -333,10 +320,9 @@ var Events = map[string]Event{
   "timestamp": "2020-05-21T11:21:07.809Z",
   "eventId": "9WBpn32ssA33ympcsuq/5JJmnDM="
 }`),
-				CloudEvent:  nil ,
-			},
-			Output: EventData{
-				LegacyEvent: []byte(`{
+		},
+		Output: EventData{
+			LegacyEvent: []byte(`{
   "data": {
     "data": {
       "deeply": {
@@ -361,12 +347,12 @@ var Events = map[string]Event{
   }
 }
 `),
-				CloudEvent:  nil ,
-			},
 		},
-		"firebase-db6": Event{
-			Input: EventData{
-				LegacyEvent: []byte(`{
+	},
+
+	"firebase-db6": {
+		Input: EventData{
+			LegacyEvent: []byte(`{
   "eventType": "providers/google.firebase.database/eventTypes/ref.write",
   "params": {
     "child": "xyz"
@@ -396,10 +382,9 @@ var Events = map[string]Event{
   "eventId": "mtM1+41X04VNxshbrbl7ua3wnTI="
 }
 `),
-				CloudEvent:  nil ,
-			},
-			Output: EventData{
-				LegacyEvent: []byte(`{
+		},
+		Output: EventData{
+			LegacyEvent: []byte(`{
   "data": {
     "data": {
       "deeply": {
@@ -425,12 +410,12 @@ var Events = map[string]Event{
   }
 }
 `),
-				CloudEvent:  nil ,
-			},
 		},
-		"firebase-db7": Event{
-			Input: EventData{
-				LegacyEvent: []byte(`{
+	},
+
+	"firebase-db7": {
+		Input: EventData{
+			LegacyEvent: []byte(`{
   "eventType": "providers/google.firebase.database/eventTypes/ref.write",
   "params": {
     "child": "xyz"
@@ -455,10 +440,9 @@ var Events = map[string]Event{
   "timestamp": "2020-05-21T11:23:46.225Z",
   "eventId": "fvnCmPWm8q4PPEKFRfrjuNxbQ00="
 }`),
-				CloudEvent:  nil ,
-			},
-			Output: EventData{
-				LegacyEvent: []byte(`{
+		},
+		Output: EventData{
+			LegacyEvent: []byte(`{
   "data": {
     "data": {
       "deeply": {
@@ -480,12 +464,12 @@ var Events = map[string]Event{
   }
 }
 `),
-				CloudEvent:  nil ,
-			},
 		},
-		"firebase-db8": Event{
-			Input: EventData{
-				LegacyEvent: []byte(`{
+	},
+
+	"firebase-db8": {
+		Input: EventData{
+			LegacyEvent: []byte(`{
   "eventType": "providers/google.firebase.database/eventTypes/ref.write",
   "params": {
   },
@@ -520,10 +504,9 @@ var Events = map[string]Event{
   "timestamp": "2020-05-21T11:33:01.789Z",
   "eventId": "MazIvLoUshV35XHwjH+2rfP7uvk="
 }`),
-				CloudEvent:  nil ,
-			},
-			Output: EventData{
-				LegacyEvent: []byte(`{
+		},
+		Output: EventData{
+			LegacyEvent: []byte(`{
   "data": {
     "data": {
       "gcf-test": {
@@ -556,12 +539,12 @@ var Events = map[string]Event{
   }
 }
 `),
-				CloudEvent:  nil ,
-			},
 		},
-		"firebase-dbdelete1": Event{
-			Input: EventData{
-				LegacyEvent: []byte(`{
+	},
+
+	"firebase-dbdelete1": {
+		Input: EventData{
+			LegacyEvent: []byte(`{
   "eventType": "providers/google.firebase.database/eventTypes/ref.delete",
   "params": {
     "child": "xyz"
@@ -579,10 +562,9 @@ var Events = map[string]Event{
   "timestamp": "2020-05-21T11:53:45.337Z",
   "eventId": "oIcVXHEMZfhQMNs/yD4nwpuKE0s="
 }`),
-				CloudEvent:  nil ,
-			},
-			Output: EventData{
-				LegacyEvent: []byte(`{
+		},
+		Output: EventData{
+			LegacyEvent: []byte(`{
   "data": {
     "data": {
       "grandchild": "other changed"
@@ -597,12 +579,12 @@ var Events = map[string]Event{
   }
 }
 `),
-				CloudEvent:  nil ,
-			},
 		},
-		"firebase-dbdelete2": Event{
-			Input: EventData{
-				LegacyEvent: []byte(`{
+	},
+
+	"firebase-dbdelete2": {
+		Input: EventData{
+			LegacyEvent: []byte(`{
   "eventType": "providers/google.firebase.database/eventTypes/ref.delete",
   "params": {
     "child": "abc"
@@ -619,10 +601,9 @@ var Events = map[string]Event{
   "eventId": "KVLKeFKjFP2jepddr+EPGC0ZQ20="
 }
 `),
-				CloudEvent:  nil ,
-			},
-			Output: EventData{
-				LegacyEvent: []byte(`{
+		},
+		Output: EventData{
+			LegacyEvent: []byte(`{
   "data": {
     "data": 10,
     "delta": null
@@ -635,12 +616,12 @@ var Events = map[string]Event{
   }
 }
 `),
-				CloudEvent:  nil ,
-			},
 		},
-		"firestore_complex": Event{
-			Input: EventData{
-				LegacyEvent: []byte(`{
+	},
+
+	"firestore_complex": {
+		Input: EventData{
+			LegacyEvent: []byte(`{
   "data": {
     "oldValue": {},
     "updateMask": {},
@@ -721,10 +702,9 @@ var Events = map[string]Event{
   "resource": "projects/project-id/databases/(default)/documents/gcf-test/IH75dRdeYJKd4uuQiqch",
   "timestamp": "2020-04-23T14:25:05.349632Z"
 }`),
-				CloudEvent:  nil ,
-			},
-			Output: EventData{
-				LegacyEvent: []byte(`{
+		},
+		Output: EventData{
+			LegacyEvent: []byte(`{
   "data": {
     "oldValue": {},
     "updateMask": {},
@@ -804,12 +784,12 @@ var Events = map[string]Event{
   }
 }
 `),
-				CloudEvent:  nil ,
-			},
 		},
-		"firestore_simple": Event{
-			Input: EventData{
-				LegacyEvent: []byte(`{
+	},
+
+	"firestore_simple": {
+		Input: EventData{
+			LegacyEvent: []byte(`{
    "data":{
       "oldValue":{
          "createTime":"2020-04-23T09:58:53.211035Z",
@@ -861,10 +841,9 @@ var Events = map[string]Event{
    "timestamp":"2020-04-23T12:00:27.247187Z"
 }
 `),
-				CloudEvent:  nil ,
-			},
-			Output: EventData{
-				LegacyEvent: []byte(`{
+		},
+		Output: EventData{
+			LegacyEvent: []byte(`{
    "data":{
       "oldValue":{
          "createTime":"2020-04-23T09:58:53.211035Z",
@@ -912,12 +891,12 @@ var Events = map[string]Event{
    }
 }
 `),
-				CloudEvent:  nil ,
-			},
 		},
-		"legacy_pubsub": Event{
-			Input: EventData{
-				LegacyEvent: []byte(`{
+	},
+
+	"legacy_pubsub": {
+		Input: EventData{
+			LegacyEvent: []byte(`{
   "eventId": "1215011316659232",
   "timestamp": "2020-05-18T12:13:19.209Z",
   "eventType": "providers/cloud.pubsub/eventTypes/topic.publish",
@@ -931,10 +910,9 @@ var Events = map[string]Event{
   }
 }
 `),
-				CloudEvent:  nil ,
-			},
-			Output: EventData{
-				LegacyEvent: []byte(`{
+		},
+		Output: EventData{
+			LegacyEvent: []byte(`{
   "context": {
     "eventId": "1215011316659232",
     "timestamp": "2020-05-18T12:13:19.209Z",
@@ -950,12 +928,12 @@ var Events = map[string]Event{
   }
 }
 `),
-				CloudEvent:  nil ,
-			},
 		},
-		"legacy_storage_change": Event{
-			Input: EventData{
-				LegacyEvent: []byte(`{
+	},
+
+	"legacy_storage_change": {
+		Input: EventData{
+			LegacyEvent: []byte(`{
   "data": {
     "bucket": "sample-bucket",
     "crc32c": "AAAAAA==",
@@ -982,10 +960,9 @@ var Events = map[string]Event{
   "timestamp": "2020-05-18T09:07:51.799Z"
 }
 `),
-				CloudEvent:  nil ,
-			},
-			Output: EventData{
-				LegacyEvent: []byte(`{
+		},
+		Output: EventData{
+			LegacyEvent: []byte(`{
   "data": {
     "bucket": "sample-bucket",
     "crc32c": "AAAAAA==",
@@ -1014,12 +991,12 @@ var Events = map[string]Event{
   }
 }
 `),
-				CloudEvent:  nil ,
-			},
 		},
-		"pubsub_binary": Event{
-			Input: EventData{
-				LegacyEvent: []byte(`{
+	},
+
+	"pubsub_binary": {
+		Input: EventData{
+			LegacyEvent: []byte(`{
    "context": {
       "eventId":"1144231683168617",
       "timestamp":"2020-05-06T07:33:34.556Z",
@@ -1036,10 +1013,9 @@ var Events = map[string]Event{
    }
 }
 `),
-				CloudEvent:  nil ,
-			},
-			Output: EventData{
-				LegacyEvent: []byte(`{
+		},
+		Output: EventData{
+			LegacyEvent: []byte(`{
    "context": {
       "eventId":"1144231683168617",
       "timestamp":"2020-05-06T07:33:34.556Z",
@@ -1056,12 +1032,12 @@ var Events = map[string]Event{
    }
 }
 `),
-				CloudEvent:  nil ,
-			},
 		},
-		"pubsub_text": Event{
-			Input: EventData{
-				LegacyEvent: []byte(`{
+	},
+
+	"pubsub_text": {
+		Input: EventData{
+			LegacyEvent: []byte(`{
    "context": {
       "eventId":"1144231683168617",
       "timestamp":"2020-05-06T07:33:34.556Z",
@@ -1081,10 +1057,9 @@ var Events = map[string]Event{
    }
 }
 `),
-				CloudEvent:  nil ,
-			},
-			Output: EventData{
-				LegacyEvent: []byte(`{
+		},
+		Output: EventData{
+			LegacyEvent: []byte(`{
    "context": {
       "eventId":"1144231683168617",
       "timestamp":"2020-05-06T07:33:34.556Z",
@@ -1104,12 +1079,12 @@ var Events = map[string]Event{
    }
 }
 `),
-				CloudEvent:  nil ,
-			},
 		},
-		"storage": Event{
-			Input: EventData{
-				LegacyEvent: []byte(`{
+	},
+
+	"storage": {
+		Input: EventData{
+			LegacyEvent: []byte(`{
    "context": {
       "eventId": "1147091835525187",
       "timestamp": "2020-04-23T07:38:57.772Z",
@@ -1141,10 +1116,9 @@ var Events = map[string]Event{
    }
 }
 `),
-				CloudEvent:  nil ,
-			},
-			Output: EventData{
-				LegacyEvent: []byte(`{
+		},
+		Output: EventData{
+			LegacyEvent: []byte(`{
    "context": {
       "eventId": "1147091835525187",
       "timestamp": "2020-04-23T07:38:57.772Z",
@@ -1176,8 +1150,6 @@ var Events = map[string]Event{
    }
 }
 `),
-				CloudEvent:  nil ,
-			},
 		},
-		
+	},
 }
