@@ -1,0 +1,31 @@
+# Test data
+
+The test data in this directory consists of events in various representations.
+Each type of event (e.g. "firebase-auth") is a particular event that can be
+represented in the Google Cloud Functions background function format or in a
+format compliant with the CloudEvent [spec](https://cloudevents.io/).
+
+## Adding test cases
+
+To add a new test case or to adjust an existing test case, add or change the
+appropriate files in this directory.
+
+A new test case should have an expected legacy event input and output and an
+expected CloudEvent input and output between which each Functions Frameworks
+should be able to convert. These files should be named:
+
+-   `newevent-legacy-input.json`
+-   `newevent-legacy-output.json`
+-   `newevent-cloudevent-input.json`
+-   `newevent-cloudevent-output.json`
+
+The conformance test suite will interpret one set of such files as one
+validation test case.
+
+Once you have the input and output data, generate the test cases to embed them
+in the binary. Run the following:
+
+`go generate ./...`
+
+This will update the `events/event_data.go` file with your changes. Include
+changes to this file in your commit.

@@ -13,6 +13,16 @@ type Event struct {
 }
 
 var Events = map[string]Event{
+		"": Event{
+			Input: EventData{
+				LegacyEvent:  nil ,
+				CloudEvent:  nil ,
+			},
+			Output: EventData{
+				LegacyEvent:  nil ,
+				CloudEvent:  nil ,
+			},
+		},
 		"firebase-auth": Event{
 			Input: EventData{
 				LegacyEvent: []byte(`{
