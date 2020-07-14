@@ -15,7 +15,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -29,7 +28,7 @@ const (
 
 // The HTTP function should copy the contents of the request into the response.
 func validateHTTP(url string) error {
-	req := `{"res":"PASS"}`
+	req := []byte(`{"res":"PASS"}`)
 	err := sendHTTP(url, req)
 	if err != nil {
 		return fmt.Errorf("failed to get response: %v", err)
@@ -38,64 +37,40 @@ func validateHTTP(url string) error {
 	if err != nil {
 		return fmt.Errorf("reading output file: %v", err)
 	}
-	if string(output) != req {
+	if string(output) != string(req) {
 		return fmt.Errorf("unexpected HTTP data: got %s, want %s", output, req)
 	}
 	return nil
 }
 
-func validateLegacyEvents(url string) error {
-	allEvents, err := events.AllEvents()
+func validateEvents(url string, inputType, outputType events.EventType) error {
+	eventNames, err := events.EventNames(inputType)
 	if err != nil {
 		return err
 	}
 
-	for _, le := range allEvents {
-		for _, build := range le.Builders {
-			leJSON, err := json.Marshal(build(le))
-			if err != nil {
-				return fmt.Errorf("encoding event: %v", err)
-			}
-			err = sendHTTP(url, string(leJSON))
-			if err != nil {
-				return fmt.Errorf("response failed: %v", err)
-			}
-			output, err := ioutil.ReadFile(outputFile)
-			if err != nil {
-				return fmt.Errorf("reading output file: %v", err)
-			}
-			if err := events.ValidateLegacyEvent(string(output), le); err != nil {
-				return fmt.Errorf("unexpected legacy event: %v", err)
-			}
+	for _, name := range eventNames {
+		input := events.InputData(name, inputType)
+		if input == nil {
+			return fmt.Errorf("no input data for %q", name)
 		}
-	}
-
-	return nil
-}
-
-func validateCloudEvents(url string) error {
-	allEvents, err := events.AllEvents()
-	if err != nil {
-		return err
-	}
-
-	for _, ce := range allEvents {
-		err := sendCE(url, *events.BuildCloudEvent(ce))
+		err = send(url, inputType, input)
 		if err != nil {
-			return fmt.Errorf("response failed: %v", err)
+			return fmt.Errorf("response failed for %q: %v", name, err)
 		}
 		output, err := ioutil.ReadFile(outputFile)
 		if err != nil {
-			return fmt.Errorf("reading output file: %v", err)
+			return fmt.Errorf("reading function output file for %q: %v", name, err)
 		}
-		if err := events.ValidateCloudEvent(string(output), ce); err != nil {
-			return fmt.Errorf("unexpected cloud event: %v", err)
+		if err := events.ValidateEvent(name, outputType, output); err != nil {
+			return fmt.Errorf("unexpected output for %q: %v", name, err)
 		}
 	}
+
 	return nil
 }
 
-func validate(url, functionType string) error {
+func validate(url, functionType string, validateMapping bool) error {
 	switch functionType {
 	case "http":
 		// Validate HTTP signature, if provided
@@ -108,16 +83,26 @@ func validate(url, functionType string) error {
 	case "cloudevent":
 		// Validate CloudEvent signature, if provided
 		log.Printf("CloudEvent validation started...")
-		if err := validateCloudEvents(url); err != nil {
+		if err := validateEvents(url, events.CloudEvent, events.CloudEvent); err != nil {
 			return err
+		}
+		if validateMapping {
+			if err := validateEvents(url, events.LegacyEvent, events.CloudEvent); err != nil {
+				return err
+			}
 		}
 		log.Printf("CloudEvent validation passed!")
 		return nil
 	case "legacyevent":
 		// Validate legacy event signature, if provided
 		log.Printf("Legacy event validation started...")
-		if err := validateLegacyEvents(url); err != nil {
+		if err := validateEvents(url, events.LegacyEvent, events.LegacyEvent); err != nil {
 			return err
+		}
+		if validateMapping {
+			if err := validateEvents(url, events.CloudEvent, events.LegacyEvent); err != nil {
+				return err
+			}
 		}
 		log.Printf("Legacy event validation passed!")
 		return nil

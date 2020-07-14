@@ -1,0 +1,14 @@
+{
+  "data": {
+    "data": null,
+    "delta": {
+      "grandchild": "other"
+    }
+  },
+  "context": {
+    "resource": "projects/_/instances/my-project-id/refs/gcf-test/xyz",
+    "timestamp": "2020-05-21T11:15:34.178Z",
+    "eventId": "/SnHth9OSlzK1Puj85kk4tDbF90=",
+    "eventType": "providers/google.firebase.database/eventTypes/ref.write" 
+  }
+}

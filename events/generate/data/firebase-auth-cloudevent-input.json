@@ -1,0 +1,22 @@
+{
+  "specversion": "1.0",
+  "type": "com.google.cloud.pubsub.topic.publish.v0",
+  "source": "http://pubsub.googleapis.com/projects/sample-project/topics/gcf-test",
+  "id": "4423b4fa-c39b-4f79-b338-977a018e9b55",
+  "time": "2020-05-26T10:42:27.088Z",
+  "datacontenttype": "application/json",
+  "data": {
+    "email": "test@nowhere.com",
+    "metadata": {
+      "createdAt": "2020-05-26T10:42:27Z"
+    },
+    "providerData": [
+      {
+        "email": "test@nowhere.com",
+        "providerId": "password",
+        "uid": "test@nowhere.com"
+      }
+    ],
+    "uid": "UUpby3s4spZre6kHsgVSPetzQ8l2"
+  }
+}

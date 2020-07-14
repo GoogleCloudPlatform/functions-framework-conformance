@@ -1,0 +1,24 @@
+{
+  "data": {
+    "data": {
+      "deeply": {
+        "nested": {
+          "text": "This is deeply nested",
+          "text2": "Second value"
+        }
+      },
+      "grandchild": "other changed"
+    },
+    "delta": {
+      "deeply": {
+        "abc": "def"
+      }
+    }
+  },
+  "context": {
+    "resource": "projects/_/instances/my-project-id/refs/gcf-test/xyz",
+    "timestamp": "2020-05-21T11:21:07.809Z",
+    "eventType": "providers/google.firebase.database/eventTypes/ref.write",
+    "eventId": "9WBpn32ssA33ympcsuq/5JJmnDM="
+  }
+}

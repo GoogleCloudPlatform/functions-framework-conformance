@@ -13,10 +13,10 @@
     ],
     "uid": "UUpby3s4spZre6kHsgVSPetzQ8l2"
   },
-  "eventId": "5fd71bdc-4955-421f-9fc3-552ac3abead8",
-  "eventType": "providers/firebase.auth/eventTypes/user.delete",
-  "notSupported": {
-  },
-  "resource": "projects/my-project-id",
-  "timestamp": "2020-05-26T10:47:14.205Z"
+  "context": {
+    "eventId": "4423b4fa-c39b-4f79-b338-977a018e9b55",
+    "eventType": "providers/firebase.auth/eventTypes/user.create",
+    "resource": "projects/my-project-id",
+    "timestamp": "2020-05-26T10:42:27.088Z"
+  }
 }
