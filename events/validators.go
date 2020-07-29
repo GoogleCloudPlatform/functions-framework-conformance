@@ -71,8 +71,49 @@ func validateCloudEvent(name string, gotBytes, wantBytes []byte) error {
 		return fmt.Errorf("unmarshalling expected cloud event %q: %v", name, err)
 	}
 
-	if want.String() != got.String() {
-		return fmt.Errorf("unexpected event %q: got %s, want %s", name, got.String(), want.String())
+	gotContext := got.Context.AsV1()
+	wantContext := want.Context.AsV1()
+
+	fields := []struct {
+		name      string
+		gotValue  interface{}
+		wantValue interface{}
+	}{
+		{
+			name:      "ID",
+			gotValue:  gotContext.ID,
+			wantValue: wantContext.ID,
+		},
+		{
+			name:      "source",
+			gotValue:  gotContext.Source,
+			wantValue: wantContext.Source,
+		},
+		{
+			name:      "type",
+			gotValue:  gotContext.Type,
+			wantValue: wantContext.Type,
+		},
+		{
+			name:      "datacontenttype",
+			gotValue:  *gotContext.DataContentType,
+			wantValue: *wantContext.DataContentType,
+		},
+		{
+			name:      "data",
+			gotValue:  string(got.DataEncoded),
+			wantValue: string(want.DataEncoded),
+		},
+	}
+	for _, field := range fields {
+		if field.gotValue != field.wantValue {
+			return fmt.Errorf("unexpected %q field in %q: got %v, want %v", field.name, name, field.gotValue, field.wantValue)
+		}
+	}
+
+	// Check the time field specially.
+	if !gotContext.Time.Time.Equal(wantContext.Time.Time) {
+		return fmt.Errorf("unexpected 'time' field in %q: got %v, want %v", name, gotContext.Time, wantContext.Time)
 	}
 	return nil
 }
