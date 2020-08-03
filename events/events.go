@@ -52,7 +52,7 @@ func EventNames(t EventType) ([]string, error) {
 	}
 
 	// Sort the event names for deterministic output.
-	sort.Sort(eventNames)
+	sort.Strings(eventNames)
 
 	return eventNames, nil
 }
