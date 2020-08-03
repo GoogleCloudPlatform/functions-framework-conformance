@@ -20,6 +20,7 @@ import (
 	"reflect"
 
 	cloudevents "github.com/cloudevents/sdk-go/v2"
+	"github.com/google/go-cmp/cmp"
 )
 
 // ValidateEvent validates that a particular function output matches the expected contents.
@@ -150,8 +151,45 @@ func validateCloudEvent(name string, gotBytes, wantBytes []byte) error {
 		return fmt.Errorf("unmarshalling expected contents of cloud event %q: %v", name, err)
 	}
 
-	if want.String() != got.String() {
-		return fmt.Errorf("unexpected event %q: got %s, want %s", name, got.String(), want.String())
+	gotContext := got.Context.AsV1()
+	wantContext := want.Context.AsV1()
+
+	fields := []struct {
+		name      string
+		gotValue  interface{}
+		wantValue interface{}
+	}{
+		{
+			name:      "ID",
+			gotValue:  gotContext.ID,
+			wantValue: wantContext.ID,
+		},
+		{
+			name:      "source",
+			gotValue:  gotContext.Source,
+			wantValue: wantContext.Source,
+		},
+		{
+			name:      "type",
+			gotValue:  gotContext.Type,
+			wantValue: wantContext.Type,
+		},
+		{
+			name:      "datacontenttype",
+			gotValue:  *gotContext.DataContentType,
+			wantValue: *wantContext.DataContentType,
+		},
+		{
+			name:      "data",
+			gotValue:  got.DataEncoded,
+			wantValue: want.DataEncoded,
+		},
 	}
+	for _, field := range fields {
+		if !cmp.Equal(field.gotValue, field.wantValue) {
+			return fmt.Errorf("unexpected %q field in %q: got %v, want %v", field.name, name, field.gotValue, field.wantValue)
+		}
+	}
+
 	return nil
 }
