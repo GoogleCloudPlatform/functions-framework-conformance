@@ -20,6 +20,7 @@ import (
 	"reflect"
 
 	cloudevents "github.com/cloudevents/sdk-go/v2"
+	"github.com/google/go-cmp/cmp"
 )
 
 // ValidateEvent validates that a particular function output matches the expected contents.
@@ -101,19 +102,15 @@ func validateCloudEvent(name string, gotBytes, wantBytes []byte) error {
 		},
 		{
 			name:      "data",
-			gotValue:  string(got.DataEncoded),
-			wantValue: string(want.DataEncoded),
+			gotValue:  got.DataEncoded,
+			wantValue: want.DataEncoded,
 		},
 	}
 	for _, field := range fields {
-		if field.gotValue != field.wantValue {
+		if !cmp.Equal(field.gotValue, field.wantValue) {
 			return fmt.Errorf("unexpected %q field in %q: got %v, want %v", field.name, name, field.gotValue, field.wantValue)
 		}
 	}
 
-	// Check the time field specially.
-	if !gotContext.Time.Time.Equal(wantContext.Time.Time) {
-		return fmt.Errorf("unexpected 'time' field in %q: got %v, want %v", name, gotContext.Time, wantContext.Time)
-	}
 	return nil
 }
