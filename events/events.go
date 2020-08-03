@@ -20,6 +20,7 @@ package events
 import (
 	"encoding/json"
 	"fmt"
+	"sort"
 
 	cloudevents "github.com/cloudevents/sdk-go/v2"
 )
@@ -49,6 +50,10 @@ func EventNames(t EventType) ([]string, error) {
 			}
 		}
 	}
+
+	// Sort the event names for deterministic output.
+	sort.Sort(eventNames)
+
 	return eventNames, nil
 }
 
