@@ -31,14 +31,14 @@ func validateHTTP(url string) error {
 	req := []byte(`{"res":"PASS"}`)
 	err := sendHTTP(url, req)
 	if err != nil {
-		return fmt.Errorf("failed to get response: %v", err)
+		return fmt.Errorf("failed to get response from HTTP function: %v", err)
 	}
 	output, err := ioutil.ReadFile(outputFile)
 	if err != nil {
-		return fmt.Errorf("reading output file: %v", err)
+		return fmt.Errorf("reading output file from HTTP function: %v", err)
 	}
 	if string(output) != string(req) {
-		return fmt.Errorf("unexpected HTTP data: got %s, want %s", output, req)
+		return fmt.Errorf("unexpected HTTP output data: got %s, want %s", output, req)
 	}
 	return nil
 }
@@ -52,15 +52,15 @@ func validateEvents(url string, inputType, outputType events.EventType) error {
 	for _, name := range eventNames {
 		input := events.InputData(name, inputType)
 		if input == nil {
-			return fmt.Errorf("no input data for %q", name)
+			return fmt.Errorf("no input data for event %q", name)
 		}
 		err = send(url, inputType, input)
 		if err != nil {
-			return fmt.Errorf("response failed for %q: %v", name, err)
+			return fmt.Errorf("failed to get response from function for %q: %v", name, err)
 		}
 		output, err := ioutil.ReadFile(outputFile)
 		if err != nil {
-			return fmt.Errorf("reading function output file for %q: %v", name, err)
+			return fmt.Errorf("reading output file from function for %q: %v", name, err)
 		}
 		if err := events.ValidateEvent(name, outputType, output); err != nil {
 			return fmt.Errorf("unexpected output for %q: %v", name, err)
