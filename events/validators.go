@@ -51,8 +51,72 @@ func validateLegacyEvent(name string, gotBytes, wantBytes []byte) error {
 		return fmt.Errorf("unmarshalling expected legacy event %q: %v", name, err)
 	}
 
-	if !reflect.DeepEqual(got, want) {
-		return fmt.Errorf("unexpected event %q:\ngot %v,\nwant %v", name, got, want)
+	if !reflect.DeepEqual(got["data"], want["data"]) {
+		return fmt.Errorf("unexpected data in event %q:\ngot %v,\nwant %v", name, got["data"], want["data"])
+	}
+
+	gotContext := got["context"].(map[string]interface{})
+	wantContext := want["context"].(map[string]interface{})
+
+	// For some fields in the context, they can be written in more than one way. Check all.
+	type eventFields struct {
+		name      string
+		gotValue  interface{}
+		wantValue interface{}
+	}
+	fields := []eventFields{
+		{
+			name:      "ID",
+			gotValue:  getMaybeSnakeCaseField(gotContext, "eventId"),
+			wantValue: wantContext["eventId"],
+		},
+		{
+			name:      "type",
+			gotValue:  getMaybeSnakeCaseField(gotContext, "eventType"),
+			wantValue: wantContext["eventType"],
+		},
+		{
+			name:      "timestamp",
+			gotValue:  gotContext["timestamp"],
+			wantValue: wantContext["timestamp"],
+		},
+		{
+			name:      "resource",
+			gotValue:  gotContext["resource"],
+			wantValue: wantContext["resource"],
+		},
+		{
+			name:      "data",
+			gotValue:  got["data"],
+			wantValue: want["data"],
+		},
+	}
+
+	for _, field := range fields {
+		if !reflect.DeepEqual(field.gotValue, field.wantValue) {
+			return fmt.Errorf("unexpected %q in event %q:\ngot %+v,\nwant %+v", field.name, name, field.gotValue, field.wantValue)
+		}
+	}
+
+	return nil
+}
+
+// Some fields can present with either a CamelCase or a snake_case key. Both are acceptable.
+func getMaybeSnakeCaseField(gotContext map[string]interface{}, field string) interface{} {
+	if gotVal, ok := gotContext[field]; ok {
+		return gotVal
+	}
+
+	var lowerField string
+	if field == "eventId" {
+		lowerField = "event_id"
+	}
+	if field == "eventType" {
+		lowerField = "event_type"
+	}
+
+	if gotVal, ok := gotContext[lowerField]; lowerField != "" && ok {
+		return gotVal
 	}
 
 	return nil
