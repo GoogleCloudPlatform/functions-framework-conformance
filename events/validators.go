@@ -26,7 +26,22 @@ import (
 func ValidateEvent(name string, t EventType, got []byte) error {
 	want := OutputData(name, t)
 	if want == nil {
-		return fmt.Errorf("no output found for %q", name)
+		// List available event types for debugging.
+		available := []string{}
+		for name, data := range Events {
+			switch t {
+			case LegacyEvent:
+				if data.Output.LegacyEvent != nil {
+					available = append(available, name)
+				}
+			case CloudEvent:
+				if data.Output.CloudEvent != nil {
+					available = append(available, name)
+				}
+			}
+		}
+		// Include the possibilities in the error.
+		return fmt.Errorf("no expected output value found for %q. Available event types: %v", name, available)
 	}
 
 	switch t {
@@ -42,13 +57,13 @@ func validateLegacyEvent(name string, gotBytes, wantBytes []byte) error {
 	got := make(map[string]interface{})
 	err := json.Unmarshal(gotBytes, &got)
 	if err != nil {
-		return fmt.Errorf("unmarshalling legacy event %q: %v", name, err)
+		return fmt.Errorf("unmarshalling function-received version of legacy event %q: %v", name, err)
 	}
 
 	want := make(map[string]interface{})
 	err = json.Unmarshal(wantBytes, &want)
 	if err != nil {
-		return fmt.Errorf("unmarshalling expected legacy event %q: %v", name, err)
+		return fmt.Errorf("unmarshalling expected contents of legacy event %q: %v", name, err)
 	}
 
 	if !reflect.DeepEqual(got["data"], want["data"]) {
@@ -126,13 +141,13 @@ func validateCloudEvent(name string, gotBytes, wantBytes []byte) error {
 	got := &cloudevents.Event{}
 	err := json.Unmarshal(gotBytes, got)
 	if err != nil {
-		return fmt.Errorf("unmarshalling cloud event %q: %v", name, err)
+		return fmt.Errorf("unmarshalling function-received version of cloud event %q: %v", name, err)
 	}
 
 	want := &cloudevents.Event{}
 	err = json.Unmarshal(wantBytes, want)
 	if err != nil {
-		return fmt.Errorf("unmarshalling expected cloud event %q: %v", name, err)
+		return fmt.Errorf("unmarshalling expected contents of cloud event %q: %v", name, err)
 	}
 
 	if want.String() != got.String() {
