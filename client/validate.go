@@ -113,6 +113,9 @@ func validate(url, functionType string, validateMapping, runInContainer bool) er
 }
 
 func getOutput(runInContainer bool) ([]byte, error) {
+	if !runInContainer {
+		return ioutil.ReadFile(outputFile)
+	}
 	cmd := exec.Command("docker", "ps", "--latest", "--format", "{{.ID}}")
 	containerID, err := cmd.Output()
 	if err != nil {
