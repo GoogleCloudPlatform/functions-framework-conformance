@@ -15,7 +15,7 @@ func HTTP(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	if err := ioutil.WriteFile("function_output.json", []byte("fail"), 0644); err != nil {
+	if err := ioutil.WriteFile("function_output.json", body, 0644); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
