@@ -34,21 +34,21 @@ function run(cmd) {
             if (err) {
               throw err;
             }
-            core.setOutput("server_stdout", data);
+            console.log("server stdout: " + data);
           });
 
           fs.readFile('serverlog_stderr.txt', 'utf8', function (err,data) {
             if (err) {
               throw err;
             }
-            core.setOutput("server_stderr", data);
+            console.log("server stderr: "+ data);
           });
 
           fs.readFile('function_output.txt', 'utf8', function (err,data) {
             if (err) {
               throw err;
             }
-            core.setOutput("server_stdout", data);
+            console.log("function output: " + data);
           });
 
           throw error;
