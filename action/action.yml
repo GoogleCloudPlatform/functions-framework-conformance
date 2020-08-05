@@ -10,6 +10,13 @@ inputs:
   validateMapping:
     description: 'whether to validate mapping from legacy->cloud event and vice versa'
     default: true
+outputs:
+  server_stdout:
+    description: "stdout from the function server"
+  server_stderr:
+    description: "stderr from the function server"
+  function_output:
+    description: "output from the function"
 runs:
   using: 'node12'
   main: 'index.js'

@@ -1,6 +1,7 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 const child_process = require("child_process");
+const  fs = require('fs')
 
 try {
   // `who-to-greet` input defined in action metadata file
@@ -29,6 +30,27 @@ function run(cmd) {
           console.log(`stderr: ${stderr}`);
       }
       if (error) {
+          fs.readFile('serverlog_stdout.txt', 'utf8', function (err,data) {
+            if (err) {
+              throw err;
+            }
+            core.setOutput("server_stdout", data);
+          });
+
+          fs.readFile('serverlog_stderr.txt', 'utf8', function (err,data) {
+            if (err) {
+              throw err;
+            }
+            core.setOutput("server_stderr", data);
+          });
+
+          fs.readFile('function_output.txt', 'utf8', function (err,data) {
+            if (err) {
+              throw err;
+            }
+            core.setOutput("server_stdout", data);
+          });
+
           throw error;
       }
       console.log(`stdout: ${stdout}`);
