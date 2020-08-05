@@ -10,7 +10,7 @@ import (
 
 // HTTP is a simple HTTP function that writes the request body to the response body.
 func HTTP(w http.ResponseWriter, r *http.Request) {
-	_, err := ioutil.ReadAll(r.Body)
+	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
