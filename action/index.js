@@ -33,7 +33,7 @@ function run(cmd) {
     }
     if (error) {
       if (fs.existsSync('serverlog_stdout.txt')) {
-        fs.readFile('serverlog_stdout.txt', 'utf8', (err, data) => {
+        fs.readFileSync('serverlog_stdout.txt', 'utf8', (err, data) => {
           if (err) {
             throw err; // print and move on
           }
@@ -41,7 +41,7 @@ function run(cmd) {
         });
       }
       if (fs.existsSync('serverlog_stderr.txt')) {
-        fs.readFile('serverlog_stderr.txt', 'utf8', (err, data) => {
+        fs.readFileSync('serverlog_stderr.txt', 'utf8', (err, data) => {
           if (err) {
             throw err;
           }
@@ -49,7 +49,7 @@ function run(cmd) {
         });
       }
       if (fs.existsSync('function_output.json')) {
-        fs.readFile('function_output.json', 'utf8', (err, data) => {
+        fs.readFileSync('function_output.json', 'utf8', (err, data) => {
           if (err) {
             throw err;
           }
