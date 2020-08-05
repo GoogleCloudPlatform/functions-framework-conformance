@@ -48,8 +48,8 @@ function run(cmd) {
           console.log(`server stderr: ${data}`);
         });
       }
-      if (fs.existsSync('function_output.txt')) {
-        fs.readFile('function_output.txt', 'utf8', (err, data) => {
+      if (fs.existsSync('function_output.json')) {
+        fs.readFile('function_output.json', 'utf8', (err, data) => {
           if (err) {
             throw err;
           }

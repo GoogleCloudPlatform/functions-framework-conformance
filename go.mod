@@ -4,6 +4,7 @@ go 1.14
 
 require (
 	cloud.google.com/go v0.58.0 // indirect
+	github.com/GoogleCloudPlatform/functions-framework-go v1.0.1 // indirect
 	github.com/cloudevents/sdk-go/v2 v2.0.0
 	github.com/google/go-cmp v0.4.1
 )
