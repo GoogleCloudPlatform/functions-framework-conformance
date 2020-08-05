@@ -10,16 +10,11 @@ try {
   // const runInContainer = core.getInput('runInContainer');
 
   // Install conformance client binary.
-  var error = run("go install github.com/GoogleCloudPlatform/functions-framework-conformance/client");
-  if (error) {
-   throw (error);
-  }
+  run("go install github.com/GoogleCloudPlatform/functions-framework-conformance/client");
 
   // Run the client with the specified parameters.
-  error = run("go run github.com/GoogleCloudPlatform/functions-framework-conformance/client --cmd='" + cmd + "' --type=" + functionType + " --validate-mapping=" + validateMapping);
-  if (error) {
-   throw (error);
-  }
+  run("go run github.com/GoogleCloudPlatform/functions-framework-conformance/client --cmd='" + cmd + "' --type=" + functionType + " --validate-mapping=" + validateMapping);
+
 } catch (error) {
   core.setFailed(error.message);
 }
@@ -34,7 +29,7 @@ function run(cmd) {
           console.log(`stderr: ${stderr}`);
       }
       if (error) {
-          return error;
+          throw error;
       }
       console.log(`stdout: ${stdout}`);
   });
