@@ -6,8 +6,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-
-	"github.com/GoogleCloudPlatform/functions-framework-go/funcframework"
 )
 
 // HTTP is a simple HTTP function that writes the request body to the response body.
@@ -24,8 +22,7 @@ func HTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	log.Print("registering...")
-	funcframework.RegisterHTTPFunction("/", HTTP)
+	http.HandleFunc("/", HTTP)
 
 	// Use PORT environment variable, or default to 8080.
 	port := "8080"
@@ -33,7 +30,7 @@ func main() {
 		port = envPort
 	}
 
-	if err := funcframework.Start(port); err != nil {
+	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		log.Fatalf("funcframework.Start: %v\n", err)
 	}
 }
