@@ -25,20 +25,14 @@ function dump(f) {
  * @param {string} cmd - command to run
  */
 function run(cmd) {
-  child_process.execSync(cmd, (error, stdout, stderr) => {
-    console.log(`stdout: ${stdout}`);
-    if (stderr) {
-      console.log(`stderr: ${stderr}`);
-    }
-
+  try {
+    child_process.execSync(cmd);
+  } catch (error) {
     dump('serverlog_stdout.txt');
     dump('serverlog_stderr.txt');
     dump('function_output.json');
-
-    if (error) {
-      throw error;
-    }
-  });
+    throw error;
+  }
 }
 
 try {
