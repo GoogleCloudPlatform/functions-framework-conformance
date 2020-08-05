@@ -35,7 +35,7 @@ function run(cmd) {
       if (fs.existsSync('serverlog_stdout.txt')) {
         fs.readFile('serverlog_stdout.txt', 'utf8', (err, data) => {
           if (err) {
-            throw err;
+            throw err; // print and move on
           }
           console.log(`server stdout: ${data}`);
         });
@@ -56,7 +56,7 @@ function run(cmd) {
           console.log(`function output: ${data}`);
         });
       }
-      // throw error;
+      throw error;
     }
     console.log(`stdout: ${stdout}`);
   });
