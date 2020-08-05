@@ -28,10 +28,12 @@ function run(cmd) {
   try {
     child_process.execSync(cmd);
   } catch (error) {
+    console.log(`stdout: ${error.stdout}`);
+    console.log(`stderr: ${error.stderr}`);
     dump('serverlog_stdout.txt');
     dump('serverlog_stderr.txt');
     dump('function_output.json');
-    throw error;
+    throw error.error;
   }
 }
 
