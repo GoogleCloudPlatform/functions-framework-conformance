@@ -12,13 +12,8 @@ function dump(f) {
     console.log(`${f} doesn't exist, skipping`);
     return;
   }
-  fs.readFileSync(f, 'utf8', (err, data) => {
-    if (err) {
-      console.log(`error reading ${f}: ${err}`);
-    } else {
-      console.log(`${f}: ${data}`);
-    }
-  });
+  const data = fs.readFileSync(f, 'utf8');
+  console.log(`${f}: ${data}`);
 }
 
 /**
@@ -29,8 +24,6 @@ function run(cmd) {
   try {
     child_process.execSync(cmd);
   } catch (error) {
-    console.log(`stdout: ${error.stdout}`);
-    console.log(`stderr: ${error.stderr}`);
     dump('serverlog_stdout.txt');
     dump('serverlog_stderr.txt');
     dump('function_output.json');
