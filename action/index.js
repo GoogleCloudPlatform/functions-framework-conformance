@@ -16,7 +16,7 @@ try {
   }
 
   // Run the client with the specified parameters.
-  error = run("go run github.com/GoogleCloudPlatform/functions-framework-conformance/client --cmd=" + cmd + "--type=" + functionType + "--validate-mapping=" + validateMapping);
+  error = run("go run github.com/GoogleCloudPlatform/functions-framework-conformance/client --cmd='" + cmd + "' --type=" + functionType + " --validate-mapping=" + validateMapping);
   if (error) {
    throw (error);
   }
