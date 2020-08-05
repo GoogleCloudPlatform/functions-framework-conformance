@@ -3,7 +3,7 @@ on: [push, pull_request]
 jobs:
   run-conformance:
     runs-on: ubuntu-latest
-    name: A job to validate conformance test framework
+    name: Validate conformance test framework
     steps:
     - uses: actions/checkout@v2
 
