@@ -4,41 +4,38 @@ const child_process = require('child_process');
 const fs = require('fs');
 
 /**
+ * Dump contents of file to console.
+ * @param {string} f - file to dump
+ */
+function dump(f) {
+    if (!fs.existsSync(f)) {
+      return;
+    }
+      fs.readFileSync(f, 'utf8', (err, data) => {
+      if (err) {
+        console.log(`error reading ${f}: ${err}`);
+      } else {
+        console.log(`${f}: ${data}`);
+      }
+    });
+}
+
+/**
  * Run a specified command.
  * @param {string} cmd - command to run
  */
 function run(cmd) {
   child_process.exec(cmd, (error, stdout, stderr) => {
-     console.log(`stdout: ${stdout}`);
-   if (stderr) {
+    console.log(`stdout: ${stdout}`);
+    if (stderr) {
       console.log(`stderr: ${stderr}`);
     }
-      fs.readFileSync('serverlog_stdout.txt', 'utf8', (err, data) => {
-        if (err) {
-          console.log(`error reading serverlog_stdout.txt: ${err}`);
-        } else {
-          console.log(`server stdout: ${data}`);
-        }
-      });
 
-      fs.readFileSync('serverlog_stderr.txt', 'utf8', (err, data) => {
-        if (err) {
-          console.log(`error reading serverlog_stderr.txt: ${err}`);
-        } else {
-          console.log(`server stderr: ${data}`);
-        }
-      });
+    dump('serverlog_stdout.txt');
+    dump('serverlog_stdout.txt');
+    dump('function_output.json');
 
-      fs.readFileSync('function_output.json', 'utf8', (err, data) => {
-        if (err) {
-          console.log(`error reading function_output.json: ${err}`);
-        } else {
-          console.log(`function output: ${data}`);
-        }
-      });
     if (error) {
-
-
       throw error;
     }
   });
