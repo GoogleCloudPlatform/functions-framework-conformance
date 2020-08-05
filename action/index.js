@@ -8,16 +8,16 @@ const fs = require('fs');
  * @param {string} f - file to dump
  */
 function dump(f) {
-    if (!fs.existsSync(f)) {
-      return;
+  if (!fs.existsSync(f)) {
+    return;
+  }
+  fs.readFileSync(f, 'utf8', (err, data) => {
+    if (err) {
+      console.log(`error reading ${f}: ${err}`);
+    } else {
+      console.log(`${f}: ${data}`);
     }
-      fs.readFileSync(f, 'utf8', (err, data) => {
-      if (err) {
-        console.log(`error reading ${f}: ${err}`);
-      } else {
-        console.log(`${f}: ${data}`);
-      }
-    });
+  });
 }
 
 /**
@@ -25,14 +25,14 @@ function dump(f) {
  * @param {string} cmd - command to run
  */
 function run(cmd) {
-  child_process.exec(cmd, (error, stdout, stderr) => {
+  child_process.execSync(cmd, (error, stdout, stderr) => {
     console.log(`stdout: ${stdout}`);
     if (stderr) {
       console.log(`stderr: ${stderr}`);
     }
 
     dump('serverlog_stdout.txt');
-    dump('serverlog_stdout.txt');
+    dump('serverlog_stderr.txt');
     dump('function_output.json');
 
     if (error) {
