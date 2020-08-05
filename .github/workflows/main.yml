@@ -22,7 +22,7 @@ jobs:
       run: "./check_go_generate.sh"
 
     - name: Run conformance tests
-      uses: GoogleCloudPlatform/functions-framework-conformance/actions
+      uses: ./action
       with:
         # Update to just "go run" once functions-framework-go has tagged a release
         cmd: 'go get github.com/GoogleCloudPlatform/functions-framework-go/conformance-tests/http@2d24e07 && go run github.com/GoogleCloudPlatform/functions-framework-go/conformance-tests/http'
