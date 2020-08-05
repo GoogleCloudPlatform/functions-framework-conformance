@@ -9,6 +9,9 @@ jobs:
 
     - uses: actions/setup-go@v1
 
+    - name: Vendor dependencies
+      run: "go mod vendor"
+
     - name: Build and test
       run: "go test ./..."
 
