@@ -51,7 +51,7 @@ function run(cmd) {
             console.log(`function output: ${data}`);
           });
 
-          throw error;
+          // throw error;
       }
       console.log(`stdout: ${stdout}`);
   });
