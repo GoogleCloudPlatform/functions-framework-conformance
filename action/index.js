@@ -4,7 +4,6 @@ const child_process = require('child_process');
 const fs = require('fs');
 
 try {
-  // `who-to-greet` input defined in action metadata file
   const cmd = core.getInput('cmd');
   const functionType = core.getInput('functionType');
   const validateMapping = core.getInput('validateMapping');
@@ -38,6 +37,7 @@ function run(cmd) {
       console.log(`stderr: ${stderr}`);
     }
     if (error) {
+      console.log(`error: ${error}`);
       if (fs.existsSync('serverlog_stdout.txt')) {
         fs.readFileSync('serverlog_stdout.txt', 'utf8', (err, data) => {
           if (err) {
