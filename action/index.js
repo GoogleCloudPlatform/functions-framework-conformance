@@ -1,6 +1,6 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
-const exec = require("child_process");
+const child_process = require("child_process");
 
 try {
   // `who-to-greet` input defined in action metadata file
@@ -29,7 +29,7 @@ try {
  * @param {string} cmd - command to run
  */
 function run(cmd) {
-    exec(cmd, (error, stdout, stderr) => {
+    child_process.exec(cmd, (error, stdout, stderr) => {
       if (stderr) {
           console.log(`stderr: ${stderr}`);
       }
