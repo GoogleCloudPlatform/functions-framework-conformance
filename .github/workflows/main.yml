@@ -1,0 +1,30 @@
+on: [push, pull_request]
+
+jobs:
+  run-conformance:
+    runs-on: ubuntu-latest
+    name: A job to validate conformance test framework
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: actions/setup-go@v1
+
+    - name: Build and test
+      run: "go test ./..."
+
+    - name: Vet
+      run: "go vet ./..."
+
+    - name: Format
+      run: "find . -not \( \( -wholename './.git' -o -wholename '*/vendor/*' \) -prune \) -name '*.go' | xargs gofmt -s -d"
+
+    - name: Verify generation
+      run: "./check_go_generate.sh"
+
+    - name: Run conformance tests
+      uses: GoogleCloudPlatform/functions-framework-conformance/actions
+      with:
+        # Update to just "go run" once functions-framework-go has tagged a release
+        cmd: 'go get github.com/GoogleCloudPlatform/functions-framework-go/conformance-tests/http@2d24e07 && go run github.com/GoogleCloudPlatform/functions-framework-go/conformance-tests/http'
+        functionType: 'http'
+        validateMapping: false
