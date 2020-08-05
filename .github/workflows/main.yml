@@ -19,7 +19,7 @@ jobs:
       run: "go vet ./..."
 
     - name: Format
-      run: "find . -not ( ( -wholename './.git' -o -wholename '*/vendor/*' ) -prune ) -name '*.go' | xargs gofmt -s -d"
+      run: "find . -not \\( \\( -wholename './.git' -o -wholename '*/vendor/*' \\) -prune \\) -name '*.go' | xargs gofmt -s -d"
 
     - name: Verify generation
       run: "./check_go_generate.sh"
