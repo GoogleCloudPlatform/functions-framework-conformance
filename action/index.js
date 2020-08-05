@@ -9,6 +9,7 @@ const fs = require('fs');
  */
 function dump(f) {
   if (!fs.existsSync(f)) {
+    console.log(`${f} doesn't exist, skipping`);
     return;
   }
   fs.readFileSync(f, 'utf8', (err, data) => {
@@ -33,7 +34,7 @@ function run(cmd) {
     dump('serverlog_stdout.txt');
     dump('serverlog_stderr.txt');
     dump('function_output.json');
-    throw error.error;
+    throw error;
   }
 }
 
