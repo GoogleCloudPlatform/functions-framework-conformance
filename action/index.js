@@ -8,39 +8,40 @@ const fs = require('fs');
  * @param {string} cmd - command to run
  */
 function run(cmd) {
-    child_process.exec(cmd, (error, stdout, stderr) => {
-      if (stderr) {
-        console.log(`stderr: ${stderr}`);
-      }
-      if (error) {
-        fs.readFileSync('serverlog_stdout.txt', 'utf8', (err, data) => {
-          if (err) {
-            console.log(`error reading serverlog_stdout.txt: ${err}`);
-          } else {
-            console.log(`server stdout: ${data}`);
-          }
-        });
+  child_process.exec(cmd, (error, stdout, stderr) => {
+     console.log(`stdout: ${stdout}`);
+   if (stderr) {
+      console.log(`stderr: ${stderr}`);
+    }
+      fs.readFileSync('serverlog_stdout.txt', 'utf8', (err, data) => {
+        if (err) {
+          console.log(`error reading serverlog_stdout.txt: ${err}`);
+        } else {
+          console.log(`server stdout: ${data}`);
+        }
+      });
 
-        fs.readFileSync('serverlog_stderr.txt', 'utf8', (err, data) => {
-          if (err) {
-            console.log(`error reading serverlog_stderr.txt: ${err}`);
-          } else {
-            console.log(`server stderr: ${data}`);
-          }
-        });
+      fs.readFileSync('serverlog_stderr.txt', 'utf8', (err, data) => {
+        if (err) {
+          console.log(`error reading serverlog_stderr.txt: ${err}`);
+        } else {
+          console.log(`server stderr: ${data}`);
+        }
+      });
 
-        fs.readFileSync('function_output.json', 'utf8', (err, data) => {
-          if (err) {
-            console.log(`error reading function_output.json: ${err}`);
-          } else {
-            console.log(`function output: ${data}`);
-          }
-        });
+      fs.readFileSync('function_output.json', 'utf8', (err, data) => {
+        if (err) {
+          console.log(`error reading function_output.json: ${err}`);
+        } else {
+          console.log(`function output: ${data}`);
+        }
+      });
+    if (error) {
 
-        throw error;
-      }
-      console.log(`stdout: ${stdout}`);
-    });
+
+      throw error;
+    }
+  });
 }
 
 try {
@@ -50,12 +51,10 @@ try {
   // const runInContainer = core.getInput('runInContainer');
 
   // Install conformance client binary.
-  run(
-      'go install github.com/GoogleCloudPlatform/functions-framework-conformance/client');
+  run('go install github.com/GoogleCloudPlatform/functions-framework-conformance/client');
 
   // Run the client with the specified parameters.
-  run(
-      'go run github.com/GoogleCloudPlatform/functions-framework-conformance/client --cmd=\'' +
+  run('go run github.com/GoogleCloudPlatform/functions-framework-conformance/client --cmd=\'' +
       cmd + '\' --type=' + functionType +
       ' --validate-mapping=' + validateMapping);
 
