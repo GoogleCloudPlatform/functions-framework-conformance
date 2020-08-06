@@ -35,8 +35,12 @@ const (
 	stderrFile = "serverlog_stderr.txt"
 )
 
-func start(c string) (func(), error) {
+func start(c string, runInContainer bool) (func(), error) {
 	args := strings.Fields(c)
+	// If run in a container, -cmd is the name of the image.
+	if runInContainer {
+		args = []string{"docker", "run", "--network=host", c}
+	}
 	cmd := exec.Command(args[0], args[1:]...)
 
 	stdout, err := os.Create(stdoutFile)
@@ -63,6 +67,9 @@ func start(c string) (func(), error) {
 	shutdown := func() {
 		if err := cmd.Process.Kill(); err != nil {
 			log.Fatalf("failed to kill process: %v", err)
+		}
+		if runInContainer {
+			killContainer()
 		}
 		stdout.Close()
 		stderr.Close()
@@ -118,4 +125,17 @@ func sendCE(url string, e cloudevents.Event) error {
 		return fmt.Errorf("failed to send CloudEvent: %v", res)
 	}
 	return nil
+}
+
+func killContainer() {
+	cmd := exec.Command("docker", "ps", "--latest", "--format", "{{.ID}}")
+	containerID, err := cmd.Output()
+	if err != nil {
+		log.Fatalf("failed to get container ID: %v", err)
+	}
+	containerID = bytes.TrimSpace(containerID)
+	cmd = exec.Command("docker", "kill", string(containerID))
+	if err := cmd.Run(); err != nil {
+		log.Fatalf("failed to kill the container %q: %v", containerID, err)
+	}
 }
