@@ -46,9 +46,11 @@ Frameworks to the Functions Framework contract.
 Usage of client:
 
   -cmd string
-        command to run a Functions Framework server at localhost:8080
+        command or container image to run a Functions Framework server at localhost:8080
   -type string
         type of function to validate (must be 'http', 'cloudevent', or 'legacyevent' (default "http")
   -validate-mapping
         whether to validate mapping from legacy->cloud events and vice versa (as applicable) (default true)
+  -run-in-container
+        whether to run a Functions Framework server in a container (default false)
 ```

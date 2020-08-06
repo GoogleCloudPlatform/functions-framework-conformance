@@ -15,12 +15,14 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"log"
 	"os"
+	"os/exec"
+	"time"
 
 	"github.com/buildpacks/pack"
 )
@@ -30,27 +32,29 @@ const (
 )
 
 type buildpacksFunctionServer struct {
-	output      string
-	source      string
-	target      string
-	funcType    string
-	runtime     string
-	tag         string
-	containerID string
+	output    string
+	source    string
+	target    string
+	funcType  string
+	runtime   string
+	tag       string
+	ctID      string
+	logStdout *os.File
+	logStderr *os.File
 }
 
 func (b *buildpacksFunctionServer) Start() (func(), error) {
-	ctx := context.Background()
 	typ := *functionType
 	if typ == "legacyevent" {
 		typ = "event"
 	}
 
+	ctx := context.Background()
 	if err := b.build(ctx); err != nil {
 		return nil, fmt.Errorf("building function container: %v", err)
 	}
 
-	shutdown, err := b.run(ctx)
+	shutdown, err := b.run()
 	if err != nil {
 		return nil, fmt.Errorf("running function container: %v", err)
 	}
@@ -59,24 +63,15 @@ func (b *buildpacksFunctionServer) Start() (func(), error) {
 }
 
 func (b *buildpacksFunctionServer) OutputFile() ([]byte, error) {
-	contents, _, err := b.dockerClient.CopyFromContainer(context.Background(), b.containerID, "/workspace/"+b.output)
+	cmd := exec.Command("docker", "cp", fmt.Sprintf("%s:/workspace/%s", b.containerID(), b.output), ".")
+	output, err := cmd.CombinedOutput()
 	if err != nil {
-		return nil, fmt.Errorf("fetching function output from container: %v", err)
+		return nil, fmt.Errorf("failed to copy output file from the container: %v: %s", err, string(output))
 	}
-	// Write to local dir for debugging.
-	f, err := os.Create(b.output)
-	defer f.Close()
-	if err != nil {
-		return nil, fmt.Errorf("creating function output file locally: %v", err)
-	}
-	if _, err := io.Copy(f, contents); err != nil {
-		return nil, fmt.Errorf("writing function output file locally: %v", err)
-	}
-	return ioutil.ReadAll(contents)
+	return ioutil.ReadFile(b.output)
 }
 
 func (b *buildpacksFunctionServer) build(ctx context.Context) error {
-	// TODO: use latest tag once GCF builders have it
 	builder := fmt.Sprintf("us.gcr.io/fn-img/buildpacks/%s/builder:%s", b.runtime, b.tag)
 	packClient, err := pack.NewClient()
 	if err != nil {
@@ -100,10 +95,89 @@ func (b *buildpacksFunctionServer) build(ctx context.Context) error {
 	return nil
 }
 
-func (b *buildpacksFunctionServer) run(ctx context.Context) (func(), error) {
+func (b *buildpacksFunctionServer) run() (func(), error) {
+	// Create logs output files.
+	var err error
+	b.logStdout, err = os.Create(stdoutFile)
+	if err != nil {
+		return nil, err
+	}
+
+	b.logStderr, err = os.Create(stderrFile)
+	if err != nil {
+		return nil, err
+	}
+
+	args := []string{"docker", "run",
+		"--network=host",
+		// TODO: figure out why these aren't getting set in the buildpack.
+		"--env=FUNCTION_SOURCE=" + b.source,
+		"--env=FUNCTION_TARGET=" + b.target,
+		"--env=FUNCTION_SIGNATURE_TYPE=" + b.funcType,
+		image,
+	}
+	cmd := exec.Command(args[0], args[1:]...)
+
+	err = cmd.Start()
+
+	// TODO: figure out why this isn't picking up errors.
+	if err != nil {
+		return nil, err
+	}
+
+	// Give it a second to do its setup.
+	time.Sleep(time.Second)
+
+	log.Printf("Framework container %q started.", b.containerID())
 
 	return func() {
-
+		if err := b.logs(); err != nil {
+			log.Fatalf("getting container logs: %v", err)
+		}
+		if err := cmd.Process.Kill(); err != nil {
+			log.Fatalf("failed to kill process: %v", err)
+		}
+		if err := b.killContainer(); err != nil {
+			log.Fatalf("failed to kill container: %v", err)
+		}
 		log.Printf("Framework server shut down. Wrote logs to %v and %v.", stdoutFile, stderrFile)
 	}, nil
+}
+
+func (b *buildpacksFunctionServer) containerID() string {
+	if b.ctID != "" {
+		return b.ctID
+	}
+	cmd := exec.Command("docker", "ps", "--latest", "--format", "{{.ID}}")
+	containerID, err := cmd.Output()
+	if err != nil {
+		log.Fatalf("failed to get container ID: %v", err)
+	}
+	b.ctID = string(bytes.TrimSpace(containerID))
+	return b.ctID
+}
+
+func (b *buildpacksFunctionServer) killContainer() error {
+	cmd := exec.Command("docker", "kill", b.containerID())
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("failed to kill the container %q: %v: %s", b.containerID(), err, string(output))
+	}
+	return nil
+}
+
+func (b *buildpacksFunctionServer) logs() error {
+	defer b.logStdout.Close()
+	defer b.logStderr.Close()
+
+	args := []string{"docker", "logs", b.containerID()}
+	logsCmd := exec.Command(args[0], args[1:]...)
+	logsCmd.Stdout = b.logStdout
+	logsCmd.Stderr = b.logStderr
+
+	err := logsCmd.Run()
+	if err != nil {
+		log.Fatalf("failed to retrieve container logs: %v", err)
+	}
+	return nil
 }

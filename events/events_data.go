@@ -40,8 +40,8 @@ var Events = map[string]Event{
 `),
 			CloudEvent: []byte(`{
   "specversion": "1.0",
-  "type": "com.google.cloud.pubsub.topic.publish.v0",
-  "source": "http://pubsub.googleapis.com/projects/sample-project/topics/gcf-test",
+  "type": "google.firebase.auth.user.v1.created",
+  "source": "//firebase.googleapis.com/projects/my-project-id",
   "id": "4423b4fa-c39b-4f79-b338-977a018e9b55",
   "time": "2020-05-26T10:42:27.088Z",
   "datacontenttype": "application/json",
@@ -88,8 +88,8 @@ var Events = map[string]Event{
 `),
 			CloudEvent: []byte(`{
   "specversion": "1.0",
-  "type": "com.google.cloud.pubsub.topic.publish.v0",
-  "source": "http://pubsub.googleapis.com/projects/sample-project/topics/gcf-test",
+  "type": "google.firebase.auth.user.v1.created",
+  "source": "//firebase.googleapis.com/projects/my-project-id",
   "id": "4423b4fa-c39b-4f79-b338-977a018e9b55",
   "time": "2020-05-26T10:42:27.088Z",
   "datacontenttype": "application/json",

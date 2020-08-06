@@ -181,8 +181,8 @@ func validateCloudEvent(name string, gotBytes, wantBytes []byte) error {
 		},
 		{
 			name:      "data",
-			gotValue:  got.DataEncoded,
-			wantValue: want.DataEncoded,
+			gotValue:  string(got.DataEncoded),
+			wantValue: string(want.DataEncoded),
 		},
 	}
 	for _, field := range fields {
