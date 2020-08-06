@@ -22,10 +22,10 @@ import (
 )
 
 var (
-	cmd             = flag.String("cmd", "", "command to run a Functions Framework server at localhost:8080")
+	cmd             = flag.String("cmd", "", "command or container image to run a Functions Framework server at localhost:8080")
 	functionType    = flag.String("type", "http", "type of function to validate (must be 'http', 'cloudevent', or 'legacyevent'")
 	validateMapping = flag.Bool("validate-mapping", true, "whether to validate mapping from legacy->cloud events and vice versa (as applicable)")
-	runInContainer  = flag.Bool("run-in-container", false, "whether the Functions Framework server is running in a container")
+	runInContainer  = flag.Bool("run-in-container", false, "whether to run a Functions Framework server in a container")
 )
 
 func runValidation() error {
