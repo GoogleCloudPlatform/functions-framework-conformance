@@ -32,10 +32,12 @@ function run(cmd) {
 }
 
 try {
-  const cmd = core.getInput('cmd');
   const functionType = core.getInput('functionType');
   const validateMapping = core.getInput('validateMapping');
-  // const runInContainer = core.getInput('runInContainer');
+  const source = core.getInput('source');
+  const target = core.getInput('target');
+  const runtime = core.getInput('runtime');
+  const tag = core.getInput('tag');
 
   // Install conformance client binary.
   run('go install github.com/GoogleCloudPlatform/functions-framework-conformance/client');
@@ -43,10 +45,13 @@ try {
   // Run the client with the specified parameters.
   run([
     `go run github.com/GoogleCloudPlatform/functions-framework-conformance/client`,
-    `--cmd=${cmd}`,
-    `--type=${functionType}`,
-    `--validate-mappings=${validateMapping}`,
-  ].join(' '))
+    `-type=${functionType}`,
+    `-validate-mappings=${validateMapping}`,
+    `-builder-source=${source}`,
+    `-builder-target=${target}`,
+    `-builder-runtime=${runtime}`,
+    `-builder-tag=${tag}`,
+  ].join(' '));
 
 } catch (error) {
   core.setFailed(error.message);

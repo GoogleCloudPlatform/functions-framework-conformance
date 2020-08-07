@@ -27,7 +27,9 @@ Whether or not to validate legacy->cloudevent mapping and vice versa. Default
 uses: actions/setup-go@v1
 uses: GoogleCloudPlatform/functions-framework-conformance/actions@v1
 with:
-  cmd: '<cmd to run function>'
   functionType: 'http'
   validateMapping: false
+  source: 'testdata/testfunc.go'
+  target: 'HTTP'
+  runtime: 'go113'
 ```
