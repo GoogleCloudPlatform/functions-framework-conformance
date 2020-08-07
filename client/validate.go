@@ -15,27 +15,87 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
-	"io/ioutil"
 	"log"
-	"os/exec"
 
 	"github.com/GoogleCloudPlatform/functions-framework-conformance/events"
 )
 
-const (
-	outputFile = "function_output.json"
-)
+type validatorParams struct {
+	useBuildpacks   bool
+	validateMapping bool
+	runCmd          string
+	outputFile      string
+	source          string
+	target          string
+	runtime         string
+	tag             string
+	functionType    string
+}
+
+type validator struct {
+	funcServer      functionServer
+	validateMapping bool
+	functionType    string
+}
+
+func newValidator(params validatorParams) *validator {
+	v := validator{
+		validateMapping: params.validateMapping,
+		functionType:    params.functionType,
+	}
+
+	if !params.useBuildpacks {
+		v.funcServer = &localFunctionServer{
+			output: params.outputFile,
+			cmd:    params.runCmd,
+		}
+		return &v
+	}
+
+	if params.functionType == "legacyevent" {
+		params.functionType = "event"
+	}
+
+	v.funcServer = &buildpacksFunctionServer{
+		output:   params.outputFile,
+		source:   params.source,
+		target:   params.target,
+		runtime:  params.runtime,
+		tag:      params.tag,
+		funcType: params.functionType,
+	}
+	return &v
+}
+
+func (v validator) runValidation() error {
+	log.Printf("Validating for %s...", *functionType)
+
+	shutdown, err := v.funcServer.Start()
+	if shutdown != nil {
+		defer shutdown()
+	}
+
+	if err != nil {
+		return fmt.Errorf("unable to start server: %v", err)
+	}
+
+	if err := v.validate("http://localhost:8080"); err != nil {
+		return fmt.Errorf("Validation failure: %v", err)
+	}
+
+	log.Printf("All validation passed!")
+	return nil
+}
 
 // The HTTP function should copy the contents of the request into the response.
-func validateHTTP(url string, runInContainer bool) error {
+func (v validator) validateHTTP(url string) error {
 	req := []byte(`{"res":"PASS"}`)
 	err := sendHTTP(url, req)
 	if err != nil {
 		return fmt.Errorf("failed to get response from HTTP function: %v", err)
 	}
-	output, err := getOutput(runInContainer)
+	output, err := v.funcServer.OutputFile()
 	if err != nil {
 		return fmt.Errorf("reading output file from HTTP function: %v", err)
 	}
@@ -45,7 +105,7 @@ func validateHTTP(url string, runInContainer bool) error {
 	return nil
 }
 
-func validateEvents(url string, inputType, outputType events.EventType, runInContainer bool) error {
+func (v validator) validateEvents(url string, inputType, outputType events.EventType) error {
 	eventNames, err := events.EventNames(inputType)
 	if err != nil {
 		return err
@@ -60,7 +120,7 @@ func validateEvents(url string, inputType, outputType events.EventType, runInCon
 		if err != nil {
 			return fmt.Errorf("failed to get response from function for %q: %v", name, err)
 		}
-		output, err := getOutput(runInContainer)
+		output, err := v.funcServer.OutputFile()
 		if err != nil {
 			return fmt.Errorf("reading output file from function for %q: %v", name, err)
 		}
@@ -72,12 +132,12 @@ func validateEvents(url string, inputType, outputType events.EventType, runInCon
 	return nil
 }
 
-func validate(url, functionType string, validateMapping, runInContainer bool) error {
-	switch functionType {
+func (v validator) validate(url string) error {
+	switch v.functionType {
 	case "http":
 		// Validate HTTP signature, if provided
 		log.Printf("HTTP validation started...")
-		if err := validateHTTP(url, runInContainer); err != nil {
+		if err := v.validateHTTP(url); err != nil {
 			return err
 		}
 		log.Printf("HTTP validation passed!")
@@ -85,11 +145,11 @@ func validate(url, functionType string, validateMapping, runInContainer bool) er
 	case "cloudevent":
 		// Validate CloudEvent signature, if provided
 		log.Printf("CloudEvent validation started...")
-		if err := validateEvents(url, events.CloudEvent, events.CloudEvent, runInContainer); err != nil {
+		if err := v.validateEvents(url, events.CloudEvent, events.CloudEvent); err != nil {
 			return err
 		}
-		if validateMapping {
-			if err := validateEvents(url, events.LegacyEvent, events.CloudEvent, runInContainer); err != nil {
+		if v.validateMapping {
+			if err := v.validateEvents(url, events.LegacyEvent, events.CloudEvent); err != nil {
 				return err
 			}
 		}
@@ -98,33 +158,16 @@ func validate(url, functionType string, validateMapping, runInContainer bool) er
 	case "legacyevent":
 		// Validate legacy event signature, if provided
 		log.Printf("Legacy event validation started...")
-		if err := validateEvents(url, events.LegacyEvent, events.LegacyEvent, runInContainer); err != nil {
+		if err := v.validateEvents(url, events.LegacyEvent, events.LegacyEvent); err != nil {
 			return err
 		}
-		if validateMapping {
-			if err := validateEvents(url, events.CloudEvent, events.LegacyEvent, runInContainer); err != nil {
+		if v.validateMapping {
+			if err := v.validateEvents(url, events.CloudEvent, events.LegacyEvent); err != nil {
 				return err
 			}
 		}
 		log.Printf("Legacy event validation passed!")
 		return nil
 	}
-	return fmt.Errorf("Expected type to be one of 'http', 'cloudevent', or 'legacyevent', got %s", functionType)
-}
-
-func getOutput(runInContainer bool) ([]byte, error) {
-	if !runInContainer {
-		return ioutil.ReadFile(outputFile)
-	}
-	cmd := exec.Command("docker", "ps", "--latest", "--format", "{{.ID}}")
-	containerID, err := cmd.Output()
-	if err != nil {
-		return nil, fmt.Errorf("failed to get container ID: %v", err)
-	}
-	containerID = bytes.TrimSpace(containerID)
-	cmd = exec.Command("docker", "cp", fmt.Sprintf("%s:/workspace/%s", containerID, outputFile), ".")
-	if err := cmd.Run(); err != nil {
-		return nil, fmt.Errorf("failed to copy output file from the container: %v", err)
-	}
-	return ioutil.ReadFile(outputFile)
+	return fmt.Errorf("Expected type to be one of 'http', 'cloudevent', or 'legacyevent', got %s", v.functionType)
 }

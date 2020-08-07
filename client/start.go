@@ -19,12 +19,7 @@ import (
 	"context"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
-	"os"
-	"os/exec"
-	"strings"
-	"time"
 
 	"github.com/GoogleCloudPlatform/functions-framework-conformance/events"
 	cloudevents "github.com/cloudevents/sdk-go/v2"
@@ -35,47 +30,9 @@ const (
 	stderrFile = "serverlog_stderr.txt"
 )
 
-func start(c string, runInContainer bool) (func(), error) {
-	args := strings.Fields(c)
-	// If run in a container, -cmd is the name of the image.
-	if runInContainer {
-		args = []string{"docker", "run", "--network=host", c}
-	}
-	cmd := exec.Command(args[0], args[1:]...)
-
-	stdout, err := os.Create(stdoutFile)
-	if err != nil {
-		return nil, err
-	}
-	cmd.Stdout = stdout
-
-	stderr, err := os.Create(stderrFile)
-	if err != nil {
-		return nil, err
-	}
-	cmd.Stderr = stderr
-
-	err = cmd.Start()
-	if err != nil {
-		return nil, err
-	}
-	log.Printf("Framework server started.")
-
-	// Give it a second to do its setup.
-	time.Sleep(time.Second)
-
-	shutdown := func() {
-		if err := cmd.Process.Kill(); err != nil {
-			log.Fatalf("failed to kill process: %v", err)
-		}
-		if runInContainer {
-			killContainer()
-		}
-		stdout.Close()
-		stderr.Close()
-		log.Printf("Framework server shut down. Wrote logs to %v and %v.", stdoutFile, stderrFile)
-	}
-	return shutdown, nil
+type functionServer interface {
+	Start() (func(), error)
+	OutputFile() ([]byte, error)
 }
 
 func send(url string, t events.EventType, data []byte) error {
@@ -97,8 +54,8 @@ func sendHTTP(url string, data []byte) error {
 	if err != nil {
 		return fmt.Errorf("failed to send HTTP request: %v", err)
 	}
+	body, err := ioutil.ReadAll(resp.Body)
 	if resp.StatusCode < 200 || resp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
 			return fmt.Errorf("reading HTTP response body: %v", err)
 		}
@@ -125,17 +82,4 @@ func sendCE(url string, e cloudevents.Event) error {
 		return fmt.Errorf("failed to send CloudEvent: %v", res)
 	}
 	return nil
-}
-
-func killContainer() {
-	cmd := exec.Command("docker", "ps", "--latest", "--format", "{{.ID}}")
-	containerID, err := cmd.Output()
-	if err != nil {
-		log.Fatalf("failed to get container ID: %v", err)
-	}
-	containerID = bytes.TrimSpace(containerID)
-	cmd = exec.Command("docker", "kill", string(containerID))
-	if err := cmd.Run(); err != nil {
-		log.Fatalf("failed to kill the container %q: %v", containerID, err)
-	}
 }

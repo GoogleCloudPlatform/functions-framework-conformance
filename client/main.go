@@ -17,38 +17,43 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
 )
 
 var (
-	cmd             = flag.String("cmd", "", "command or container image to run a Functions Framework server at localhost:8080")
+	runCmd          = flag.String("cmd", "", "command to run a Functions Framework server at localhost:8080. Ignored if -buildpacks=true.")
 	functionType    = flag.String("type", "http", "type of function to validate (must be 'http', 'cloudevent', or 'legacyevent'")
 	validateMapping = flag.Bool("validate-mapping", true, "whether to validate mapping from legacy->cloud events and vice versa (as applicable)")
-	runInContainer  = flag.Bool("run-in-container", false, "whether to run a Functions Framework server in a container")
+	outputFile      = flag.String("output-file", "function_output.json", "name of file output by function")
+	useBuildpacks   = flag.Bool("buildpacks", true, "whether to use the current release of buildpacks to run the validation. If true, -cmd is ignored and --builder-* flags must be set.")
+	source          = flag.String("builder-source", "", "function source directory to use in building. Required if -buildpacks=true")
+	target          = flag.String("builder-target", "", "function target to use in building. Required if -buildpacks=true")
+	runtime         = flag.String("builder-runtime", "", "runtime to use in building. Required if -buildpacks=true")
+	tag             = flag.String("builder-tag", "latest", "builder image tag to use in building")
 )
-
-func runValidation() error {
-	log.Printf("Validating %q for %s...", *cmd, *functionType)
-
-	shutdown, err := start(*cmd, *runInContainer)
-	defer shutdown()
-
-	if err != nil {
-		return fmt.Errorf("unable to start server: %v", err)
-	}
-
-	if err := validate("http://localhost:8080", *functionType, *validateMapping, *runInContainer); err != nil {
-		return fmt.Errorf("Validation failure: %v", err)
-	}
-
-	log.Printf("All validation passed!")
-	return nil
-}
 
 func main() {
 	flag.Parse()
-	if err := runValidation(); err != nil {
+
+	if *useBuildpacks {
+		if *runtime == "" || *source == "" || *target == "" {
+			log.Fatalf("testing via buildpacks requires -builder-runtime, -builder-source, and -builder-target to be set")
+		}
+	}
+
+	v := newValidator(validatorParams{
+		validateMapping: *validateMapping,
+		useBuildpacks:   *useBuildpacks,
+		runCmd:          *runCmd,
+		outputFile:      *outputFile,
+		source:          *source,
+		target:          *target,
+		runtime:         *runtime,
+		functionType:    *functionType,
+		tag:             *tag,
+	})
+
+	if err := v.runValidation(); err != nil {
 		log.Fatalf("%v", err)
 	}
 }
