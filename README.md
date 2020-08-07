@@ -45,12 +45,22 @@ Frameworks to the Functions Framework contract.
 ```
 Usage of client:
 
+  -builder-runtime string
+        runtime to use in building. Required if -buildpacks=true
+  -builder-source string
+        function source directory to use in building. Required if -buildpacks=true
+  -builder-tag string
+        builder image tag to use in building (default "latest")
+  -builder-target string
+        function target to use in building. Required if -buildpacks=true
+  -buildpacks
+        whether to use the current release of buildpacks to run the validation. If true, -cmd is ignored and --builder-* flags must be set. (default true)
   -cmd string
-        command or container image to run a Functions Framework server at localhost:8080
+        command to run a Functions Framework server at localhost:8080. Ignored if -buildpacks=true.
+  -output-file string
+        name of file output by function (default "function_output.json")
   -type string
         type of function to validate (must be 'http', 'cloudevent', or 'legacyevent' (default "http")
   -validate-mapping
         whether to validate mapping from legacy->cloud events and vice versa (as applicable) (default true)
-  -run-in-container
-        whether to run a Functions Framework server in a container (default false)
 ```

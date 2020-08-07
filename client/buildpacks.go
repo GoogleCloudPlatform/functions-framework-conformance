@@ -83,7 +83,6 @@ func (b *buildpacksFunctionServer) build(ctx context.Context) error {
 		AppPath:  b.source,
 		Registry: "",
 		Env: map[string]string{
-			"GOOGLE_FUNCTION_SOURCE":         b.source,
 			"GOOGLE_FUNCTION_TARGET":         b.target,
 			"GOOGLE_FUNCTION_SIGNATURE_TYPE": b.funcType,
 		},
@@ -111,7 +110,6 @@ func (b *buildpacksFunctionServer) run() (func(), error) {
 	args := []string{"docker", "run",
 		"--network=host",
 		// TODO: figure out why these aren't getting set in the buildpack.
-		"--env=FUNCTION_SOURCE=" + b.source,
 		"--env=FUNCTION_TARGET=" + b.target,
 		"--env=FUNCTION_SIGNATURE_TYPE=" + b.funcType,
 		image,
