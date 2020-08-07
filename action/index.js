@@ -1,19 +1,19 @@
-const core = require('@actions/core');
-const github = require('@actions/github');
-const child_process = require('child_process');
-const fs = require('fs');
+import {} from '@actions/core';
+import {} from '@actions/github';
+import {} from 'child_process';
+import {} from 'fs';
 
 /**
- * Dump contents of file to console.
- * @param {string} f - file to dump
+ * writeFileToConsole contents of file to console.
+ * @param {string} path - filepath to write to the console
  */
-function dump(f) {
-  if (!fs.existsSync(f)) {
-    console.log(`${f} doesn't exist, skipping`);
-    return;
+function writeFileToConsole(path) {
+  try {
+    const data = fs.readFileSync(path, 'utf8');
+    console.log(`${path}: ${data}`);
+  } catch (e) {
+    console.log(`$unable to read {path}, skipping: ${e}`);
   }
-  const data = fs.readFileSync(f, 'utf8');
-  console.log(`${f}: ${data}`);
 }
 
 /**
@@ -24,9 +24,9 @@ function run(cmd) {
   try {
     child_process.execSync(cmd);
   } catch (error) {
-    dump('serverlog_stdout.txt');
-    dump('serverlog_stderr.txt');
-    dump('function_output.json');
+    writeFileToConsole('serverlog_stdout.txt');
+    writeFileToConsole('serverlog_stderr.txt');
+    writeFileToConsole('function_output.json');
     throw error;
   }
 }
@@ -41,9 +41,12 @@ try {
   run('go install github.com/GoogleCloudPlatform/functions-framework-conformance/client');
 
   // Run the client with the specified parameters.
-  run('go run github.com/GoogleCloudPlatform/functions-framework-conformance/client --cmd=\'' +
-      cmd + '\' --type=' + functionType +
-      ' --validate-mapping=' + validateMapping);
+  run([
+    `go run github.com/GoogleCloudPlatform/functions-framework-conformance/client`,
+    `--cmd=${cmd}`,
+    `--type=${functionType}`,
+    `--validate-mappings=${validateMapping}`,
+  ].join(' '))
 
 } catch (error) {
   core.setFailed(error.message);

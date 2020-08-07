@@ -1,4 +1,4 @@
-# Functions framework conformance test javascript action
+# Functions Framework conformance test action
 
 This action runs the Functions Framework conformance tests with the specified
 parameters.
@@ -23,7 +23,7 @@ Whether or not to validate legacy->cloudevent mapping and vice versa. Default
 
 ## Example usage
 
-```
+```yaml
 uses: actions/setup-go@v1
 uses: GoogleCloudPlatform/functions-framework-conformance/actions@v1
 with:
