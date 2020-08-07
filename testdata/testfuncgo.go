@@ -1,5 +1,5 @@
 // Package func is a Go test function.
-package main
+package func
 
 import (
 	"io/ioutil"
