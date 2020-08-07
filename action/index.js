@@ -46,7 +46,7 @@ try {
   run([
     `go run github.com/GoogleCloudPlatform/functions-framework-conformance/client`,
     `-type=${functionType}`,
-    `-validate-mappings=${validateMapping}`,
+    `-validate-mapping=${validateMapping}`,
     `-builder-source=${source}`,
     `-builder-target=${target}`,
     `-builder-runtime=${runtime}`,
