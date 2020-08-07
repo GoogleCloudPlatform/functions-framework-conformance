@@ -1,7 +1,7 @@
-import {} from '@actions/core';
-import {} from '@actions/github';
-import {} from 'child_process';
-import {} from 'fs';
+const core = require('@actions/core');
+const core = require('@actions/github');
+const core = require('child_process');
+const core = require('fs');
 
 /**
  * writeFileToConsole contents of file to console.
