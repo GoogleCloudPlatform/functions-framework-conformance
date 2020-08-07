@@ -1,7 +1,7 @@
 const core = require('@actions/core');
-const core = require('@actions/github');
-const core = require('child_process');
-const core = require('fs');
+const github = require('@actions/github');
+const child_process = require('child_process');
+const fs = require('fs');
 
 /**
  * writeFileToConsole contents of file to console.
