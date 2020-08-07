@@ -1,0 +1,25 @@
+{
+  "name": "conformance-test-action",
+  "private": true,
+  "description": "Conformance test action",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "tsc",
+    "package": "ncc build --source-map",
+    "all": "npm run build && npm run package"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GoogleCloudPlatform/functions-framework-conformance.git"
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.25",
+    "@typescript-eslint/parser": "^3.7.0",
+    "@zeit/ncc": "^0.22.3",
+    "typescript": "^3.9.7"
+  },
+  "dependencies": {
+    "@actions/core": "^1.2.4",
+    "@actions/github": "^4.0.0"
+  }
+}
