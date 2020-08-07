@@ -31,7 +31,7 @@ jobs:
       with:
         functionType: 'http'
         validateMapping: false
-        source: 'testdata/testfunc.go'
+        source: 'testdata/testfuncgo.go'
         target: 'HTTP'
         runtime: 'go113'
         tag: 'go113_20200713_20_RC00'
