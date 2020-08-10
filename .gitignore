@@ -3,8 +3,9 @@ client/client
 client/client.exe
 BUILD
 
-# Ignore the action's dependency directory.
+# Ignore the action's dependency and lib directories.
 action/node_modules
+action/lib
 
 ## From https://github.com/github/gitignore/blob/master/Go.gitignore
 

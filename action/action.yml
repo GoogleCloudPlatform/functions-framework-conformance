@@ -1,6 +1,9 @@
 name: 'Run conformance tests'
 description: 'Run the functions framework conformance tests with specified parameters.'
 inputs:
+  outputFile:
+    description: 'output file from funciton'
+    default: 'function_output.json'
   functionType:
     description: 'type of function'
     default: 'http'

@@ -453,34 +453,31 @@ function runCmd(cmd) {
         writeFileToConsole('serverlog_stdout.txt');
         writeFileToConsole('serverlog_stderr.txt');
         writeFileToConsole('function_output.json');
-        throw error;
+        core.setFailed(error.message);
     }
 }
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const functionType = core.getInput('functionType');
-            const validateMapping = core.getInput('validateMapping');
-            const source = core.getInput('source');
-            const target = core.getInput('target');
-            const runtime = core.getInput('runtime');
-            const tag = core.getInput('tag');
-            // Install conformance client binary.
-            runCmd('go install github.com/GoogleCloudPlatform/functions-framework-conformance/client');
-            // Run the client with the specified parameters.
-            runCmd([
-                `go run github.com/GoogleCloudPlatform/functions-framework-conformance/client`,
-                `-type=${functionType}`,
-                `-validate-mapping=${validateMapping}`,
-                `-builder-source=${source}`,
-                `-builder-target=${target}`,
-                `-builder-runtime=${runtime}`,
-                `-builder-tag=${tag}`,
-            ].join(' '));
-        }
-        catch (error) {
-            core.setFailed(error.message);
-        }
+        const outputFile = core.getInput('outputFile');
+        const functionType = core.getInput('functionType');
+        const validateMapping = core.getInput('validateMapping');
+        const source = core.getInput('source');
+        const target = core.getInput('target');
+        const runtime = core.getInput('runtime');
+        const tag = core.getInput('tag');
+        // Install conformance client binary.
+        runCmd('go install github.com/GoogleCloudPlatform/functions-framework-conformance/client');
+        // Run the client with the specified parameters.
+        runCmd([
+            `go run github.com/GoogleCloudPlatform/functions-framework-conformance/client`,
+            `-output-file=${outputFile}`,
+            `-type=${functionType}`,
+            `-validate-mapping=${validateMapping}`,
+            `-builder-source=${source}`,
+            `-builder-target=${target}`,
+            `-builder-runtime=${runtime}`,
+            `-builder-tag=${tag}`,
+        ].join(' '));
     });
 }
 run();
