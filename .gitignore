@@ -2,3 +2,38 @@
 client/client
 client/client.exe
 BUILD
+
+# Ignore the action's dependency and lib directories.
+action/node_modules
+action/lib
+
+## From https://github.com/github/gitignore/blob/master/Go.gitignore
+
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+## From https://github.com/github/gitignore/blob/master/Node.gitignore
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Diagnostic reports (https://nodejs.org/api/report.html)
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+*.tsbuildinfo
+.npm

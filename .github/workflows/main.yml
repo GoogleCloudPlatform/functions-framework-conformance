@@ -1,0 +1,37 @@
+on: [push, pull_request]
+
+jobs:
+  run-conformance:
+    runs-on: ubuntu-latest
+    name: Validate conformance test framework
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: actions/setup-go@v2
+      with:
+        go-version: '^1.13.1'
+
+    - name: Vendor dependencies
+      run: "go mod vendor"
+
+    - name: Build and test
+      run: "go test ./..."
+
+    - name: Vet
+      run: "go vet ./..."
+
+    - name: Format
+      run: "find . -not \\( \\( -wholename './.git' -o -wholename '*/vendor/*' \\) -prune \\) -name '*.go' | xargs gofmt -s -d"
+
+    - name: Verify generation
+      run: "./check_go_generate.sh"
+
+    - name: Run conformance tests
+      uses: ./action
+      with:
+        functionType: 'http'
+        validateMapping: false
+        source: 'testdata'
+        target: 'HTTP'
+        runtime: 'go113'
+        tag: 'go113_20200713_20_RC00'

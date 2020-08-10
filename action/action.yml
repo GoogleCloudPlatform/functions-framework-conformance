@@ -1,0 +1,27 @@
+name: 'Run conformance tests'
+description: 'Run the functions framework conformance tests with specified parameters.'
+inputs:
+  outputFile:
+    description: 'output file from funciton'
+    default: 'function_output.json'
+  functionType:
+    description: 'type of function'
+    default: 'http'
+  validateMapping:
+    description: 'whether to validate mapping from legacy->cloud event and vice versa'
+    default: true
+  source:
+    description: 'function source code'
+    default: ''
+  target:
+    description: 'function target'
+    default: ''
+  runtime:
+    description: 'function runtime (e.g. nodejs10, go113)'
+    default: ''
+  tag:
+    description: 'GCR tag to use for builder image'
+    default: 'latest'
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
