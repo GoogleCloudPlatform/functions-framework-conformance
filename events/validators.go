@@ -33,7 +33,6 @@ type ValidationInfo struct {
 
 // PrintValidationInfos takes a list of ValidationInfos and collapses them into a single error and
 // a single log line recording which events were validation, which skipped, and why.
-// Returns
 func PrintValidationInfos(vis []*ValidationInfo) (string, error) {
 	errStr := "Validation errors:"
 	logStr := "Events tried:"
@@ -95,19 +94,17 @@ func validateLegacyEvent(name string, gotBytes, wantBytes []byte) *ValidationInf
 	got := make(map[string]interface{})
 	err := json.Unmarshal(gotBytes, &got)
 	if err != nil {
-		vi.Errs = []error{fmt.Errorf("unmarshalling function-received version of legacy event %q: %v", name, err)}
-		return vi
+		vi.Errs = append(vi.Errs, fmt.Errorf("unmarshalling function-received version of legacy event %q: %v", name, err))
 	}
 
 	want := make(map[string]interface{})
 	err = json.Unmarshal(wantBytes, &want)
 	if err != nil {
-		vi.Errs = []error{fmt.Errorf("unmarshalling expected contents of legacy event %q: %v", name, err)}
-		return vi
+		vi.Errs = append(vi.Errs, fmt.Errorf("unmarshalling expected contents of legacy event %q: %v", name, err))
 	}
 
-	if !reflect.DeepEqual(got["data"], want["data"]) {
-		vi.Errs = []error{fmt.Errorf("unexpected data in event %q:\ngot %v,\nwant %v", name, got["data"], want["data"])}
+	// If there were issues extracting the data, bail early.
+	if vi.Errs != nil {
 		return vi
 	}
 
@@ -186,14 +183,17 @@ func validateCloudEvent(name string, gotBytes, wantBytes []byte) *ValidationInfo
 	got := &cloudevents.Event{}
 	err := json.Unmarshal(gotBytes, got)
 	if err != nil {
-		vi.Errs = []error{fmt.Errorf("unmarshalling function-received version of cloud event %q: %v", name, err)}
-		return vi
+		vi.Errs = append(vi.Errs, fmt.Errorf("unmarshalling function-received version of cloud event %q: %v", name, err))
 	}
 
 	want := &cloudevents.Event{}
 	err = json.Unmarshal(wantBytes, want)
 	if err != nil {
-		vi.Errs = []error{fmt.Errorf("unmarshalling expected contents of cloud event %q: %v", name, err)}
+		vi.Errs = append(vi.Errs, fmt.Errorf("unmarshalling expected contents of cloud event %q: %v", name, err))
+	}
+
+	// If there were issues extracting the data, bail early.
+	if vi.Errs != nil {
 		return vi
 	}
 
