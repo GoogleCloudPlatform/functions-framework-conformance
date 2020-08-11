@@ -23,26 +23,58 @@ import (
 	"github.com/google/go-cmp/cmp"
 )
 
+// ValidationInfo contains information about a particular validation step, including a reason why
+// the validation for this event and type was skipped or the relevant error.
+type ValidationInfo struct {
+	Name          string
+	Errs          []error
+	SkippedReason string
+}
+
+// PrintValidationInfos takes a list of ValidationInfos and collapses them into a single error and
+// a single log line recording which events were validation, which skipped, and why.
+// Returns
+func PrintValidationInfos(vis []*ValidationInfo) (string, error) {
+	errStr := "Validation errors:"
+	logStr := "Events tried:"
+
+	errsOccurred := false
+	for _, vi := range vis {
+		// Collect errors into one string.
+		if vi.Errs != nil {
+			errsOccurred = true
+			viErrStr := fmt.Sprintf("%s:", vi.Name)
+			for _, err := range vi.Errs {
+				viErrStr = fmt.Sprintf("%s\n\t\t- %v", viErrStr, err)
+			}
+			errStr = fmt.Sprintf("%s\n\t- %s", errStr, viErrStr)
+			logStr = fmt.Sprintf("%s\n\t- %s (FAILED)", logStr, vi.Name)
+			continue
+		}
+
+		// Collect events run and skipped into one string.
+		if vi.SkippedReason != "" {
+			logStr = fmt.Sprintf("%s\n\t- %s (SKIPPED: %s)", logStr, vi.Name, vi.SkippedReason)
+		} else {
+			logStr = fmt.Sprintf("%s\n\t- %s (PASSED)", logStr, vi.Name)
+		}
+	}
+
+	if errsOccurred {
+		return logStr, fmt.Errorf(errStr)
+	}
+	return logStr, nil
+}
+
 // ValidateEvent validates that a particular function output matches the expected contents.
-func ValidateEvent(name string, t EventType, got []byte) error {
+func ValidateEvent(name string, t EventType, got []byte) *ValidationInfo {
 	want := OutputData(name, t)
 	if want == nil {
-		// List available event types for debugging.
-		available := []string{}
-		for name, data := range Events {
-			switch t {
-			case LegacyEvent:
-				if data.Output.LegacyEvent != nil {
-					available = append(available, name)
-				}
-			case CloudEvent:
-				if data.Output.CloudEvent != nil {
-					available = append(available, name)
-				}
-			}
-		}
 		// Include the possibilities in the error.
-		return fmt.Errorf("no expected output value found for %q. Available event types: %v", name, available)
+		return &ValidationInfo{
+			Name:          name,
+			SkippedReason: fmt.Sprintf("no expected output value of type %s", t),
+		}
 	}
 
 	switch t {
@@ -51,24 +83,32 @@ func ValidateEvent(name string, t EventType, got []byte) error {
 	case CloudEvent:
 		return validateCloudEvent(name, got, want)
 	}
+
+	// Should be unreachable.
 	return nil
 }
 
-func validateLegacyEvent(name string, gotBytes, wantBytes []byte) error {
+func validateLegacyEvent(name string, gotBytes, wantBytes []byte) *ValidationInfo {
+	vi := &ValidationInfo{
+		Name: name,
+	}
 	got := make(map[string]interface{})
 	err := json.Unmarshal(gotBytes, &got)
 	if err != nil {
-		return fmt.Errorf("unmarshalling function-received version of legacy event %q: %v", name, err)
+		vi.Errs = []error{fmt.Errorf("unmarshalling function-received version of legacy event %q: %v", name, err)}
+		return vi
 	}
 
 	want := make(map[string]interface{})
 	err = json.Unmarshal(wantBytes, &want)
 	if err != nil {
-		return fmt.Errorf("unmarshalling expected contents of legacy event %q: %v", name, err)
+		vi.Errs = []error{fmt.Errorf("unmarshalling expected contents of legacy event %q: %v", name, err)}
+		return vi
 	}
 
 	if !reflect.DeepEqual(got["data"], want["data"]) {
-		return fmt.Errorf("unexpected data in event %q:\ngot %v,\nwant %v", name, got["data"], want["data"])
+		vi.Errs = []error{fmt.Errorf("unexpected data in event %q:\ngot %v,\nwant %v", name, got["data"], want["data"])}
+		return vi
 	}
 
 	gotContext := got["context"].(map[string]interface{})
@@ -110,11 +150,11 @@ func validateLegacyEvent(name string, gotBytes, wantBytes []byte) error {
 
 	for _, field := range fields {
 		if !reflect.DeepEqual(field.gotValue, field.wantValue) {
-			return fmt.Errorf("unexpected %q in event %q:\ngot %+v,\nwant %+v", field.name, name, field.gotValue, field.wantValue)
+			vi.Errs = append(vi.Errs, fmt.Errorf("unexpected %q in event %q:\ngot %+v,\nwant %+v", field.name, name, field.gotValue, field.wantValue))
 		}
 	}
 
-	return nil
+	return vi
 }
 
 // Some fields can present with either a CamelCase or a snake_case key. Both are acceptable.
@@ -138,21 +178,24 @@ func getMaybeSnakeCaseField(gotContext map[string]interface{}, field string) int
 	return nil
 }
 
-func validateCloudEvent(name string, gotBytes, wantBytes []byte) error {
+func validateCloudEvent(name string, gotBytes, wantBytes []byte) *ValidationInfo {
+	vi := &ValidationInfo{
+		Name: name,
+	}
+
 	got := &cloudevents.Event{}
 	err := json.Unmarshal(gotBytes, got)
 	if err != nil {
-		return fmt.Errorf("unmarshalling function-received version of cloud event %q: %v", name, err)
+		vi.Errs = []error{fmt.Errorf("unmarshalling function-received version of cloud event %q: %v", name, err)}
+		return vi
 	}
 
 	want := &cloudevents.Event{}
 	err = json.Unmarshal(wantBytes, want)
 	if err != nil {
-		return fmt.Errorf("unmarshalling expected contents of cloud event %q: %v", name, err)
+		vi.Errs = []error{fmt.Errorf("unmarshalling expected contents of cloud event %q: %v", name, err)}
+		return vi
 	}
-
-	gotContext := got.Context.AsV1()
-	wantContext := want.Context.AsV1()
 
 	fields := []struct {
 		name      string
@@ -161,35 +204,35 @@ func validateCloudEvent(name string, gotBytes, wantBytes []byte) error {
 	}{
 		{
 			name:      "ID",
-			gotValue:  gotContext.ID,
-			wantValue: wantContext.ID,
+			gotValue:  got.ID(),
+			wantValue: want.ID(),
 		},
 		{
 			name:      "source",
-			gotValue:  gotContext.Source,
-			wantValue: wantContext.Source,
+			gotValue:  got.Source(),
+			wantValue: want.Source(),
 		},
 		{
 			name:      "type",
-			gotValue:  gotContext.Type,
-			wantValue: wantContext.Type,
+			gotValue:  got.Type(),
+			wantValue: want.Type(),
 		},
 		{
 			name:      "datacontenttype",
-			gotValue:  *gotContext.DataContentType,
-			wantValue: *wantContext.DataContentType,
+			gotValue:  got.DataContentType(),
+			wantValue: want.DataContentType(),
 		},
 		{
 			name:      "data",
-			gotValue:  string(got.DataEncoded),
-			wantValue: string(want.DataEncoded),
+			gotValue:  string(got.Data()),
+			wantValue: string(want.Data()),
 		},
 	}
 	for _, field := range fields {
 		if !cmp.Equal(field.gotValue, field.wantValue) {
-			return fmt.Errorf("unexpected %q field in %q: got %v, want %v", field.name, name, field.gotValue, field.wantValue)
+			vi.Errs = append(vi.Errs, fmt.Errorf("unexpected %q field in %q: got %v, want %v", field.name, name, field.gotValue, field.wantValue))
 		}
 	}
 
-	return nil
+	return vi
 }

@@ -111,6 +111,7 @@ func (v validator) validateEvents(url string, inputType, outputType events.Event
 		return err
 	}
 
+	vis := []*events.ValidationInfo{}
 	for _, name := range eventNames {
 		input := events.InputData(name, inputType)
 		if input == nil {
@@ -124,12 +125,14 @@ func (v validator) validateEvents(url string, inputType, outputType events.Event
 		if err != nil {
 			return fmt.Errorf("reading output file from function for %q: %v", name, err)
 		}
-		if err := events.ValidateEvent(name, outputType, output); err != nil {
-			return fmt.Errorf("unexpected output for %q: %v", name, err)
+		if vi := events.ValidateEvent(name, outputType, output); vi != nil {
+			vis = append(vis, vi)
 		}
 	}
 
-	return nil
+	logStr, err := events.PrintValidationInfos(vis)
+	log.Printf(logStr)
+	return err
 }
 
 func (v validator) validate(url string) error {
@@ -144,11 +147,12 @@ func (v validator) validate(url string) error {
 		return nil
 	case "cloudevent":
 		// Validate CloudEvent signature, if provided
-		log.Printf("CloudEvent validation started...")
+		log.Printf("CloudEvent validation with CloudEvent requests...")
 		if err := v.validateEvents(url, events.CloudEvent, events.CloudEvent); err != nil {
 			return err
 		}
 		if v.validateMapping {
+			log.Printf("CloudEvent validation with legacy event requests...")
 			if err := v.validateEvents(url, events.LegacyEvent, events.CloudEvent); err != nil {
 				return err
 			}
@@ -157,11 +161,12 @@ func (v validator) validate(url string) error {
 		return nil
 	case "legacyevent":
 		// Validate legacy event signature, if provided
-		log.Printf("Legacy event validation started...")
+		log.Printf("Legacy event validation with legacy event requests...")
 		if err := v.validateEvents(url, events.LegacyEvent, events.LegacyEvent); err != nil {
 			return err
 		}
 		if v.validateMapping {
+			log.Printf("Legacy event validation with CloudEvent requests...")
 			if err := v.validateEvents(url, events.CloudEvent, events.LegacyEvent); err != nil {
 				return err
 			}

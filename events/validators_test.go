@@ -15,6 +15,7 @@
 package events
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -25,8 +26,8 @@ func TestValidateLegacyEvent(t *testing.T) {
 		t.Fatalf("no legacy event data")
 	}
 	// Validate the event output against itself.
-	if err := ValidateEvent(testName, LegacyEvent, data); err != nil {
-		t.Errorf("validating legacy event: %v", err)
+	if vi := ValidateEvent(testName, LegacyEvent, data); vi.Errs != nil {
+		t.Errorf("validating legacy event: %v", vi.Errs)
 	}
 }
 
@@ -37,7 +38,75 @@ func TestValidateCloudEvent(t *testing.T) {
 		t.Fatalf("no cloudevent data")
 	}
 	// Validate the event output against itself.
-	if err := ValidateEvent(testName, CloudEvent, data); err != nil {
-		t.Errorf("validating cloudevent: %v", err)
+	if vi := ValidateEvent(testName, CloudEvent, data); vi.Errs != nil {
+		t.Errorf("validating cloudevent: %v", vi.Errs)
+	}
+}
+
+func TestPrintValidationInfos(t *testing.T) {
+	vis := []*ValidationInfo{
+		&ValidationInfo{
+			Name: "with error",
+			Errs: []error{
+				fmt.Errorf("first error"),
+			},
+		},
+		&ValidationInfo{
+			Name: "with multiple errors",
+			Errs: []error{
+				fmt.Errorf("first error"),
+				fmt.Errorf("second error"),
+			},
+		},
+		&ValidationInfo{
+			Name: "passed",
+		},
+		&ValidationInfo{
+			Name:          "skipped",
+			SkippedReason: "skipping",
+		},
+	}
+
+	wantLog := `Events tried:
+	- with error (FAILED)
+	- with multiple errors (FAILED)
+	- passed (PASSED)
+	- skipped (SKIPPED: skipping)`
+
+	wantErr := fmt.Errorf(`Validation errors:
+	- with error:
+		- first error
+	- with multiple errors:
+		- first error
+		- second error`)
+
+	gotLog, gotErr := PrintValidationInfos(vis)
+	if gotLog != wantLog {
+		t.Errorf("PrintValidationInfos log: got %s, want %s", gotLog, wantLog)
+	}
+	if gotErr.Error() != wantErr.Error() {
+		t.Errorf("PrintValidationInfos error: got %v, want %v", gotErr, wantErr)
+	}
+
+	passedVIs := []*ValidationInfo{
+		&ValidationInfo{
+			Name: "passed",
+		},
+		&ValidationInfo{
+			Name:          "skipped",
+			SkippedReason: "skipping",
+		},
+	}
+
+	wantLog = `Events tried:
+	- passed (PASSED)
+	- skipped (SKIPPED: skipping)`
+
+	gotLog, gotErr = PrintValidationInfos(passedVIs)
+	if gotLog != wantLog {
+		t.Errorf("PrintValidationInfos log: got %s, want %s", gotLog, wantLog)
+	}
+	if gotErr != nil {
+		t.Errorf("PrintValidationInfos error: got %v, want nil", gotErr)
 	}
 }
