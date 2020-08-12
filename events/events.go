@@ -35,6 +35,16 @@ const (
 	CloudEvent
 )
 
+func (e EventType) String() string {
+	switch e {
+	case LegacyEvent:
+		return "legacy event"
+	case CloudEvent:
+		return "cloud event"
+	}
+	return ""
+}
+
 // EventNames returns a list of event names to use as inputs for a particular event type.
 func EventNames(t EventType) ([]string, error) {
 	eventNames := []string{}
