@@ -30,6 +30,7 @@ var (
 	target          = flag.String("builder-target", "", "function target to use in building. Required if -buildpacks=true")
 	runtime         = flag.String("builder-runtime", "", "runtime to use in building. Required if -buildpacks=true")
 	tag             = flag.String("builder-tag", "latest", "builder image tag to use in building")
+	startDelay      = flag.Uint("start-delay", 1, "Seconds to wait before sending HTTP request to command process")
 )
 
 func main() {
