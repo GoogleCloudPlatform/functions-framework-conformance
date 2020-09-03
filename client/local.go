@@ -49,8 +49,8 @@ func (l *localFunctionServer) Start() (func(), error) {
 	}
 	log.Printf("Framework server started.")
 
-	// Give it a second to do its setup.
-	time.Sleep(time.Second)
+	// Give it some time to do its setup.
+	time.Sleep(time.Duration(*startDelay) * time.Second)
 
 	shutdown := func() {
 		// TODO: kill processes properly.
