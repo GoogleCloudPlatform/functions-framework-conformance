@@ -124,7 +124,7 @@ func (b *buildpacksFunctionServer) run() (func(), error) {
 	}
 
 	// Give it a second to do its setup.
-	time.Sleep(time.Second)
+	time.Sleep(time.Duration(*startDelay) * time.Second)
 
 	log.Printf("Framework container %q started.", b.containerID())
 
