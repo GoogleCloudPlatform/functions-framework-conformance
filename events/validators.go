@@ -224,8 +224,8 @@ func validateCloudEvent(name string, gotBytes, wantBytes []byte) *ValidationInfo
 		},
 		{
 			name:      "data",
-			gotValue:  string(got.Data()),
-			wantValue: string(want.Data()),
+			gotValue:  unmarshalMap(got.Data(), vi),
+			wantValue: unmarshalMap(want.Data(), vi),
 		},
 	}
 	for _, field := range fields {
@@ -236,3 +236,10 @@ func validateCloudEvent(name string, gotBytes, wantBytes []byte) *ValidationInfo
 
 	return vi
 }
+
+func unmarshalMap(data []byte, vi *ValidationInfo) (dataMap map[string]interface{}) {
+	if err := json.Unmarshal(data, &dataMap); err != nil {
+		vi.Errs = append(vi.Errs, fmt.Errorf("could not parse CloudEvent data as map: %v", err))
+	}
+	return
+}  
