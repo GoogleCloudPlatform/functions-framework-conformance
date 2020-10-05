@@ -39,6 +39,9 @@ async function run() {
   const target = core.getInput('target');
   const runtime = core.getInput('runtime');
   const tag = core.getInput('tag');
+  const useBuildpacks = core.getInput('useBuildpacks');
+  const cmd = core.getInput('cmd');
+  const startDelay = core.getInput('startDelay');
 
   // Install conformance client binary.
   runCmd(
@@ -54,6 +57,9 @@ async function run() {
     `-builder-target=${target}`,
     `-builder-runtime=${runtime}`,
     `-builder-tag=${tag}`,
+    `-buildpacks=${useBuildpacks}`,
+    `-cmd=${cmd}`,
+    `-start-delay=${startDelay}`,
   ].join(' '));
 }
 

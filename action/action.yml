@@ -22,6 +22,15 @@ inputs:
   tag:
     description: 'GCR tag to use for builder image'
     default: 'latest'
+  useBuildpacks:
+    description: 'GCR tag to use for builder image'
+    default: true
+  cmd:
+    description: 'command to run a Functions Framework server at localhost:8080. Ignored if -buildpacks=true.'
+    default: ''
+  startDelay:
+    description: 'GCR tag to use for builder image'
+    default: 1
 runs:
   using: 'node12'
   main: 'dist/index.js'
