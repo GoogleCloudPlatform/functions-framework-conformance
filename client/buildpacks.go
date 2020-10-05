@@ -72,7 +72,7 @@ func (b *buildpacksFunctionServer) OutputFile() ([]byte, error) {
 }
 
 func (b *buildpacksFunctionServer) build(ctx context.Context) error {
-	builder := fmt.Sprintf("ggcr.io/fn-img/buildpacks/%s/builder:%s", b.runtime, b.tag)
+	builder := fmt.Sprintf("us.gcr.io/fn-img/buildpacks/%s/builder:%s", b.runtime, b.tag)
 	packClient, err := pack.NewClient()
 	if err != nil {
 		return fmt.Errorf("getting pack client: %v", err)
