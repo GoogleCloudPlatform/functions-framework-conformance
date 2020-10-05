@@ -242,4 +242,4 @@ func unmarshalMap(data []byte, vi *ValidationInfo) (dataMap map[string]interface
 		vi.Errs = append(vi.Errs, fmt.Errorf("could not parse CloudEvent data as map: %v", err))
 	}
 	return
-}  
+}
