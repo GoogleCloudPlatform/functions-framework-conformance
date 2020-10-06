@@ -89,12 +89,12 @@ Next, determine the *ce_type* based on an exact match of
 |providers/cloud.firestore/eventTypes/document.delete|google.cloud.firestore.document.v1.deleted|
 |providers/firebase.auth/eventTypes/user.create|google.firebase.auth.user.v1.created|
 |providers/firebase.auth/eventTypes/user.delete|google.firebase.auth.user.v1.deleted|
+|providers/firebase.remoteConfig/remoteconfig.update|google.firebase.remoteconfig.remoteConfig.v1.updated|
 |providers/google.firebase.analytics/eventTypes/event.log|google.firebase.analytics.log.v1.written|
-|providers/google.firebase.database/eventTypes/ref.create|google.firebase.database.document.v1.created|
-|providers/google.firebase.database/eventTypes/ref.write|google.firebase.database.document.v1.written|
-|providers/google.firebase.database/eventTypes/ref.update|google.firebase.database.document.v1.updated|
-|providers/google.firebase.database/eventTypes/ref.delete|google.firebase.database.document.v1.deleted|
-|providers/cloud.storage/eventTypes/object.change|google.cloud.storage.object.v1.finalized|
+|providers/google.firebase.database/eventTypes/ref.create|google.firebase.database.ref.v1.created|
+|providers/google.firebase.database/eventTypes/ref.write|google.firebase.database.ref.v1.written|
+|providers/google.firebase.database/eventTypes/ref.update|google.firebase.database.ref.v1.updated|
+|providers/google.firebase.database/eventTypes/ref.delete|google.firebase.database.ref.v1.deleted|
 
 Finally, construct a new CloudEvent with the following attributes:
 
@@ -164,6 +164,38 @@ The inclusion or removal of the extra properties should make little
 difference to users, it's simpler to write conformance tests if all
 Functions Frameworks behave consistently.
 
+### Firebase RTDB events (tentative)
+
+(This information is still actively being worked on.)
+
+### Firebase analytics events (tentative)
+
+The `resource` property in the GCF HTTP representation is of the
+form `projects/{project-id}/events/{event-name}`. As part of
+conversion to a CloudEvent, this is split between the `subject` and
+the `source` attributes:
+
+- `source`: `//firebaseanalytics.googleapis.com/projects/{project-id}/apps/{app-id}`
+- `subject`: `events/{event-name}`
+
+TBD: Where the `app-id` part comes from.
+
+### Firebase auth events (tentative)
+
+The `subject` attribute of the CloudEvent is of the form `users/{uid}` where the
+`uid` value is taken from the `uid` property within the original
+`data` property. (This value is still populated within the CloudEvent data as well.)
+
+### Firestore document events (tentative)
+
+The `resource` in the GCF HTTP representation is of the form
+`projects/{project-id}/databases/{database-id}/documents/{path-to-document}".
+In the CloudEvent representation, this information is split between
+the `source` and the `subject`:
+
+- `source`: `//firestore.googleapis.com/projects/{project-id}/databases/{database-id}`
+- `subject: documents/{document-id}`
+
 # CloudEvent to "event, context" representation
 
 Here "event" represents the payload of the event, either as a string
@@ -200,4 +232,3 @@ TBD
 ### Cloud PubSub events
 
 TBD
-
