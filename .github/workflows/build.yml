@@ -11,6 +11,6 @@ jobs:
       with:
         node-version: 14.x
     - name: Build Action
-      run: cd action && npm i && npm run build
+      run: cd action && npm i && npm run all
     - name: Check if there's a diff
       run: git diff
