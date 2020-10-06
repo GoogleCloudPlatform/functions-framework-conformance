@@ -15,4 +15,4 @@ jobs:
     - name: Check if there's a diff
       run: git diff
     - name: Check git status
-      run: [ -z "`git status --porcelain`" ] && echo "NO DIFF" || exit 1
+      run: "[ -z "`git status --porcelain`" ] && echo "NO DIFF" || exit 1"
