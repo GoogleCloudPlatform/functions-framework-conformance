@@ -13,5 +13,4 @@ jobs:
     - name: Build Action
       run: cd action && npm i && npm run all
     - name: Check if there's a diff
-      run:
-      if: [ -z "`git status --porcelain`" ] && echo "NO DIFF" || exit 1
+      run: [ -z "`git status --porcelain`" ] && echo "NO DIFF" || exit 1
