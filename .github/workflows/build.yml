@@ -1,0 +1,22 @@
+on: [push, pull_request]
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    name: Check compiled script
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: 14.x
+    - name: Build Action
+      run: cd action && npm i && npm run all
+    - name: Check if there's a diff
+      run: git diff
+    - name: Verify no unstaged changes
+      run: |
+        if [[ "$(git status --porcelain)" != "" ]]; then
+          echo Unstaged changes detected
+          exit 1
+        fi
