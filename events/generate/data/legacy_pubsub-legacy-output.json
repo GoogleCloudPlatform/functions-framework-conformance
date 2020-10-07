@@ -1,7 +1,7 @@
 {
   "context": {
-    "eventId": "1215011316659232",
-    "timestamp": "2020-05-18T12:13:19.209Z",
+    "eventId": "aaaaaa-1111-bbbb-2222-cccccccccccc",
+    "timestamp": "2020-09-29T11:32:00.000Z",
     "eventType": "providers/cloud.pubsub/eventTypes/topic.publish",
     "resource": "projects/sample-project/topics/gcf-test"
   },

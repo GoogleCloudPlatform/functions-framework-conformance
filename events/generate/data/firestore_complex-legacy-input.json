@@ -70,12 +70,12 @@
       "updateTime": "2020-04-23T14:25:05.349632Z"
     }
   },
-  "eventId": "9babded5-e5f2-41af-a46a-06ba6bd84739-0",
+  "eventId": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "eventType": "providers/cloud.firestore/eventTypes/document.write",
   "notSupported": {},
   "params": {
     "doc": "IH75dRdeYJKd4uuQiqch"
   },
   "resource": "projects/project-id/databases/(default)/documents/gcf-test/IH75dRdeYJKd4uuQiqch",
-  "timestamp": "2020-04-23T14:25:05.349632Z"
+  "timestamp": "2020-09-29T11:32:00.000Z"
 }

@@ -2,8 +2,8 @@
   "specversion": "1.0",
   "type": "google.firebase.auth.user.v1.created",
   "source": "//firebase.googleapis.com/projects/my-project-id",
-  "id": "4423b4fa-c39b-4f79-b338-977a018e9b55",
-  "time": "2020-05-26T10:42:27.088Z",
+  "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
+  "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
   "data": {
     "email": "test@nowhere.com",
