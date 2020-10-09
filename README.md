@@ -25,19 +25,19 @@ Frameworks to the Functions Framework contract.
     For example, to test a Go HTTP function, you would invoke:
 
     ```sh
-    /path/to/functions-framework-conformance/client/client -cmd "go run ." -type http
+    /path/to/functions-framework-conformance/client/client -cmd "go run ." -type http -buildpacks false
     ```
 
     For example, to test a .NET CloudEvent function, you would invoke:
 
     ```sh
-    /path/to/functions-framework-conformance/client/client -cmd "dotnet run MyFunction" -type cloudevent
+    /path/to/functions-framework-conformance/client/client -cmd "dotnet run MyFunction" -type cloudevent -buildpacks false
     ```
 
     For example, to test a Node.js legacy event function, you would invoke:
 
     ```sh
-    /path/to/functions-framework-conformance/client/client -cmd "npx @google-cloud/functions-framework --target MyFunction --signature-type=event" -type legacyevent
+    /path/to/functions-framework-conformance/client/client -cmd "npx @google-cloud/functions-framework --target MyFunction --signature-type=event" -type legacyevent -buildpacks false
     ```
 
 ## Usage
@@ -63,4 +63,6 @@ Usage of client:
         type of function to validate (must be 'http', 'cloudevent', or 'legacyevent' (default "http")
   -validate-mapping
         whether to validate mapping from legacy->cloud events and vice versa (as applicable) (default true)
+  -start-delay int
+        number of seconds to wait after command process startup before sending HTTP request
 ```
