@@ -20,3 +20,8 @@ jobs:
           echo Unstaged changes detected
           exit 1
         fi
+    - name: Lint Code Base
+      uses: github/super-linter@v3
+      env:
+        DEFAULT_BRANCH: master
+        VALIDATE_JSON: true
