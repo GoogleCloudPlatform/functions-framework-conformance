@@ -24,3 +24,4 @@ jobs:
       uses: github/super-linter@v3
       env:
         DEFAULT_BRANCH: master
+        VALIDATE_JSON: true
