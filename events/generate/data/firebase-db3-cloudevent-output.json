@@ -7,8 +7,6 @@
   "datacontenttype": "application/json",
   "data": {
     "data": null,
-    "delta": {
-      "grandchild": "other"
-    }
+    "delta": 10
   }
 }

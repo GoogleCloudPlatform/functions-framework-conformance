@@ -6,9 +6,11 @@
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
   "data": {
-    "data": null,
-    "delta": {
+    "data": {
       "grandchild": "other"
+    },
+    "delta": {
+      "grandchild": "other changed"
     }
   }
 }

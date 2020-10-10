@@ -6,9 +6,16 @@
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
   "data": {
-    "data": null,
+    "data": {
+      "grandchild": "other changed"
+    },
     "delta": {
-      "grandchild": "other"
+      "deeply": {
+        "nested": {
+          "text": "This is deeply nested",
+          "text2": "Second value"
+        }
+      }
     }
   }
 }
