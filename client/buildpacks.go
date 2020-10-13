@@ -78,7 +78,7 @@ func (b *buildpacksFunctionServer) build(ctx context.Context) error {
 	cmd := exec.Command("docker", "pull", builder)
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		return fmt.Errorf("failed to pull builder image %s: %v", builder, err)
+		return fmt.Errorf("failed to pull builder image %s: %v: %s", builder, err, string(output))
 	}
 	
 	packClient, err := pack.NewClient()
