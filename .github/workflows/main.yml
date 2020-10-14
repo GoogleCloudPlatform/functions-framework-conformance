@@ -34,3 +34,4 @@ jobs:
         source: 'testdata'
         target: 'HTTP'
         runtime: 'go113'
+        tag: 'go113_20201005_20_RC00'
