@@ -534,10 +534,10 @@ function run() {
         const cmd = core.getInput('cmd');
         const startDelay = core.getInput('startDelay');
         // Install conformance client binary.
-        runCmd('go get github.com/GoogleCloudPlatform/functions-framework-conformance/client');
+        runCmd('GO111MODULE=on go get -v github.com/GoogleCloudPlatform/functions-framework-conformance/client');
         // Run the client with the specified parameters.
         runCmd([
-            `go run github.com/GoogleCloudPlatform/functions-framework-conformance/client`,
+            `client`,
             `-output-file=${outputFile}`,
             `-type=${functionType}`,
             `-validate-mapping=${validateMapping}`,
