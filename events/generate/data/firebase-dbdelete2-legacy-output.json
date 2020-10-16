@@ -5,8 +5,8 @@
   },
   "context": {
     "resource": "projects/_/instances/my-project-id/refs/gcf-test/abc",
-    "timestamp": "2020-05-21T11:56:12.833Z",
+    "timestamp": "2020-09-29T11:32:00.000Z",
     "eventType": "providers/google.firebase.database/eventTypes/ref.delete",
-    "eventId": "KVLKeFKjFP2jepddr+EPGC0ZQ20="
+    "eventId": "aaaaaa-1111-bbbb-2222-cccccccccccc"
   }
 }

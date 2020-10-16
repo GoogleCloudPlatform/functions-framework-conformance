@@ -17,8 +17,8 @@
   },
   "context": {
     "resource": "projects/_/instances/my-project-id/refs/gcf-test/xyz",
-    "timestamp": "2020-05-21T11:21:07.809Z",
+    "timestamp": "2020-09-29T11:32:00.000Z",
     "eventType": "providers/google.firebase.database/eventTypes/ref.write",
-    "eventId": "9WBpn32ssA33ympcsuq/5JJmnDM="
+    "eventId": "aaaaaa-1111-bbbb-2222-cccccccccccc"
   }
 }
