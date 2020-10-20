@@ -15,10 +15,12 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 
 	"github.com/GoogleCloudPlatform/functions-framework-conformance/events"
+	"github.com/google/go-cmp/cmp"
 )
 
 type validatorParams struct {
@@ -90,17 +92,30 @@ func (v validator) runValidation() error {
 
 // The HTTP function should copy the contents of the request into the response.
 func (v validator) validateHTTP(url string) error {
-	req := []byte(`{"res":"PASS"}`)
-	err := sendHTTP(url, req)
+	want := map[string]string{
+		"res": "PASS",
+	}
+
+	req, err := json.Marshal(want)
 	if err != nil {
+		return fmt.Errorf("failed to marshal json: %v", err)
+	}
+
+	if err := sendHTTP(url, req); err != nil {
 		return fmt.Errorf("failed to get response from HTTP function: %v", err)
 	}
 	output, err := v.funcServer.OutputFile()
 	if err != nil {
 		return fmt.Errorf("reading output file from HTTP function: %v", err)
 	}
-	if string(output) != string(req) {
-		return fmt.Errorf("unexpected HTTP output data: got %s, want %s", output, req)
+
+	got := make(map[string]string)
+	if err = json.Unmarshal(output, &got); err != nil {
+		return fmt.Errorf("failed to unmarshal json: %v", err)
+	}
+
+	if !cmp.Equal(got, want) {
+		return fmt.Errorf("unexpected HTTP output data: got %v, want %v", got, want)
 	}
 	return nil
 }
