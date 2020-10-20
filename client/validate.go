@@ -110,7 +110,7 @@ func (v validator) validateHTTP(url string) error {
 	}
 
 	got := make(map[string]string)
-	if err = json.Unmarshal(output, got); err != nil {
+	if err = json.Unmarshal(output, &got); err != nil {
 		return fmt.Errorf("failed to unmarshal json: %v", err)
 	}
 
