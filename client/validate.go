@@ -92,16 +92,16 @@ func (v validator) runValidation() error {
 
 // The HTTP function should copy the contents of the request into the response.
 func (v validator) validateHTTP(url string) error {
-	want := make(map[string]string)
-	want["res"] = "PASS"
+	want := map[string]string{
+		"res": "PASS",
+	}
 
 	req, err := json.Marshal(want)
 	if err != nil {
 		return fmt.Errorf("failed to marshal json: %v", err)
 	}
 
-	err = sendHTTP(url, req)
-	if err != nil {
+	if err := sendHTTP(url, req); err != nil {
 		return fmt.Errorf("failed to get response from HTTP function: %v", err)
 	}
 	output, err := v.funcServer.OutputFile()
