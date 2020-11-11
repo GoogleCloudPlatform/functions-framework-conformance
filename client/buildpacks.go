@@ -28,8 +28,8 @@ import (
 )
 
 const (
-	image = "conformance-test-func"
-    	builderURL = "us.gcr.io/fn-img/buildpacks/%s/builder:%s"
+	image      = "conformance-test-func"
+	builderURL = "us.gcr.io/fn-img/buildpacks/%s/builder:%s"
 )
 
 type buildpacksFunctionServer struct {
@@ -74,13 +74,13 @@ func (b *buildpacksFunctionServer) OutputFile() ([]byte, error) {
 
 func (b *buildpacksFunctionServer) build(ctx context.Context) error {
 	builder := fmt.Sprintf(builderURL, b.runtime, b.tag)
-	
+
 	cmd := exec.Command("docker", "pull", builder)
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		return fmt.Errorf("failed to pull builder image %s: %v: %s", builder, err, string(output))
 	}
-	
+
 	packClient, err := pack.NewClient()
 	if err != nil {
 		return fmt.Errorf("getting pack client: %v", err)
