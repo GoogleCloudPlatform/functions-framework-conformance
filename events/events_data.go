@@ -299,7 +299,7 @@ var Events = map[string]Event{
     "delta": 10
   },
   "context": {
-    "resource": "projects/_/instances/my-project-id/refs/gcf-test/abc",
+    "resource": "projects/_/instances/my-project-id/refs/gcf-test/xyz",
     "timestamp": "2020-09-29T11:32:00.000Z",
     "eventType": "providers/google.firebase.database/eventTypes/ref.write",
     "eventId": "aaaaaa-1111-bbbb-2222-cccccccccccc"
