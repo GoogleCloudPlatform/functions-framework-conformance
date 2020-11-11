@@ -265,7 +265,7 @@ var Events = map[string]Event{
 			LegacyEvent: []byte(`{
   "eventType": "providers/google.firebase.database/eventTypes/ref.write",
   "params": {
-    "child": "abc"
+    "child": "xyz"
   },
   "auth": {
     "admin": true
@@ -274,7 +274,7 @@ var Events = map[string]Event{
     "data": null,
     "delta": 10
   },
-  "resource": "projects/_/instances/my-project-id/refs/gcf-test/abc",
+  "resource": "projects/_/instances/my-project-id/refs/gcf-test/xyz",
   "timestamp": "2020-09-29T11:32:00.000Z",
   "eventId": "aaaaaa-1111-bbbb-2222-cccccccccccc"
 }
@@ -959,7 +959,7 @@ var Events = map[string]Event{
 			LegacyEvent: []byte(`{
   "eventType": "providers/google.firebase.database/eventTypes/ref.delete",
   "params": {
-    "child": "abc"
+    "child": "xyz"
   },
   "auth": {
     "admin": true
@@ -968,7 +968,7 @@ var Events = map[string]Event{
     "data": 10,
     "delta": null
   },
-  "resource": "projects/_/instances/my-project-id/refs/gcf-test/abc",
+  "resource": "projects/_/instances/my-project-id/refs/gcf-test/xyz",
   "timestamp": "2020-09-29T11:32:00.000Z",
   "eventId": "aaaaaa-1111-bbbb-2222-cccccccccccc"
 }
@@ -994,7 +994,7 @@ var Events = map[string]Event{
     "delta": null
   },
   "context": {
-    "resource": "projects/_/instances/my-project-id/refs/gcf-test/abc",
+    "resource": "projects/_/instances/my-project-id/refs/gcf-test/xyz",
     "timestamp": "2020-09-29T11:32:00.000Z",
     "eventType": "providers/google.firebase.database/eventTypes/ref.delete",
     "eventId": "aaaaaa-1111-bbbb-2222-cccccccccccc"
