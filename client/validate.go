@@ -140,7 +140,7 @@ func (v validator) validateEvents(url string, inputType, outputType events.Event
 		if err != nil {
 			return fmt.Errorf("reading output file from function for %q: %v", name, err)
 		}
-		if vi := events.ValidateEvent(name, outputType, output); vi != nil {
+		if vi := events.ValidateEvent(name, inputType, outputType, output); vi != nil {
 			vis = append(vis, vi)
 		}
 	}
