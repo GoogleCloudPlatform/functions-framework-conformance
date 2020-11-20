@@ -26,19 +26,19 @@ func TestValidateLegacyEvent(t *testing.T) {
 		t.Fatalf("no legacy event data")
 	}
 	// Validate the event output against itself.
-	if vi := ValidateEvent(testName, LegacyEvent, data); vi.Errs != nil {
+	if vi := ValidateEvent(testName, LegacyEvent, LegacyEvent, data); vi.Errs != nil {
 		t.Errorf("validating legacy event: %v", vi.Errs)
 	}
 }
 
 func TestValidateCloudEvent(t *testing.T) {
 	testName := "firebase-auth"
-	data := OutputData(testName, CloudEvent)
+	data := InputData(testName, CloudEvent)
 	if data == nil {
 		t.Fatalf("no cloudevent data")
 	}
 	// Validate the event output against itself.
-	if vi := ValidateEvent(testName, CloudEvent, data); vi.Errs != nil {
+	if vi := ValidateEvent(testName, CloudEvent, CloudEvent, data); vi.Errs != nil {
 		t.Errorf("validating cloudevent: %v", vi.Errs)
 	}
 }

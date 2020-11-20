@@ -67,17 +67,24 @@ func PrintValidationInfos(vis []*ValidationInfo) (string, error) {
 }
 
 // ValidateEvent validates that a particular function output matches the expected contents.
-func ValidateEvent(name string, t EventType, got []byte) *ValidationInfo {
-	want := OutputData(name, t)
+func ValidateEvent(name string, it EventType, ot EventType, got []byte) *ValidationInfo {
+	want := OutputData(name, ot)
+
+	// If validating CloudEvent to CloudEvent (no event conversions),
+	// the output data should be exactly the same as the input data.
+	if it == CloudEvent && ot == CloudEvent {
+		want = InputData(name, it)
+	}
+
 	if want == nil {
 		// Include the possibilities in the error.
 		return &ValidationInfo{
 			Name:          name,
-			SkippedReason: fmt.Sprintf("no expected output value of type %s", t),
+			SkippedReason: fmt.Sprintf("no expected output value of type %s", ot),
 		}
 	}
 
-	switch t {
+	switch ot {
 	case LegacyEvent:
 		return validateLegacyEvent(name, got, want)
 	case CloudEvent:
