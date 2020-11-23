@@ -1,7 +1,8 @@
 {
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.written",
-  "source": "//firebase.googleapis.com/projects/_/instances/my-project-id/refs/gcf-test/xyz",
+  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
