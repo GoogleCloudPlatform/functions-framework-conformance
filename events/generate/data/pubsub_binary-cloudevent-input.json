@@ -6,7 +6,10 @@
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
   "data": {
-    "@type": "type.googleapis.com/google.pubsub.v1.PubsubMessage",
-    "data": "AQIDBA=="
+    "subscription": "projects/sample-project/subscriptions/sample-subscription",
+    "message": {
+      "@type": "type.googleapis.com/google.pubsub.v1.PubsubMessage",
+      "data": "AQIDBA=="
+    }
   }
 }
