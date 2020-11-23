@@ -41,7 +41,8 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.auth.user.v1.created",
-  "source": "//firebase.googleapis.com/projects/my-project-id",
+  "source": "//firebaseauth.googleapis.com/projects/my-project-id",
+  "subject": "users/UUpby3s4spZre6kHsgVSPetzQ8l2",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
@@ -89,7 +90,8 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.auth.user.v1.created",
-  "source": "//firebase.googleapis.com/projects/my-project-id",
+  "source": "//firebaseauth.googleapis.com/projects/my-project-id",
+  "subject": "users/UUpby3s4spZre6kHsgVSPetzQ8l2",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
@@ -136,7 +138,8 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.written",
-  "source": "//firebase.googleapis.com/projects/_/instances/my-project-id/refs/gcf-test/xyz",
+  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
@@ -168,7 +171,8 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.written",
-  "source": "//firebase.googleapis.com/projects/_/instances/my-project-id/refs/gcf-test/xyz",
+  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
@@ -209,7 +213,8 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.written",
-  "source": "//firebase.googleapis.com/projects/_/instances/my-project-id/refs/gcf-test/xyz",
+  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
@@ -244,7 +249,8 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.written",
-  "source": "//firebase.googleapis.com/projects/_/instances/my-project-id/refs/gcf-test/xyz",
+  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
@@ -282,7 +288,8 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.written",
-  "source": "//firebase.googleapis.com/projects/_/instances/my-project-id/refs/gcf-test/xyz",
+  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
@@ -309,7 +316,8 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.written",
-  "source": "//firebase.googleapis.com/projects/_/instances/my-project-id/refs/gcf-test/xyz",
+  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
@@ -352,7 +360,8 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.written",
-  "source": "//firebase.googleapis.com/projects/_/instances/my-project-id/refs/gcf-test/xyz",
+  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
@@ -397,7 +406,8 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.written",
-  "source": "//firebase.googleapis.com/projects/_/instances/my-project-id/refs/gcf-test/xyz",
+  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
@@ -452,7 +462,8 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.written",
-  "source": "//firebase.googleapis.com/projects/_/instances/my-project-id/refs/gcf-test/xyz",
+  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
@@ -503,7 +514,8 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.written",
-  "source": "//firebase.googleapis.com/projects/_/instances/my-project-id/refs/gcf-test/xyz",
+  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
@@ -562,7 +574,8 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.written",
-  "source": "//firebase.googleapis.com/projects/_/instances/my-project-id/refs/gcf-test/xyz",
+  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
@@ -616,7 +629,8 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.written",
-  "source": "//firebase.googleapis.com/projects/_/instances/my-project-id/refs/gcf-test/xyz",
+  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
@@ -673,7 +687,8 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.written",
-  "source": "//firebase.googleapis.com/projects/_/instances/my-project-id/refs/gcf-test/xyz",
+  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
@@ -719,7 +734,8 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.written",
-  "source": "//firebase.googleapis.com/projects/_/instances/my-project-id/refs/gcf-test/xyz",
+  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
@@ -782,7 +798,8 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.written",
-  "source": "//firebase.googleapis.com/projects/_/instances/my-project-id/refs/gcf-test/xyz",
+  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
@@ -850,7 +867,8 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.written",
-  "source": "//firebase.googleapis.com/projects/_/instances/my-project-id/refs/gcf-test/xyz",
+  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
@@ -907,7 +925,8 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.deleted",
-  "source": "//firebase.googleapis.com/projects/_/instances/my-project-id/refs/gcf-test/xyz",
+  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
@@ -939,7 +958,8 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.deleted",
-  "source": "//firebase.googleapis.com/projects/_/instances/my-project-id/refs/gcf-test/xyz",
+  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
@@ -976,7 +996,8 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.deleted",
-  "source": "//firebase.googleapis.com/projects/_/instances/my-project-id/refs/gcf-test/xyz",
+  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
@@ -1004,7 +1025,8 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.deleted",
-  "source": "//firebase.googleapis.com/projects/_/instances/my-project-id/refs/gcf-test/xyz",
+  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
@@ -1104,7 +1126,8 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.cloud.firestore.document.v1.written",
-  "source": "//firestore.googleapis.com/projects/project-id/databases/(default)/documents/gcf-test/IH75dRdeYJKd4uuQiqch",
+  "source": "//firestore.googleapis.com/projects/project-id/databases/(default)",
+  "subject": "documents/gcf-test/IH75dRdeYJKd4uuQiqch",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
@@ -1266,7 +1289,8 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.cloud.firestore.document.v1.written",
-  "source": "//firestore.googleapis.com/projects/project-id/databases/(default)/documents/gcf-test/IH75dRdeYJKd4uuQiqch",
+  "source": "//firestore.googleapis.com/projects/project-id/databases/(default)",
+  "subject": "documents/gcf-test/IH75dRdeYJKd4uuQiqch",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
@@ -1403,7 +1427,8 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.cloud.firestore.document.v1.written",
-  "source": "//firestore.googleapis.com/projects/project-id/databases/(default)/documents/gcf-test/2Vm2mI1d0wIaK2Waj5to",
+  "source": "//firestore.googleapis.com/projects/project-id/databases/(default)",
+  "subject": "documents/gcf-test/IH75dRdeYJKd4uuQiqch",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
@@ -1501,7 +1526,8 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.cloud.firestore.document.v1.written",
-  "source": "//firestore.googleapis.com/projects/project-id/databases/(default)/documents/gcf-test/2Vm2mI1d0wIaK2Waj5to",
+  "source": "//firestore.googleapis.com/projects/project-id/databases/(default)",
+  "subject": "documents/gcf-test/IH75dRdeYJKd4uuQiqch",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
@@ -1573,11 +1599,14 @@ var Events = map[string]Event{
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
   "data": {
-    "@type": "type.googleapis.com/google.pubsub.v1.PubsubMessage",
-    "attributes": {
-      "attribute1": "value1"
-    },
-    "data": "VGhpcyBpcyBhIHNhbXBsZSBtZXNzYWdl"
+    "subscription": "projects/sample-project/subscriptions/sample-subscription",
+    "message": {
+      "@type": "type.googleapis.com/google.pubsub.v1.PubsubMessage",
+      "attributes": {
+        "attribute1": "value1"
+      },
+      "data": "VGhpcyBpcyBhIHNhbXBsZSBtZXNzYWdl"
+    }
   }
 }
 `),
@@ -1607,132 +1636,13 @@ var Events = map[string]Event{
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
   "data": {
-    "@type": "type.googleapis.com/google.pubsub.v1.PubsubMessage",
-    "attributes": {
-      "attribute1": "value1"
-    },
-    "data": "VGhpcyBpcyBhIHNhbXBsZSBtZXNzYWdl"
-  }
-}
-`),
-		},
-	},
-
-	"legacy_storage_change": {
-		Input: EventData{
-			LegacyEvent: []byte(`{
-  "data": {
-    "bucket": "sample-bucket",
-    "crc32c": "AAAAAA==",
-    "etag": "COu8mb3Dn+kCEAE=",
-    "generation": "1588778055917163",
-    "id": "sample-bucket/MyFile/1588778055917163",
-    "kind": "storage#object",
-    "md5Hash": "ZDQxZDhjZDk4ZjAwYjIwNGU5ODAwOTk4ZWNmODQyN2U=",
-    "mediaLink": "https://www.googleapis.com/download/storage/v1/b/projectid-sample-bucket/o/MyFile?generation=1588778055917163\u0026alt=media",
-    "metageneration": "1",
-    "name": "MyFile",
-    "resourceState": "not_exists",
-    "selfLink": "https://www.googleapis.com/storage/v1/b/projectid-sample-bucket/o/MyFile",
-    "size": "0",
-    "storageClass": "MULTI_REGIONAL",
-    "timeCreated": "2020-05-06T15:14:15.917Z",
-    "timeDeleted": "2020-05-18T09:07:51.799Z",
-    "timeStorageClassUpdated": "2020-05-06T15:14:15.917Z",
-    "updated": "2020-05-06T15:14:15.917Z"
-  },
-  "eventId": "aaaaaa-1111-bbbb-2222-cccccccccccc",
-  "eventType": "providers/cloud.storage/eventTypes/object.change",
-  "resource": "projects/_/buckets/sample-bucket/objects/MyFile#1588778055917163",
-  "timestamp": "2020-09-29T11:32:00.000Z"
-}
-`),
-			CloudEvent: []byte(`{
-  "specversion": "1.0",
-  "type": "google.cloud.storage.object.v1.finalized",
-  "source": "//storage.googleapis.com/projects/_/buckets/sample-bucket/objects/MyFile#1588778055917163",
-  "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
-  "time": "2020-09-29T11:32:00.000Z",
-  "datacontenttype": "application/json",
-  "data": {
-    "bucket": "sample-bucket",
-    "crc32c": "AAAAAA==",
-    "etag": "COu8mb3Dn+kCEAE=",
-    "generation": "1588778055917163",
-    "id": "sample-bucket/MyFile/1588778055917163",
-    "kind": "storage#object",
-    "md5Hash": "ZDQxZDhjZDk4ZjAwYjIwNGU5ODAwOTk4ZWNmODQyN2U=",
-    "mediaLink": "https://www.googleapis.com/download/storage/v1/b/projectid-sample-bucket/o/MyFile?generation=1588778055917163\u0026alt=media",
-    "metageneration": "1",
-    "name": "MyFile",
-    "resourceState": "not_exists",
-    "selfLink": "https://www.googleapis.com/storage/v1/b/projectid-sample-bucket/o/MyFile",
-    "size": "0",
-    "storageClass": "MULTI_REGIONAL",
-    "timeCreated": "2020-05-06T15:14:15.917Z",
-    "timeDeleted": "2020-05-18T09:07:51.799Z",
-    "timeStorageClassUpdated": "2020-05-06T15:14:15.917Z",
-    "updated": "2020-05-06T15:14:15.917Z"
-  }
-}
-`),
-		},
-		Output: EventData{
-			LegacyEvent: []byte(`{
-  "data": {
-    "bucket": "sample-bucket",
-    "crc32c": "AAAAAA==",
-    "etag": "COu8mb3Dn+kCEAE=",
-    "generation": "1588778055917163",
-    "id": "sample-bucket/MyFile/1588778055917163",
-    "kind": "storage#object",
-    "md5Hash": "ZDQxZDhjZDk4ZjAwYjIwNGU5ODAwOTk4ZWNmODQyN2U=",
-    "mediaLink": "https://www.googleapis.com/download/storage/v1/b/projectid-sample-bucket/o/MyFile?generation=1588778055917163\u0026alt=media",
-    "metageneration": "1",
-    "name": "MyFile",
-    "resourceState": "not_exists",
-    "selfLink": "https://www.googleapis.com/storage/v1/b/projectid-sample-bucket/o/MyFile",
-    "size": "0",
-    "storageClass": "MULTI_REGIONAL",
-    "timeCreated": "2020-05-06T15:14:15.917Z",
-    "timeDeleted": "2020-05-18T09:07:51.799Z",
-    "timeStorageClassUpdated": "2020-05-06T15:14:15.917Z",
-    "updated": "2020-05-06T15:14:15.917Z"
-  },
-  "context": {
-    "eventId": "aaaaaa-1111-bbbb-2222-cccccccccccc",
-    "eventType": "providers/cloud.storage/eventTypes/object.change",
-    "resource": "projects/_/buckets/sample-bucket/objects/MyFile#1588778055917163",
-    "timestamp": "2020-09-29T11:32:00.000Z"
-  }
-}
-`),
-			CloudEvent: []byte(`{
-  "specversion": "1.0",
-  "type": "google.cloud.storage.object.v1.finalized",
-  "source": "//storage.googleapis.com/projects/_/buckets/sample-bucket/objects/MyFile#1588778055917163",
-  "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
-  "time": "2020-09-29T11:32:00.000Z",
-  "datacontenttype": "application/json",
-  "data": {
-    "bucket": "sample-bucket",
-    "crc32c": "AAAAAA==",
-    "etag": "COu8mb3Dn+kCEAE=",
-    "generation": "1588778055917163",
-    "id": "sample-bucket/MyFile/1588778055917163",
-    "kind": "storage#object",
-    "md5Hash": "ZDQxZDhjZDk4ZjAwYjIwNGU5ODAwOTk4ZWNmODQyN2U=",
-    "mediaLink": "https://www.googleapis.com/download/storage/v1/b/projectid-sample-bucket/o/MyFile?generation=1588778055917163\u0026alt=media",
-    "metageneration": "1",
-    "name": "MyFile",
-    "resourceState": "not_exists",
-    "selfLink": "https://www.googleapis.com/storage/v1/b/projectid-sample-bucket/o/MyFile",
-    "size": "0",
-    "storageClass": "MULTI_REGIONAL",
-    "timeCreated": "2020-05-06T15:14:15.917Z",
-    "timeDeleted": "2020-05-18T09:07:51.799Z",
-    "timeStorageClassUpdated": "2020-05-06T15:14:15.917Z",
-    "updated": "2020-05-06T15:14:15.917Z"
+    "message": {
+      "@type": "type.googleapis.com/google.pubsub.v1.PubsubMessage",
+      "attributes": {
+        "attribute1": "value1"
+      },
+      "data": "VGhpcyBpcyBhIHNhbXBsZSBtZXNzYWdl"
+    }
   }
 }
 `),
@@ -1766,8 +1676,11 @@ var Events = map[string]Event{
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
   "data": {
-    "@type": "type.googleapis.com/google.pubsub.v1.PubsubMessage",
-    "data": "AQIDBA=="
+    "subscription": "projects/sample-project/subscriptions/sample-subscription",
+    "message": {
+      "@type": "type.googleapis.com/google.pubsub.v1.PubsubMessage",
+      "data": "AQIDBA=="
+    }
   }
 }
 `),
@@ -1798,8 +1711,10 @@ var Events = map[string]Event{
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
   "data": {
-    "@type": "type.googleapis.com/google.pubsub.v1.PubsubMessage",
-    "data": "AQIDBA=="
+    "message": {
+      "@type": "type.googleapis.com/google.pubsub.v1.PubsubMessage",
+      "data": "AQIDBA=="
+    }
   }
 }
 `),
@@ -1836,11 +1751,14 @@ var Events = map[string]Event{
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
   "data": {
-    "@type": "type.googleapis.com/google.pubsub.v1.PubsubMessage",
-    "attributes": {
-       "attr1":"attr1-value"
-    },
-    "data": "dGVzdCBtZXNzYWdlIDM="
+    "subscription": "projects/sample-project/subscriptions/sample-subscription",
+    "message": {
+      "@type": "type.googleapis.com/google.pubsub.v1.PubsubMessage",
+      "attributes": {
+         "attr1":"attr1-value"
+      },
+      "data": "dGVzdCBtZXNzYWdlIDM="
+    }
   }
 }
 `),
@@ -1874,11 +1792,13 @@ var Events = map[string]Event{
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
   "data": {
-    "@type": "type.googleapis.com/google.pubsub.v1.PubsubMessage",
-    "attributes": {
-       "attr1":"attr1-value"
-    },
-    "data": "dGVzdCBtZXNzYWdlIDM="
+    "message": {
+      "@type": "type.googleapis.com/google.pubsub.v1.PubsubMessage",
+      "attributes": {
+         "attr1":"attr1-value"
+      },
+      "data": "dGVzdCBtZXNzYWdlIDM="
+    }
   }
 }
 `),
@@ -1922,7 +1842,8 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.cloud.storage.object.v1.finalized",
-  "source": "//storage.googleapis.com/projects/_/buckets/some-bucket/objects/folder/Test.cs",
+  "source": "//storage.googleapis.com/projects/_/buckets/some-bucket",
+  "subject": "objects/folder/Test.cs",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
@@ -1984,7 +1905,8 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.cloud.storage.object.v1.finalized",
-  "source": "//storage.googleapis.com/projects/_/buckets/some-bucket/objects/folder/Test.cs",
+  "source": "//storage.googleapis.com/projects/_/buckets/some-bucket",
+  "subject": "objects/folder/Test.cs",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
