@@ -1,7 +1,8 @@
 {
   "specversion": "1.0",
   "type": "google.cloud.storage.object.v1.finalized",
-  "source": "//storage.googleapis.com/projects/_/buckets/some-bucket/objects/folder/Test.cs",
+  "source": "//storage.googleapis.com/projects/_/buckets/some-bucket",
+  "subject": "objects/folder/Test.cs",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
