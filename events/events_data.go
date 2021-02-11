@@ -19,7 +19,8 @@ var Events = map[string]Event{
   "data": {
     "email": "test@nowhere.com",
     "metadata": {
-      "createdAt": "2020-05-26T10:42:27Z"
+      "createdAt": "2020-05-26T10:42:27Z",
+      "lastSignedInAt": "2020-10-24T11:00:00Z"
     },
     "providerData": [
       {
@@ -49,7 +50,8 @@ var Events = map[string]Event{
   "data": {
     "email": "test@nowhere.com",
     "metadata": {
-      "createdAt": "2020-05-26T10:42:27Z"
+      "createTime": "2020-05-26T10:42:27Z",
+      "lastSignInTime": "2020-10-24T11:00:00Z"
     },
     "providerData": [
       {
@@ -68,7 +70,8 @@ var Events = map[string]Event{
   "data": {
     "email": "test@nowhere.com",
     "metadata": {
-      "createdAt": "2020-05-26T10:42:27Z"
+      "createdAt": "2020-05-26T10:42:27Z",
+      "lastSignedInAt": "2020-10-24T11:00:00Z"
     },
     "providerData": [
       {
@@ -98,7 +101,8 @@ var Events = map[string]Event{
   "data": {
     "email": "test@nowhere.com",
     "metadata": {
-      "createdAt": "2020-05-26T10:42:27Z"
+      "createTime": "2020-05-26T10:42:27Z",
+      "lastSignInTime": "2020-10-24T11:00:00Z"
     },
     "providerData": [
       {
