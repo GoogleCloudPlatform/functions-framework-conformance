@@ -184,7 +184,14 @@ TBD: Where the `app-id` part comes from.
 
 The `subject` attribute of the CloudEvent is of the form `users/{uid}` where the
 `uid` value is taken from the `uid` property within the original
-`data` property. (This value is still populated within the CloudEvent data as well.)
+`data` property. This value is still retained within the CloudEvent data as well.
+
+Additionally, two properties within the CloudEvent have different names
+to those in the GCF HTTP event. Within the `metadata` top-level
+property, there are two timestamps. In GCF HTTP events these have
+names of `createdAt` and `lastSignedInAt`; in the CloudEvent
+representation the names are `createTime` and `lastSignInTime`
+respectively.
 
 ### Firestore document events (tentative)
 
