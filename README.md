@@ -5,64 +5,84 @@ Frameworks to the Functions Framework contract.
 
 ## Quickstart
 
-1.  Create a set of locally-runnable test functions (one for each type). Each
-    function write its inputs to the file `function_output.json`.
+1. In your Functions Framework repo:
+   - Create a set of locally-runnable test functions – one function for each signature type.
 
-    -   The HTTP function should write the request body.
-    -   The CloudEvent function should serialize the CloudEvent parameter to
-        JSON and write the resulting string.
-    -   The legacy event function should serialize the data and context
-        parameters to JSON in the format of `{"data": ...data..., "context":
-        ...context...}` and write the resulting string.
+   Each function write its inputs to the file `function_output.json`.
 
-1.  Build the test client: `cd functions-framework-conformance/client && go
-    build`. This will create a `client` binary in
-    `functions-framework-conformance/client`.
+   - The `http` functions should write the request body.
+   - The `cloudevent` function should serialize the CloudEvent parameter to
+     JSON and write the resulting string.
+   - The `event` (legacy event) function should serialize the data and context
+     parameters to JSON in the format:
+       `{"data": ...data..., "context": ...context...}`
+     and write the resulting string.
 
-1.  Invoke the client binary with the command to run your function server and
+1.  Build the test client:
+
+    ```sh
+    cd functions-framework-conformance/client && \
+      go build
+    ```
+
+    This will create a `client` binary in `functions-framework-conformance/client` directory.
+    You can use this binary to test the conformance of Function Frameworks.
+
+1.  Invoke the client binary with the following command to run your function server and
     the type of the function.
 
-    For example, to test a Go HTTP function, you would invoke:
+    - **Go _HTTP_** function Example:
 
-    ```sh
-    /path/to/functions-framework-conformance/client/client -cmd "go run ." -type http -buildpacks false
-    ```
+        ```sh
+        $HOME/functions-framework-conformance/client/client \
+          -cmd "go run ." \
+          -type http \
+          -builder-source testdata \
+          -buildpacks false
+        ```
 
-    For example, to test a .NET CloudEvent function, you would invoke:
+    - **.NET _CloudEvent_** function example:
 
-    ```sh
-    /path/to/functions-framework-conformance/client/client -cmd "dotnet run MyFunction" -type cloudevent -buildpacks false
-    ```
+        ```sh
+        $HOME/functions-framework-conformance/client/client \
+          -cmd "dotnet run MyFunction" \
+          -type cloudevent \
+          -buildpacks false
+        ```
 
-    For example, to test a Node.js legacy event function, you would invoke:
+    - **Node.js _legacy event_** function example:
 
-    ```sh
-    /path/to/functions-framework-conformance/client/client -cmd "npx @google-cloud/functions-framework --target MyFunction --signature-type=event" -type legacyevent -buildpacks false
-    ```
+        ```sh
+        $HOME/functions-framework-conformance/client/client \
+          -cmd "npx @google-cloud/functions-framework --target MyFunction --signature-type=event" \
+          -type legacyevent \
+          -buildpacks false
+        ```
+
+    If there are validation errors, an error will be logged in the output, causing your conformance test to fail.
 
 ## Usage
 
-```
-Usage of client:
+<nobr>
 
-  -builder-runtime string
-        runtime to use in building. Required if -buildpacks=true
-  -builder-source string
-        function source directory to use in building. Required if -buildpacks=true
-  -builder-tag string
-        builder image tag to use in building (default "latest")
-  -builder-target string
-        function target to use in building. Required if -buildpacks=true
-  -buildpacks
-        whether to use the current release of buildpacks to run the validation. If true, -cmd is ignored and --builder-* flags must be set. (default true)
-  -cmd string
-        command to run a Functions Framework server at localhost:8080. Ignored if -buildpacks=true.
-  -output-file string
-        name of file output by function (default "function_output.json")
-  -type string
-        type of function to validate (must be 'http', 'cloudevent', or 'legacyevent' (default "http")
-  -validate-mapping
-        whether to validate mapping from legacy->cloud events and vice versa (as applicable) (default true)
-  -start-delay int
-        number of seconds to wait after command process startup before sending HTTP request
-```
+| Configuration flag | Type | Default | Description |
+| --- | --- | --- | --- |
+| `-cmd` | string | `""` | Command to run a Functions Framework server at `localhost:8080`. Ignored if `-buildpacks=true`. |
+| `-type` | string | `"http"` | Type of function to validate (must be `"http"`, `"cloudevent"`, or `"legacyevent"`). |
+| `-validate-mapping` | boolean | `true` | Whether to validate mapping from legacy->cloud events and vice versa (as applicable). |
+| `-output-file` | string | `"function_output.json"` | Name of file output by function. |
+| `-buildpacks` | boolean | `true` | Whether to use the current release of buildpacks to run the validation. If `true`, `-cmd` is ignored and `--builder-*` flags must be set. |
+| `-builder-source` | string | `""` | Function source directory to use in building. Required if `-buildpacks=true`. |
+| `-builder-target` | string | `""` | Function target to use in building. Required if `-buildpacks=true`. |
+| `-builder-runtime` | string | `""` | Runtime to use in building. Required if `-buildpacks=true`. |
+| `-builder-tag` | string | `"latest"` | Builder image tag to use in building. |
+| `-start-delay` | uint | `1` | Seconds to wait before sending HTTP request to command process. |
+
+</nobr>
+
+If `-buildpacks` is `true`, you must specify the following flags:
+
+- `-builder-runtime`
+- `-builder-source`
+- `-builder-target`
+
