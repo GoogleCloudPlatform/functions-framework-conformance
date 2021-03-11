@@ -63,7 +63,7 @@ Frameworks to the Functions Framework contract.
 
 ## Usage
 
-<div style="white-space: nowrap;">
+<nobr>
 
 | Flag | type | default | description |
 | --- | --- | --- | --- |
@@ -78,7 +78,7 @@ Frameworks to the Functions Framework contract.
 | `-builder-tag` | string | `"latest"` | builder image tag to use in building |
 | `-start-delay` | uint | `1` | Seconds to wait before sending HTTP request to command process |
 
-</div>
+</nobr>
 
 If `-buildpacks` is `true`, you must specify the following flags:
 
