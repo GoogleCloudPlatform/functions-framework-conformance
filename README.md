@@ -6,7 +6,7 @@ Frameworks to the Functions Framework contract.
 ## Quickstart
 
 1. In your Functions Framework repo:
-   - Create a set of locally-runnable test functions – one function for each signature type).
+   - Create a set of locally-runnable test functions – one function for each signature type.
 
    Each function write its inputs to the file `function_output.json`.
 
