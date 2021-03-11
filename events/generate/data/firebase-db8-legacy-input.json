@@ -29,7 +29,7 @@
       }
     }
   },
-  "resource": "projects/_/instances/my-project-id/refs/",
-  "timestamp": "2020-05-21T11:33:01.789Z",
-  "eventId": "MazIvLoUshV35XHwjH+2rfP7uvk="
+  "resource": "projects/_/instances/my-project-id/refs/gcf-test/xyz",
+  "timestamp": "2020-09-29T11:32:00.000Z",
+  "eventId": "aaaaaa-1111-bbbb-2222-cccccccccccc"
 }

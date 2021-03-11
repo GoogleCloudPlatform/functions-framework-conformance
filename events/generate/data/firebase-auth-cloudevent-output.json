@@ -1,14 +1,16 @@
 {
   "specversion": "1.0",
   "type": "google.firebase.auth.user.v1.created",
-  "source": "//firebase.googleapis.com/projects/my-project-id",
-  "id": "4423b4fa-c39b-4f79-b338-977a018e9b55",
-  "time": "2020-05-26T10:42:27.088Z",
+  "source": "//firebaseauth.googleapis.com/projects/my-project-id",
+  "subject": "users/UUpby3s4spZre6kHsgVSPetzQ8l2",
+  "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
+  "time": "2020-09-29T11:32:00.000Z",
   "datacontenttype": "application/json",
   "data": {
     "email": "test@nowhere.com",
     "metadata": {
-      "createdAt": "2020-05-26T10:42:27Z"
+      "createTime": "2020-05-26T10:42:27Z",
+      "lastSignInTime": "2020-10-24T11:00:00Z"
     },
     "providerData": [
       {

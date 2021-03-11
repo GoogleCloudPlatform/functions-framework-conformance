@@ -1,7 +1,7 @@
 {
   "eventType": "providers/google.firebase.database/eventTypes/ref.write",
   "params": {
-    "child": "abc"
+    "child": "xyz"
   },
   "auth": {
     "admin": true
@@ -10,7 +10,7 @@
     "data": null,
     "delta": 10
   },
-  "resource": "projects/_/instances/my-project-id/refs/gcf-test/abc",
-  "timestamp": "2020-05-21T11:17:17.809Z",
-  "eventId": "kbAmkXNSQhmARA0JB5lcCt1Zpsg="
+  "resource": "projects/_/instances/my-project-id/refs/gcf-test/xyz",
+  "timestamp": "2020-09-29T11:32:00.000Z",
+  "eventId": "aaaaaa-1111-bbbb-2222-cccccccccccc"
 }

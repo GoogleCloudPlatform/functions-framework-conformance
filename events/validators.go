@@ -18,6 +18,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"reflect"
+	"time"
 
 	cloudevents "github.com/cloudevents/sdk-go/v2"
 	"github.com/google/go-cmp/cmp"
@@ -66,17 +67,24 @@ func PrintValidationInfos(vis []*ValidationInfo) (string, error) {
 }
 
 // ValidateEvent validates that a particular function output matches the expected contents.
-func ValidateEvent(name string, t EventType, got []byte) *ValidationInfo {
-	want := OutputData(name, t)
+func ValidateEvent(name string, it EventType, ot EventType, got []byte) *ValidationInfo {
+	want := OutputData(name, ot)
+
+	// If validating CloudEvent to CloudEvent (no event conversions),
+	// the output data should be exactly the same as the input data.
+	if it == CloudEvent && ot == CloudEvent {
+		want = InputData(name, it)
+	}
+
 	if want == nil {
 		// Include the possibilities in the error.
 		return &ValidationInfo{
 			Name:          name,
-			SkippedReason: fmt.Sprintf("no expected output value of type %s", t),
+			SkippedReason: fmt.Sprintf("no expected output value of type %s", ot),
 		}
 	}
 
-	switch t {
+	switch ot {
 	case LegacyEvent:
 		return validateLegacyEvent(name, got, want)
 	case CloudEvent:
@@ -94,13 +102,13 @@ func validateLegacyEvent(name string, gotBytes, wantBytes []byte) *ValidationInf
 	got := make(map[string]interface{})
 	err := json.Unmarshal(gotBytes, &got)
 	if err != nil {
-		vi.Errs = append(vi.Errs, fmt.Errorf("unmarshalling function-received version of legacy event %q: %v", name, err))
+		vi.Errs = append(vi.Errs, fmt.Errorf("unmarshalling received legacy event %q: %v", name, err))
 	}
 
 	want := make(map[string]interface{})
 	err = json.Unmarshal(wantBytes, &want)
 	if err != nil {
-		vi.Errs = append(vi.Errs, fmt.Errorf("unmarshalling expected contents of legacy event %q: %v", name, err))
+		vi.Errs = append(vi.Errs, fmt.Errorf("unmarshalling expected legacy event %q: %v", name, err))
 	}
 
 	// If there were issues extracting the data, bail early.
@@ -117,6 +125,16 @@ func validateLegacyEvent(name string, gotBytes, wantBytes []byte) *ValidationInf
 		gotValue  interface{}
 		wantValue interface{}
 	}
+	gotTimestamp, err := time.Parse(time.RFC3339, gotContext["timestamp"].(string))
+	if err != nil {
+		vi.Errs = append(vi.Errs, fmt.Errorf("parsing timestamp of received legacy event: %v", err))
+		return vi
+	}
+	wantTimestamp, err := time.Parse(time.RFC3339, wantContext["timestamp"].(string))
+	if err != nil {
+		vi.Errs = append(vi.Errs, fmt.Errorf("parsing timestamp of expected legacy event: %v", err))
+		return vi
+	}
 	fields := []eventFields{
 		{
 			name:      "ID",
@@ -130,8 +148,8 @@ func validateLegacyEvent(name string, gotBytes, wantBytes []byte) *ValidationInf
 		},
 		{
 			name:      "timestamp",
-			gotValue:  gotContext["timestamp"],
-			wantValue: wantContext["timestamp"],
+			gotValue:  gotTimestamp,
+			wantValue: wantTimestamp,
 		},
 		{
 			name:      "resource",

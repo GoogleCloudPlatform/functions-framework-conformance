@@ -1,0 +1,33 @@
+{
+  "specversion": "1.0",
+  "type": "google.firebase.database.document.v1.written",
+  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "subject": "refs/gcf-test/xyz",
+  "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
+  "time": "2020-09-29T11:32:00.000Z",
+  "datacontenttype": "application/json",
+  "data": {
+    "data": {
+      "gcf-test": {
+        "abc": 10,
+        "child1": "value1",
+        "xyz": {
+          "deeply": {
+            "abc": 11
+          },
+          "grandchild": "other changed"
+        }
+      },
+      "not-gcf-test": "Foo"
+    },
+    "delta": {
+      "gcf-test": {
+        "xyz": {
+          "deeply": {
+            "abc": 12
+          }
+        }
+      }
+    }
+  }
+}

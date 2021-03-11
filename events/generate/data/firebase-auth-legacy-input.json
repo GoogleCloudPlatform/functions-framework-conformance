@@ -2,7 +2,8 @@
   "data": {
     "email": "test@nowhere.com",
     "metadata": {
-      "createdAt": "2020-05-26T10:42:27Z"
+      "createdAt": "2020-05-26T10:42:27Z",
+      "lastSignedInAt": "2020-10-24T11:00:00Z"
     },
     "providerData": [
       {
@@ -13,10 +14,10 @@
     ],
     "uid": "UUpby3s4spZre6kHsgVSPetzQ8l2"
   },
-  "eventId": "4423b4fa-c39b-4f79-b338-977a018e9b55",
+  "eventId": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "eventType": "providers/firebase.auth/eventTypes/user.create",
   "notSupported": {
   },
   "resource": "projects/my-project-id",
-  "timestamp": "2020-05-26T10:42:27.088Z"
+  "timestamp": "2020-09-29T11:32:00.000Z"
 }
