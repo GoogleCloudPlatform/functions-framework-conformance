@@ -65,18 +65,18 @@ Frameworks to the Functions Framework contract.
 
 <nobr>
 
-| configuration flag | type | default | description |
+| Configuration flag | Type | Default | Description |
 | --- | --- | --- | --- |
-| `-cmd` | string | `""` | command to run a Functions Framework server at localhost:8080. Ignored if `-buildpacks=true`. |
-| `-type` | string | `"http"` | type of function to validate (must be "http", "cloudevent", or "legacyevent") |
-| `-validate-mapping` | boolean | `true` | whether to validate mapping from legacy->cloud events and vice versa (as applicable) |
-| `-output-file` | string | `"function_output.json"` | name of file output by function |
-| `-buildpacks` | boolean | `true` | whether to use the current release of buildpacks to run the validation. If `true`, `-cmd` is ignored and `--builder-*` flags must be set. |
-| `-builder-source` | string | `""` | function source directory to use in building. Required if `-buildpacks=true` |
-| `-builder-target` | string | `""` | function target to use in building. Required if `-buildpacks=true` |
-| `-builder-runtime` | string | `""` | runtime to use in building. Required if `-buildpacks=true` |
-| `-builder-tag` | string | `"latest"` | builder image tag to use in building |
-| `-start-delay` | uint | `1` | Seconds to wait before sending HTTP request to command process |
+| `-cmd` | string | `""` | Command to run a Functions Framework server at `localhost:8080`. Ignored if `-buildpacks=true`. |
+| `-type` | string | `"http"` | Type of function to validate (must be `"http"`, `"cloudevent"`, or `"legacyevent"`). |
+| `-validate-mapping` | boolean | `true` | Whether to validate mapping from legacy->cloud events and vice versa (as applicable). |
+| `-output-file` | string | `"function_output.json"` | Name of file output by function. |
+| `-buildpacks` | boolean | `true` | Whether to use the current release of buildpacks to run the validation. If `true`, `-cmd` is ignored and `--builder-*` flags must be set. |
+| `-builder-source` | string | `""` | Function source directory to use in building. Required if `-buildpacks=true`. |
+| `-builder-target` | string | `""` | Function target to use in building. Required if `-buildpacks=true`. |
+| `-builder-runtime` | string | `""` | Runtime to use in building. Required if `-buildpacks=true`. |
+| `-builder-tag` | string | `"latest"` | Builder image tag to use in building. |
+| `-start-delay` | uint | `1` | Seconds to wait before sending HTTP request to command process. |
 
 </nobr>
 
