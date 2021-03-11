@@ -65,7 +65,7 @@ Frameworks to the Functions Framework contract.
 
 <nobr>
 
-| Flag | type | default | description |
+| configuration flag | type | default | description |
 | --- | --- | --- | --- |
 | `-cmd` | string | `""` | command to run a Functions Framework server at localhost:8080. Ignored if `-buildpacks=true`. |
 | `-type` | string | `"http"` | type of function to validate (must be "http", "cloudevent", or "legacyevent") |
