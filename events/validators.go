@@ -231,9 +231,19 @@ func validateCloudEvent(name string, gotBytes, wantBytes []byte) *ValidationInfo
 			wantValue: want.Source(),
 		},
 		{
+			name:      "subject",
+			gotValue:  got.Subject(),
+			wantValue: want.Subject(),
+		},
+		{
 			name:      "type",
 			gotValue:  got.Type(),
 			wantValue: want.Type(),
+		},
+		{
+			name:      "time",
+			gotValue:  got.Time(),
+			wantValue: want.Time(),
 		},
 		{
 			name:      "datacontenttype",
