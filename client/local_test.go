@@ -42,9 +42,9 @@ func TestStartAndShutdown(t *testing.T) {
 	}
 
 	server := localFunctionServer{
-		// The go tool compiles the program and then execs it, which allows us to test
-		// that the whole process group is killed. It's done this way instead of something
-		// simpler like "/bin/sh -c 'exec sleep 90'" so that it's cross-platform.
+		// `go run` compiles the program and then execs it, which allows us to test that
+		// the whole process group is killed. It's done this way instead of something
+		// simpler like "/bin/sh -c 'exec sleep 90'" so that it's cross-platform compatible.
 		cmd: fmt.Sprintf("go run %s", f),
 	}
 
