@@ -30,7 +30,9 @@ func newCmd(args []string) *exec.Cmd {
 	// temp dir and then execute it. If we simply cmd.Process.Kill() the exec.Command
 	// then the running binary will not be killed. Only if we make a group and then
 	// kill the group will child processes be killed.
-	cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
+	cmd.SysProcAttr = &syscall.SysProcAttr{
+		Setpgid: true,
+	}
 
 	return cmd
 }

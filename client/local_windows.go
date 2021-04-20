@@ -17,10 +17,22 @@ package main
 import (
 	"fmt"
 	"os/exec"
+	"syscall"
 )
 
 func newCmd(args []string) *exec.Cmd {
-	return exec.Command(args[0], args[1:]...)
+	cmd := exec.Command(args[0], args[1:]...)
+
+	// Make a process group so that later we can kill child processes too. As an
+	// example, if the command is `go run main.go`, Go will build a binary in a
+	// temp dir and then execute it. If we simply cmd.Process.Kill() the exec.Command
+	// then the running binary will not be killed. Only if we make a group will
+	// child processes be killed.
+	cmd.SysProcAttr = &syscall.SysProcAttr{
+		CreationFlags: syscall.CREATE_NEW_PROCESS_GROUP,
+	}
+
+	return cmd
 }
 
 func stopCmd(cmd *exec.Cmd) error {
