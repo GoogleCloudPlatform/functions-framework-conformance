@@ -4,7 +4,7 @@ jobs:
   run-conformance:
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     name: Validate conformance test framework
     steps:
