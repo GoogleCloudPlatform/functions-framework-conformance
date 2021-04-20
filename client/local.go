@@ -18,9 +18,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"os/exec"
 	"strings"
-	"syscall"
 	"time"
 )
 
@@ -31,14 +29,7 @@ type localFunctionServer struct {
 
 func (l *localFunctionServer) Start() (func(), error) {
 	args := strings.Fields(l.cmd)
-	cmd := exec.Command(args[0], args[1:]...)
-
-	// Set a process group ID so that later we can kill child processes too. As an
-	// example, if the command is `go run main.go`, Go will build a binary in a
-	// temp dir and then execute it. If we simply cmd.Process.Kill() the exec.Command
-	// then the running binary will not be killed. Only if we make a group and then
-	// kill the group will child processes be killed.
-	cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
+	cmd := newCmd(args)
 
 	stdout, err := os.Create(stdoutFile)
 	if err != nil {
@@ -64,20 +55,7 @@ func (l *localFunctionServer) Start() (func(), error) {
 		stdout.Close()
 		stderr.Close()
 
-		pgid, err := syscall.Getpgid(cmd.Process.Pid)
-		if err != nil {
-			log.Printf("Failed to get pgid: %v", err)
-
-			// Kill just the parent process since we failed to get the process group ID.
-			if err := cmd.Process.Kill(); err != nil {
-				log.Fatalf("Failed to kill process: %v", err)
-			}
-		} else {
-			// Kill the whole process group.
-			if err := syscall.Kill(-pgid, syscall.SIGKILL); err != nil {
-				log.Fatalf("Failed to kill process group: %v", err)
-			}
-		}
+		stopCmd(cmd)
 
 		log.Printf("Framework server shut down. Wrote logs to %v and %v.", stdoutFile, stderrFile)
 	}
