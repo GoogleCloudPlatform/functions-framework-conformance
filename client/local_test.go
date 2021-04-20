@@ -15,14 +15,37 @@
 package main
 
 import (
+	"fmt"
+	"io/ioutil"
+	"path/filepath"
 	"testing"
 )
 
+const testProgram = `package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+	fmt.Println("Hello from test program")
+	time.Sleep(time.Second * 90)
+}
+`
+
 func TestStartAndShutdown(t *testing.T) {
+	dir := t.TempDir()
+	f := filepath.Join(dir, "main.go")
+	if err := ioutil.WriteFile(f, []byte(testProgram), 0644); err != nil {
+		t.Fatalf("Failed to write file: %v", err)
+	}
+
 	server := localFunctionServer{
-		// Use a command that execs another command in order to test that the whole
-		// process group is killed.
-		cmd: "/bin/sh -c 'exec sleep 90'",
+		// The go tool compiles the program and then execs it, which allows us to test
+		// that the whole process group is killed. It's done this way instead of something
+		// simpler like "/bin/sh -c 'exec sleep 90'" so that it's cross-platform.
+		cmd: fmt.Sprintf("go run %s", f),
 	}
 
 	shutdown, err := server.Start()
