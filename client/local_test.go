@@ -18,10 +18,11 @@ import (
 	"testing"
 )
 
-func TestStartStop(t *testing.T) {
+func TestStartAndShutdown(t *testing.T) {
 	server := localFunctionServer{
-		output: "out.json",
-		cmd:    "sleep 90",
+		// Use a command that execs another command in order to test that the whole
+		// process group is killed.
+		cmd: "/bin/sh -c 'exec sleep 90'",
 	}
 
 	shutdown, err := server.Start()
