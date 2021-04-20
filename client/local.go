@@ -55,7 +55,9 @@ func (l *localFunctionServer) Start() (func(), error) {
 		stdout.Close()
 		stderr.Close()
 
-		stopCmd(cmd)
+		if err := stopCmd(cmd); err != nil {
+			log.Fatalf("Failed to shut down framework server: %v", err)
+		}
 
 		log.Printf("Framework server shut down. Wrote logs to %v and %v.", stdoutFile, stderrFile)
 	}
