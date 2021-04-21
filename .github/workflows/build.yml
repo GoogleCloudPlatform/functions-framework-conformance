@@ -1,9 +1,12 @@
-on: [push, pull_request]
-
+name: Check compiled action script CI
+on:
+  push:
+    branches:
+    - master
+  pull_request:
 jobs:
   compile:
     runs-on: ubuntu-latest
-    name: Check compiled script
     steps:
     - uses: actions/checkout@v2
     - name: Setup Node.js

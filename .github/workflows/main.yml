@@ -1,15 +1,18 @@
-on: [push, pull_request]
-
+name: Conformance test framework validation CI
+on:
+  push:
+    branches:
+    - master
+  pull_request:
 jobs:
   run-conformance:
     runs-on: ubuntu-latest
-    name: Validate conformance test framework
     steps:
     - uses: actions/checkout@v2
 
     - uses: actions/setup-go@v2
       with:
-        go-version: '^1.13.1'
+        go-version: '^1.16'
 
     - name: Vendor dependencies
       run: "go mod vendor"
