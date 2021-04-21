@@ -29,8 +29,9 @@ import (
 )
 
 func main() {
-	fmt.Println("Hello from test program")
-	time.Sleep(time.Second * 90)
+	sleepDuration := time.Second * 90
+	fmt.Printf("Hello from test program. Sleeping for %v.\n", sleepDuration)
+	time.Sleep(sleepDuration)
 }
 `
 
