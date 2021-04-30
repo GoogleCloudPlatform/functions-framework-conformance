@@ -31,6 +31,9 @@ inputs:
   startDelay:
     description: 'GCR tag to use for builder image'
     default: 1
+  workingDirectory:
+    description: 'The subdirectory in which the conformance tests should run'
+    default: ""
 runs:
   using: 'node12'
   main: 'dist/index.js'
