@@ -42,6 +42,7 @@ async function run() {
   const useBuildpacks = core.getInput('useBuildpacks');
   const cmd = core.getInput('cmd');
   const startDelay = core.getInput('startDelay');
+  const workingDirectory = core.getInput('workingDirectory');
 
   // Install conformance client binary.
   runCmd(
@@ -49,6 +50,7 @@ async function run() {
 
   // Run the client with the specified parameters.
   runCmd([
+    !!workingDirectory ? `cd ${workingDirectory} &&` : '',
     `client`,
     `-output-file=${outputFile}`,
     `-type=${functionType}`,
@@ -60,7 +62,7 @@ async function run() {
     `-buildpacks=${useBuildpacks}`,
     `-cmd=${cmd}`,
     `-start-delay=${startDelay}`,
-  ].join(' '));
+  ].filter((x) => !!x).join(' '));
 }
 
 run();

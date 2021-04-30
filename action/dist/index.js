@@ -533,10 +533,12 @@ function run() {
         const useBuildpacks = core.getInput('useBuildpacks');
         const cmd = core.getInput('cmd');
         const startDelay = core.getInput('startDelay');
+        const workingDirectory = core.getInput('workingDirectory');
         // Install conformance client binary.
         runCmd('GO111MODULE=on go get -v github.com/GoogleCloudPlatform/functions-framework-conformance/client');
         // Run the client with the specified parameters.
         runCmd([
+            !!workingDirectory ? `cd ${workingDirectory} &&` : '',
             `client`,
             `-output-file=${outputFile}`,
             `-type=${functionType}`,
@@ -548,7 +550,7 @@ function run() {
             `-buildpacks=${useBuildpacks}`,
             `-cmd=${cmd}`,
             `-start-delay=${startDelay}`,
-        ].join(' '));
+        ].filter((x) => !!x).join(' '));
     });
 }
 run();
