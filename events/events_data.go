@@ -8,8 +8,9 @@ type EventData struct {
 }
 
 type Event struct {
-	Input  EventData
-	Output EventData
+	Input           EventData
+	Output          EventData
+	ConvertedOutput EventData
 }
 
 var Events = map[string]Event{
@@ -116,6 +117,8 @@ var Events = map[string]Event{
 }
 `),
 		},
+		ConvertedOutput: EventData{
+		},
 	},
 
 	"firebase-db1": {
@@ -188,6 +191,8 @@ var Events = map[string]Event{
   }
 }
 `),
+		},
+		ConvertedOutput: EventData{
 		},
 	},
 
@@ -268,6 +273,8 @@ var Events = map[string]Event{
   }
 }`),
 		},
+		ConvertedOutput: EventData{
+		},
 	},
 
 	"firebase-db3": {
@@ -330,6 +337,8 @@ var Events = map[string]Event{
     "delta": 10
   }
 }`),
+		},
+		ConvertedOutput: EventData{
 		},
 	},
 
@@ -429,6 +438,8 @@ var Events = map[string]Event{
     }
   }
 }`),
+		},
+		ConvertedOutput: EventData{
 		},
 	},
 
@@ -540,6 +551,8 @@ var Events = map[string]Event{
     }
   }
 }`),
+		},
+		ConvertedOutput: EventData{
 		},
 	},
 
@@ -658,6 +671,8 @@ var Events = map[string]Event{
 }
 `),
 		},
+		ConvertedOutput: EventData{
+		},
 	},
 
 	"firebase-db7": {
@@ -758,6 +773,8 @@ var Events = map[string]Event{
   }
 }
 `),
+		},
+		ConvertedOutput: EventData{
 		},
 	},
 
@@ -903,6 +920,8 @@ var Events = map[string]Event{
 }
 `),
 		},
+		ConvertedOutput: EventData{
+		},
 	},
 
 	"firebase-dbdelete1": {
@@ -976,6 +995,8 @@ var Events = map[string]Event{
 }
 `),
 		},
+		ConvertedOutput: EventData{
+		},
 	},
 
 	"firebase-dbdelete2": {
@@ -1040,6 +1061,8 @@ var Events = map[string]Event{
   }
 }
 `),
+		},
+		ConvertedOutput: EventData{
 		},
 	},
 
@@ -1372,6 +1395,8 @@ var Events = map[string]Event{
 }
 `),
 		},
+		ConvertedOutput: EventData{
+		},
 	},
 
 	"firestore_simple": {
@@ -1577,6 +1602,8 @@ var Events = map[string]Event{
 }
 `),
 		},
+		ConvertedOutput: EventData{
+		},
 	},
 
 	"legacy_pubsub": {
@@ -1647,6 +1674,28 @@ var Events = map[string]Event{
       },
       "data": "VGhpcyBpcyBhIHNhbXBsZSBtZXNzYWdl"
     }
+  }
+}
+`),
+		},
+		ConvertedOutput: EventData{
+			LegacyEvent: []byte(`{
+  "context": {
+    "eventId": "aaaaaa-1111-bbbb-2222-cccccccccccc",
+    "timestamp": "2020-09-29T11:32:00.000Z",
+    "eventType":"google.pubsub.topic.publish",
+    "resource": {
+      "service":"pubsub.googleapis.com",
+      "name":"projects/sample-project/topics/gcf-test",
+      "type":"type.googleapis.com/google.pubsub.v1.PubsubMessage"
+    }
+  },
+  "data": {
+    "@type": "type.googleapis.com/google.pubsub.v1.PubsubMessage",
+    "attributes": {
+      "attribute1": "value1"
+    },
+    "data": "VGhpcyBpcyBhIHNhbXBsZSBtZXNzYWdl"
   }
 }
 `),
@@ -1722,6 +1771,8 @@ var Events = map[string]Event{
   }
 }
 `),
+		},
+		ConvertedOutput: EventData{
 		},
 	},
 
@@ -1806,6 +1857,8 @@ var Events = map[string]Event{
   }
 }
 `),
+		},
+		ConvertedOutput: EventData{
 		},
 	},
 
@@ -1935,6 +1988,8 @@ var Events = map[string]Event{
   }
 }
 `),
+		},
+		ConvertedOutput: EventData{
 		},
 	},
 }

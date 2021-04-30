@@ -19,6 +19,7 @@ var (
 const (
 	input             = "input"
 	output            = "output"
+	converted         = "converted"
 	legacyType        = "legacy"
 	cloudeventType    = "cloudevent"
 	dataDir           = "generate/data"
@@ -33,8 +34,9 @@ type EventData struct {
 }
 
 type Event struct {
-	Input  EventData
-	Output EventData
+	Input           EventData
+	Output          EventData
+	ConvertedOutput EventData
 }
 
 var Events = map[string]Event{[[ range $k, $v := . ]]
@@ -47,24 +49,36 @@ var Events = map[string]Event{[[ range $k, $v := . ]]
 			LegacyEvent: [[ $v.LegacyOutput ]],[[ end ]][[ if $v.CloudEventOutput ]]
 			CloudEvent: [[ $v.CloudEventOutput ]],[[ end ]]
 		},
+		ConvertedOutput: EventData{[[ if $v.ConvertedLegacyOutput ]]
+			LegacyEvent: [[ $v.ConvertedLegacyOutput ]],[[ end ]][[ if $v.ConvertedCloudEventOutput ]]
+			CloudEvent: [[ $v.ConvertedCloudEventOutput ]],[[ end ]]
+		},
 	},
 [[ end ]]}
 `
 )
 
 type eventData struct {
-	LegacyInput      string
-	LegacyOutput     string
-	CloudEventInput  string
-	CloudEventOutput string
+	LegacyInput               string
+	LegacyOutput              string
+	CloudEventInput           string
+	CloudEventOutput          string
+	ConvertedCloudEventOutput string
+	ConvertedLegacyOutput     string
 }
 
-func breakdownFileName(path string) (string, string) {
+func breakdownFileName(path string) (string, string, bool) {
+
 	// Must be a JSON file.
 	if !strings.HasSuffix(path, ".json") {
-		return "", ""
+		return "", "", false
 	}
 	fileName := strings.TrimSuffix(path, ".json")
+
+	isConverted := strings.HasSuffix(fileName, converted)
+	if isConverted {
+		fileName = strings.TrimSuffix(fileName, "-"+converted)
+	}
 
 	var et, ft string
 	if strings.HasSuffix(fileName, input) {
@@ -83,7 +97,7 @@ func breakdownFileName(path string) (string, string) {
 		fileName = strings.TrimSuffix(fileName, "-"+cloudeventType)
 	}
 
-	return fileName, et + ft
+	return fileName, et + ft, isConverted
 }
 
 func main() {
@@ -110,7 +124,7 @@ func main() {
 			return nil
 		}
 
-		name, t := breakdownFileName(info.Name())
+		name, t, c := breakdownFileName(info.Name())
 		if name == "" {
 			return nil
 		}
@@ -125,11 +139,19 @@ func main() {
 		case legacyType + input:
 			ed.LegacyInput = d
 		case legacyType + output:
-			ed.LegacyOutput = d
+			if c {
+				ed.ConvertedLegacyOutput = d
+			} else {
+				ed.LegacyOutput = d
+			}
 		case cloudeventType + input:
 			ed.CloudEventInput = d
 		case cloudeventType + output:
-			ed.CloudEventOutput = d
+			if c {
+				ed.ConvertedCloudEventOutput = d
+			} else {
+				ed.CloudEventOutput = d
+			}
 		}
 
 		return nil

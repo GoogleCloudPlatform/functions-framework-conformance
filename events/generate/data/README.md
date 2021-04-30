@@ -28,6 +28,16 @@ Generally, try to stay consistent across tests for the following fields (arbitra
 - Timestamp: "2020-09-29T11:32:00.000Z"
 - Project ID: my-project-id
 
+The `output-converted.json` suffix can be used to override the expected output
+when converting between event types. For example, consider the following files:
+
+-   `newevent-legacy-output.json`
+-   `newevent-legacy-output-converted.json`
+
+The `newevent-legacy-output.json` file will be used to validate legacy events,
+and `newevent-legacy-output-converted.json` will be used to validate converting
+between cloud events and legacy events.
+
 Once you have the input and output data, generate the test cases to embed them
 in the binary. Run the following:
 

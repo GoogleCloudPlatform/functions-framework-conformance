@@ -68,7 +68,7 @@ func PrintValidationInfos(vis []*ValidationInfo) (string, error) {
 
 // ValidateEvent validates that a particular function output matches the expected contents.
 func ValidateEvent(name string, it EventType, ot EventType, got []byte) *ValidationInfo {
-	want := OutputData(name, ot)
+	want := OutputData(name, ot, it != ot)
 
 	// If validating CloudEvent to CloudEvent (no event conversions),
 	// the output data should be exactly the same as the input data.
