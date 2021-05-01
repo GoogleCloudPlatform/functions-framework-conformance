@@ -2,22 +2,22 @@ name: 'Run conformance tests'
 description: 'Run the functions framework conformance tests with specified parameters.'
 inputs:
   outputFile:
-    description: 'output file from funciton'
+    description: 'The output file from the function'
     default: 'function_output.json'
   functionType:
-    description: 'type of function'
+    description: 'The type of function to validate. Can be `http`, `legacyevent`, or `cloudevent`'
     default: 'http'
   validateMapping:
-    description: 'whether to validate mapping from legacy->cloud event and vice versa'
+    description: 'Whether to validate mapping from legacy->cloud event and vice versa'
     default: true
   source:
-    description: 'function source code'
+    description: 'Function source code'
     default: ''
   target:
-    description: 'function target'
+    description: 'Function target'
     default: ''
   runtime:
-    description: 'function runtime (e.g. nodejs10, go113)'
+    description: 'Function runtime (e.g. nodejs10, go113)'
     default: ''
   tag:
     description: 'GCR tag to use for builder image'
@@ -26,7 +26,7 @@ inputs:
     description: 'GCR tag to use for builder image'
     default: true
   cmd:
-    description: 'command to run a Functions Framework server at localhost:8080. Ignored if -buildpacks=true.'
+    description: 'Command to run a Functions Framework server at localhost:8080. Ignored if -buildpacks=true.'
     default: ''
   startDelay:
     description: 'GCR tag to use for builder image'
