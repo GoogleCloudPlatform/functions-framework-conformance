@@ -1633,6 +1633,8 @@ var Events = map[string]Event{
     "subscription": "projects/sample-project/subscriptions/sample-subscription",
     "message": {
       "@type": "type.googleapis.com/google.pubsub.v1.PubsubMessage",
+      "messageId": "aaaaaa-1111-bbbb-2222-cccccccccccc",
+      "publishTime": "2020-09-29T11:32:00.000Z",
       "attributes": {
         "attribute1": "value1"
       },
@@ -1669,6 +1671,8 @@ var Events = map[string]Event{
   "data": {
     "message": {
       "@type": "type.googleapis.com/google.pubsub.v1.PubsubMessage",
+      "messageId": "aaaaaa-1111-bbbb-2222-cccccccccccc",
+      "publishTime": "2020-09-29T11:32:00.000Z",
       "attributes": {
         "attribute1": "value1"
       },
@@ -1732,6 +1736,8 @@ var Events = map[string]Event{
     "subscription": "projects/sample-project/subscriptions/sample-subscription",
     "message": {
       "@type": "type.googleapis.com/google.pubsub.v1.PubsubMessage",
+      "messageId": "aaaaaa-1111-bbbb-2222-cccccccccccc",
+      "publishTime": "2020-09-29T11:32:00.000Z",
       "data": "AQIDBA=="
     }
   }
@@ -1766,6 +1772,8 @@ var Events = map[string]Event{
   "data": {
     "message": {
       "@type": "type.googleapis.com/google.pubsub.v1.PubsubMessage",
+      "messageId": "aaaaaa-1111-bbbb-2222-cccccccccccc",
+      "publishTime": "2020-09-29T11:32:00.000Z",
       "data": "AQIDBA=="
     }
   }
@@ -1809,6 +1817,8 @@ var Events = map[string]Event{
     "subscription": "projects/sample-project/subscriptions/sample-subscription",
     "message": {
       "@type": "type.googleapis.com/google.pubsub.v1.PubsubMessage",
+      "messageId": "aaaaaa-1111-bbbb-2222-cccccccccccc",
+      "publishTime": "2020-09-29T11:32:00.000Z",
       "attributes": {
          "attr1":"attr1-value"
       },
@@ -1849,6 +1859,8 @@ var Events = map[string]Event{
   "data": {
     "message": {
       "@type": "type.googleapis.com/google.pubsub.v1.PubsubMessage",
+      "messageId": "aaaaaa-1111-bbbb-2222-cccccccccccc",
+      "publishTime": "2020-09-29T11:32:00.000Z",
       "attributes": {
          "attr1":"attr1-value"
       },

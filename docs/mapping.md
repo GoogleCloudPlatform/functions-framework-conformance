@@ -156,6 +156,12 @@ should not be populated at the moment. If the subscription name
 becomes available in the GCF HTTP representation, this document will
 be updated, along with the conformance tests.)
 
+Additionally, two properties should be populated in the message,
+based on the context:
+
+- The `messageId` property in the `message` object should be set to *gcf_event_id*
+- The `publishTime` proeprty in the `message` object should be set to *gcf_timestamp*
+
 The conversion should **not** parse *gcf_data* to ensure that only
 expected properties are present. (For example, the GCF HTTP
 representation usually includes a `@type` property, always with a
