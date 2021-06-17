@@ -131,6 +131,7 @@ var Events = map[string]Event{
   "auth": {
     "admin": true
   },
+  "domain": "firebaseio.com",
   "data": {
     "data": null,
     "delta": {
@@ -145,7 +146,7 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.written",
-  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "source": "//firebasedatabase.googleapis.com/projects/_/locations/us-central1/instances/my-project-id",
   "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
@@ -178,7 +179,7 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.written",
-  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "source": "//firebasedatabase.googleapis.com/projects/_/locations/us-central1/instances/my-project-id",
   "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
@@ -206,6 +207,7 @@ var Events = map[string]Event{
   "auth": {
     "admin": true
   },
+  "domain":"europe-west1.firebasedatabase.app",
   "data": {
     "data": {
       "grandchild": "other"
@@ -222,7 +224,7 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.written",
-  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "source": "//firebasedatabase.googleapis.com/projects/_/locations/europe-west1/instances/my-project-id",
   "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
@@ -258,7 +260,7 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.written",
-  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "source": "//firebasedatabase.googleapis.com/projects/_/locations/europe-west1/instances/my-project-id",
   "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
@@ -287,6 +289,7 @@ var Events = map[string]Event{
   "auth": {
     "admin": true
   },
+  "domain": "firebaseio.com",
   "data": {
     "data": null,
     "delta": 10
@@ -299,7 +302,7 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.written",
-  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "source": "//firebasedatabase.googleapis.com/projects/_/locations/us-central1/instances/my-project-id",
   "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
@@ -327,7 +330,7 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.written",
-  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "source": "//firebasedatabase.googleapis.com/projects/_/locations/us-central1/instances/my-project-id",
   "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
@@ -352,6 +355,7 @@ var Events = map[string]Event{
   "auth": {
     "admin": true
   },
+  "domain": "firebaseio.com",
   "data": {
     "data": {
       "grandchild": "other changed"
@@ -373,7 +377,7 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.written",
-  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "source": "//firebasedatabase.googleapis.com/projects/_/locations/us-central1/instances/my-project-id",
   "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
@@ -419,7 +423,7 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.written",
-  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "source": "//firebasedatabase.googleapis.com/projects/_/locations/us-central1/instances/my-project-id",
   "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
@@ -453,6 +457,7 @@ var Events = map[string]Event{
   "auth": {
     "admin": true
   },
+  "domain": "firebaseio.com",
   "data": {
     "data": {
       "deeply": {
@@ -477,7 +482,7 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.written",
-  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "source": "//firebasedatabase.googleapis.com/projects/_/locations/us-central1/instances/my-project-id",
   "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
@@ -529,7 +534,7 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.written",
-  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "source": "//firebasedatabase.googleapis.com/projects/_/locations/us-central1/instances/my-project-id",
   "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
@@ -566,6 +571,7 @@ var Events = map[string]Event{
   "auth": {
     "admin": true
   },
+  "domain": "firebaseio.com",
   "data": {
     "data": {
       "deeply": {
@@ -591,7 +597,7 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.written",
-  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "source": "//firebasedatabase.googleapis.com/projects/_/locations/us-central1/instances/my-project-id",
   "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
@@ -646,7 +652,7 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.written",
-  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "source": "//firebasedatabase.googleapis.com/projects/_/locations/us-central1/instances/my-project-id",
   "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
@@ -685,6 +691,7 @@ var Events = map[string]Event{
   "auth": {
     "admin": true
   },
+  "domain": "firebaseio.com",
   "data": {
     "data": {
       "deeply": {
@@ -706,7 +713,7 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.written",
-  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "source": "//firebasedatabase.googleapis.com/projects/_/locations/us-central1/instances/my-project-id",
   "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
@@ -753,7 +760,7 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.written",
-  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "source": "//firebasedatabase.googleapis.com/projects/_/locations/us-central1/instances/my-project-id",
   "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
@@ -787,6 +794,7 @@ var Events = map[string]Event{
   "auth": {
     "admin": true
   },
+  "domain": "firebaseio.com",
   "data": {
     "data": {
       "gcf-test": {
@@ -819,7 +827,7 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.written",
-  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "source": "//firebasedatabase.googleapis.com/projects/_/locations/us-central1/instances/my-project-id",
   "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
@@ -888,7 +896,7 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.written",
-  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "source": "//firebasedatabase.googleapis.com/projects/_/locations/us-central1/instances/my-project-id",
   "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
@@ -934,6 +942,7 @@ var Events = map[string]Event{
   "auth": {
     "admin": true
   },
+  "domain": "firebaseio.com",
   "data": {
     "data": {
       "grandchild": "other changed"
@@ -948,7 +957,7 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.deleted",
-  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "source": "//firebasedatabase.googleapis.com/projects/_/locations/us-central1/instances/my-project-id",
   "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
@@ -981,7 +990,7 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.deleted",
-  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "source": "//firebasedatabase.googleapis.com/projects/_/locations/us-central1/instances/my-project-id",
   "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
@@ -1009,6 +1018,7 @@ var Events = map[string]Event{
   "auth": {
     "admin": true
   },
+  "domain": "firebaseio.com",
   "data": {
     "data": 10,
     "delta": null
@@ -1021,7 +1031,7 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.deleted",
-  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "source": "//firebasedatabase.googleapis.com/projects/_/locations/us-central1/instances/my-project-id",
   "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
@@ -1050,7 +1060,7 @@ var Events = map[string]Event{
 			CloudEvent: []byte(`{
   "specversion": "1.0",
   "type": "google.firebase.database.document.v1.deleted",
-  "source": "//firebasedatabase.googleapis.com/projects/_/instances/my-project-id",
+  "source": "//firebasedatabase.googleapis.com/projects/_/locations/us-central1/instances/my-project-id",
   "subject": "refs/gcf-test/xyz",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
   "time": "2020-09-29T11:32:00.000Z",
