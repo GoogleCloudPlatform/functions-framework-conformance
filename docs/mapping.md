@@ -172,7 +172,22 @@ Functions Frameworks behave consistently.
 
 ### Firebase RTDB events (tentative)
 
-(This information is still actively being worked on.)
+The `resource` in the GCF HTTP representation is of the form
+`projects/_/instances/{instance-id}/refs/{ref-path}`. Additionally,
+there is a top-level `domain` property, which is used to determine the `location` part
+of the CloudEvent representation:
+
+- The `domain` property must be present as a string; if it's missing, the conversion should fail.
+- If the `domain` value is `firebaseio.com`, the location is `us-central1`.
+- Otherwise, the location is the value of `domain` before the first period. For example,
+  a `domain` value of `europe-west1.firebasedatabase.app` would lead to a location value
+  of `europe-west1`.
+
+In the CloudEvent representation, this information is split between
+the `source` and the `subject`:
+
+- `source`: `//firestore.googleapis.com/projects/_/locations/{location}/instances/{instance-id}`
+- `subject: refs/{ref-path}`
 
 ### Firebase analytics events (tentative)
 
@@ -184,7 +199,9 @@ the `source` attributes:
 - `source`: `//firebaseanalytics.googleapis.com/projects/{project-id}/apps/{app-id}`
 - `subject`: `events/{event-name}`
 
-TBD: Where the `app-id` part comes from.
+The `app-id` part it obtained from the data within the GCF HTTP representation, from
+a path of `userDim.appInfo.appId` (both the `userDim` and `appInfo` properties are
+expected to have object values; the `appId` property is expected to have a string value.)
 
 ### Firebase auth events (tentative)
 
@@ -202,7 +219,7 @@ respectively.
 ### Firestore document events (tentative)
 
 The `resource` in the GCF HTTP representation is of the form
-`projects/{project-id}/databases/{database-id}/documents/{path-to-document}".
+`projects/{project-id}/databases/{database-id}/documents/{path-to-document}`.
 In the CloudEvent representation, this information is split between
 the `source` and the `subject`:
 
@@ -219,7 +236,7 @@ of raw JSON or a deserialized in-lanuage representation. The
 - `timestamp`: The date/time this event was created. (String)
 - `eventType`: The type of the event.
   For example: "google.pubsub.topic.publish". (String) 
-- `resource": The resource that emitted the event. (The format of this
+- `resource`: The resource that emitted the event. (The format of this
   varies by language.)
 
 The Java Functions Framework additionally includes an `attributes`
