@@ -39,13 +39,13 @@ All relevant information in the GCF HTTP representation is within
 the HTTP body, as a JSON object. Note that context information can
 come from either the root of the JSON, or within a `context`
 property. The description below uses paths within the JSON to
-represent nested information. For example, the path `context/type`
-refers to "the `type` property within the `context` property of the root
+represent nested information. For example, the path `context/eventType`
+refers to "the `eventType` property within the `context` property of the root
 object".
 
 First obtain the following information from the JSON:
 
-- *gcf_event_type*: from `context/type` or `type`
+- *gcf_event_type*: from `context/eventType` or `eventType`
 - *gcf_service*: from `context/resource/service`, or mapped from the
   GCF event type if absent (see below).
 - *gcf_resource_name*: from `context/resource/name` or `resource`
@@ -252,7 +252,7 @@ The "context" is populated as follows:
 - `eventId` from the CloudEvent `id` attribute
 - `timestamp` from the CloudEvent `timestamp` attribute
 - `eventType` from the CloudEvent `type` attribute, with a reverse
-  mapping of the *gcf_type* to *ce_type* table earlier applied.
+  mapping of the *gcf_event_type* to *ce_type* table earlier applied.
 - `resource`: TBD
 
 ### Cloud Storage events
