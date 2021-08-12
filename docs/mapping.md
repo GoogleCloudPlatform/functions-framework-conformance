@@ -65,9 +65,9 @@ match of *gcf_event_type* against the table below.
 |*gcf_event_type* prefix|*gcf_service*|
 |-|-|
 |providers/cloud.firestore/|firestore.googleapis.com|
-|providers/google.firebase.analytics/|firebase.googleapis.com|
-|providers/firebase.auth/|firebase.googleapis.com|
-|providers/google.firebase.database/|firebase.googleapis.com|
+|providers/google.firebase.analytics/|firebaseanalytics.googleapis.com|
+|providers/firebase.auth/|firebaseauth.googleapis.com|
+|providers/google.firebase.database/|firebasedatabase.googleapis.com|
 |providers/cloud.pubsub/|pubsub.googleapis.com|
 |providers/cloud.storage/|storage.googleapis.com|
 
