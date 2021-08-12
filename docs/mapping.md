@@ -82,7 +82,6 @@ Next, determine the *ce_type* based on an exact match of
 |google.storage.object.delete|google.cloud.storage.object.v1.deleted|
 |google.storage.object.archive|google.cloud.storage.object.v1.archived|
 |google.storage.object.metadataUpdate|google.cloud.storage.object.v1.metadataUpdated|
-|**Mappings below here are tentative**|
 |providers/cloud.firestore/eventTypes/document.write|google.cloud.firestore.document.v1.written|
 |providers/cloud.firestore/eventTypes/document.create|google.cloud.firestore.document.v1.created|
 |providers/cloud.firestore/eventTypes/document.update|google.cloud.firestore.document.v1.updated|
@@ -170,7 +169,7 @@ The inclusion or removal of the extra properties should make little
 difference to users, it's simpler to write conformance tests if all
 Functions Frameworks behave consistently.
 
-### Firebase RTDB events (tentative)
+### Firebase RTDB events
 
 The `resource` in the GCF HTTP representation is of the form
 `projects/_/instances/{instance-id}/refs/{ref-path}`. Additionally,
@@ -189,7 +188,7 @@ the `source` and the `subject`:
 - `source`: `//firestore.googleapis.com/projects/_/locations/{location}/instances/{instance-id}`
 - `subject: refs/{ref-path}`
 
-### Firebase analytics events (tentative)
+### Firebase analytics events
 
 The `resource` property in the GCF HTTP representation is of the
 form `projects/{project-id}/events/{event-name}`. As part of
@@ -203,7 +202,7 @@ The `app-id` part it obtained from the data within the GCF HTTP representation, 
 a path of `userDim.appInfo.appId` (both the `userDim` and `appInfo` properties are
 expected to have object values; the `appId` property is expected to have a string value.)
 
-### Firebase auth events (tentative)
+### Firebase auth events
 
 The `subject` attribute of the CloudEvent is of the form `users/{uid}` where the
 `uid` value is taken from the `uid` property within the original
@@ -216,7 +215,7 @@ names of `createdAt` and `lastSignedInAt`; in the CloudEvent
 representation the names are `createTime` and `lastSignInTime`
 respectively.
 
-### Firestore document events (tentative)
+### Firestore document events
 
 The `resource` in the GCF HTTP representation is of the form
 `projects/{project-id}/databases/{database-id}/documents/{path-to-document}`.
