@@ -35,28 +35,28 @@ Frameworks to the Functions Framework contract.
 
         ```sh
         $HOME/functions-framework-conformance/client/client \
-          -cmd "go run ." \
-          -type http \
-          -builder-source testdata \
-          -buildpacks false
+          -cmd="go run ." \
+          -type=http \
+          -builder-source=testdata \
+          -buildpacks=false
         ```
 
     - **.NET _CloudEvent_** function example:
 
         ```sh
         $HOME/functions-framework-conformance/client/client \
-          -cmd "dotnet run MyFunction" \
-          -type cloudevent \
-          -buildpacks false
+          -cmd="dotnet run MyFunction" \
+          -type=cloudevent \
+          -buildpacks=false
         ```
 
     - **Node.js _legacy event_** function example:
 
         ```sh
         $HOME/functions-framework-conformance/client/client \
-          -cmd "npx @google-cloud/functions-framework --target MyFunction --signature-type=event" \
-          -type legacyevent \
-          -buildpacks false
+          -cmd="npx @google-cloud/functions-framework --target MyFunction --signature-type=event" \
+          -type=legacyevent \
+          -buildpacks=false
         ```
 
     If there are validation errors, an error will be logged in the output, causing your conformance test to fail.
