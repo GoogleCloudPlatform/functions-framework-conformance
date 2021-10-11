@@ -1,8 +1,11 @@
 name: 'Run conformance tests'
 description: 'Run the functions framework conformance tests with specified parameters.'
 inputs:
+  version:
+    description: 'version of the conformance tests to run'
+    default: 'latest'
   outputFile:
-    description: 'output file from funciton'
+    description: 'output file from function'
     default: 'function_output.json'
   functionType:
     description: 'type of function'

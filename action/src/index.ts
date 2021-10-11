@@ -32,6 +32,7 @@ function runCmd(cmd: string) {
 }
 
 async function run() {
+  const version = core.getInput('version');
   const outputFile = core.getInput('outputFile');
   const functionType = core.getInput('functionType');
   const validateMapping = core.getInput('validateMapping');
@@ -46,7 +47,7 @@ async function run() {
 
   // Install conformance client binary.
   runCmd(
-      'GO111MODULE=on go get -v github.com/GoogleCloudPlatform/functions-framework-conformance/client');
+      `go install github.com/GoogleCloudPlatform/functions-framework-conformance/client@${version}`);
 
   // Run the client with the specified parameters.
   runCmd([
