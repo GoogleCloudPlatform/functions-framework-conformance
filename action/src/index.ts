@@ -1,5 +1,4 @@
 import * as core from '@actions/core';
-import * as github from '@actions/github';
 import * as childProcess from 'child_process';
 import * as fs from 'fs';
 
@@ -46,8 +45,12 @@ async function run() {
   const workingDirectory = core.getInput('workingDirectory');
 
   // Install conformance client binary.
+  let versionTag = ''
+  if (version) {
+    versionTag = `@${version}`
+  }
   runCmd(
-      `go get github.com/GoogleCloudPlatform/functions-framework-conformance/client@${version} && go install github.com/GoogleCloudPlatform/functions-framework-conformance/client`);
+      `go get github.com/GoogleCloudPlatform/functions-framework-conformance/client${versionTag} && go install github.com/GoogleCloudPlatform/functions-framework-conformance/client`);
 
   // Run the client with the specified parameters.
   runCmd([

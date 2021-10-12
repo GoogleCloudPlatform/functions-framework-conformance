@@ -9,7 +9,7 @@ Requires Go to be installed prior to running (e.g. actions/setup-go).
 
 ### `version`
 
-The version of conformance tests to run. Default `latest`.
+The version of conformance tests to run. Default to latest release if unspecified.
 
 ### `cmd`
 
