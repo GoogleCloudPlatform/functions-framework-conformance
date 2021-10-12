@@ -536,7 +536,7 @@ function run() {
         const startDelay = core.getInput('startDelay');
         const workingDirectory = core.getInput('workingDirectory');
         // Install conformance client binary.
-        runCmd(`go install github.com/GoogleCloudPlatform/functions-framework-conformance/client@${version}`);
+        runCmd(`go get github.com/GoogleCloudPlatform/functions-framework-conformance/client@${version} && go install github.com/GoogleCloudPlatform/functions-framework-conformance/client`);
         // Run the client with the specified parameters.
         runCmd([
             !!workingDirectory ? `cd ${workingDirectory} &&` : '',

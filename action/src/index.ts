@@ -47,7 +47,7 @@ async function run() {
 
   // Install conformance client binary.
   runCmd(
-      `go install github.com/GoogleCloudPlatform/functions-framework-conformance/client@${version}`);
+      `go get github.com/GoogleCloudPlatform/functions-framework-conformance/client@${version} && go install github.com/GoogleCloudPlatform/functions-framework-conformance/client`);
 
   // Run the client with the specified parameters.
   runCmd([
