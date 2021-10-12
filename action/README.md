@@ -3,13 +3,13 @@
 This action runs the Functions Framework conformance tests with the specified
 parameters.
 
-Requires Go 1.16+ to be installed prior to running (e.g. actions/setup-go).
+Requires Go to be installed prior to running (e.g. actions/setup-go).
 
 ## Inputs
 
 ### `version`
 
-The version of conformance tests to run. Default `latest`.
+The version of conformance tests to run. Default to latest release if unspecified.
 
 ### `cmd`
 
