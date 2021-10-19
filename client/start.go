@@ -20,18 +20,20 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
+	"path"
 
 	"github.com/GoogleCloudPlatform/functions-framework-conformance/events"
 	cloudevents "github.com/cloudevents/sdk-go/v2"
 )
 
-const (
-	stdoutFile = "serverlog_stdout.txt"
-	stderrFile = "serverlog_stderr.txt"
+var (
+	defaultStdoutFile = path.Join(os.TempDir(), "serverlog_stdout.txt")
+	defaultStderrFile = path.Join(os.TempDir(), "serverlog_stderr.txt")
 )
 
 type functionServer interface {
-	Start() (func(), error)
+	Start(stdoutFile, stderrFile string) (func(), error)
 	OutputFile() ([]byte, error)
 }
 

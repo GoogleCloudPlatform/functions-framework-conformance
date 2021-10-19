@@ -33,18 +33,22 @@ const (
 )
 
 type buildpacksFunctionServer struct {
-	output    string
-	source    string
-	target    string
-	funcType  string
-	runtime   string
-	tag       string
-	ctID      string
-	logStdout *os.File
-	logStderr *os.File
+	output     string
+	source     string
+	target     string
+	funcType   string
+	runtime    string
+	tag        string
+	ctID       string
+	logStdout  *os.File
+	logStderr  *os.File
+	stdoutFile string
+	stderrFile string
 }
 
-func (b *buildpacksFunctionServer) Start() (func(), error) {
+func (b *buildpacksFunctionServer) Start(stdoutFile, stderrFile string) (func(), error) {
+	b.stdoutFile = stdoutFile
+	b.stderrFile = stderrFile
 	typ := *functionType
 	if typ == "legacyevent" {
 		typ = "event"
@@ -105,12 +109,12 @@ func (b *buildpacksFunctionServer) build(ctx context.Context) error {
 func (b *buildpacksFunctionServer) run() (func(), error) {
 	// Create logs output files.
 	var err error
-	b.logStdout, err = os.Create(stdoutFile)
+	b.logStdout, err = os.Create(b.stdoutFile)
 	if err != nil {
 		return nil, err
 	}
 
-	b.logStderr, err = os.Create(stderrFile)
+	b.logStderr, err = os.Create(b.stderrFile)
 	if err != nil {
 		return nil, err
 	}
@@ -146,7 +150,7 @@ func (b *buildpacksFunctionServer) run() (func(), error) {
 		if err := b.killContainer(); err != nil {
 			log.Fatalf("failed to kill container: %v", err)
 		}
-		log.Printf("Framework server shut down. Wrote logs to %v and %v.", stdoutFile, stderrFile)
+		log.Printf("Framework server shut down. Wrote logs to %v and %v.", b.stdoutFile, b.stderrFile)
 	}, nil
 }
 
