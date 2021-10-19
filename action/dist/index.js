@@ -495,19 +495,6 @@ const childProcess = __importStar(__webpack_require__(129));
 const fs = __importStar(__webpack_require__(747));
 const process = __importStar(__webpack_require__(765));
 /**
- * writeFileToConsole contents of file to console.
- * @param {string} path - filepath to write to the console
- */
-function writeFileToConsole(path) {
-    try {
-        const data = fs.readFileSync(path, 'utf8');
-        console.log(`${path}: ${data}`);
-    }
-    catch (e) {
-        console.log(`$unable to read {path}, skipping: ${e}`);
-    }
-}
-/**
  * Run a specified command.
  * @param {string} cmd - command to run
  */
@@ -517,9 +504,6 @@ function runCmd(cmd) {
         childProcess.execSync(cmd);
     }
     catch (error) {
-        writeFileToConsole('serverlog_stdout.txt');
-        writeFileToConsole('serverlog_stderr.txt');
-        writeFileToConsole('function_output.json');
         core.setFailed(error.message);
     }
 }
@@ -549,7 +533,7 @@ function run() {
         }
         else {
             // Checkout latest release tag.
-            runCmd(`git fetch --tags && git checkout $(git describe --tags 'git rev-list --tags --max-count=1')`);
+            runCmd('git fetch --tags && git checkout $(git describe --tags $(git rev-list --tags --max-count=1))');
         }
         runCmd(`go build -o ~/client`);
         process.chdir(cwd);

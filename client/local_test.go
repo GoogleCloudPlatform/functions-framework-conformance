@@ -49,7 +49,7 @@ func TestStartAndShutdown(t *testing.T) {
 		cmd: fmt.Sprintf("go run %s", f),
 	}
 
-	shutdown, err := server.Start()
+	shutdown, err := server.Start(defaultStdoutFile, defaultStderrFile)
 	if shutdown != nil {
 		defer shutdown()
 	}
