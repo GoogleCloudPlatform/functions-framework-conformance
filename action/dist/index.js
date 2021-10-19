@@ -493,6 +493,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(__webpack_require__(470));
 const childProcess = __importStar(__webpack_require__(129));
 const fs = __importStar(__webpack_require__(747));
+const process = __importStar(__webpack_require__(765));
 /**
  * writeFileToConsole contents of file to console.
  * @param {string} path - filepath to write to the console
@@ -512,6 +513,7 @@ function writeFileToConsole(path) {
  */
 function runCmd(cmd) {
     try {
+        console.log(`RUNNING: "${cmd}"`);
         childProcess.execSync(cmd);
     }
     catch (error) {
@@ -535,16 +537,28 @@ function run() {
         const cmd = core.getInput('cmd');
         const startDelay = core.getInput('startDelay');
         const workingDirectory = core.getInput('workingDirectory');
-        // Install conformance client binary.
-        let versionTag = '';
-        if (version) {
-            versionTag = `@${version}`;
+        let cwd = process.cwd();
+        // Build conformance client binary from source.
+        let repo = 'functions-framework-conformance';
+        if (!fs.existsSync(repo)) {
+            runCmd(`git clone https://github.com/GoogleCloudPlatform/functions-framework-conformance.git`);
         }
-        runCmd(`go get github.com/GoogleCloudPlatform/functions-framework-conformance/client${versionTag} && go install github.com/GoogleCloudPlatform/functions-framework-conformance/client`);
+        process.chdir('functions-framework-conformance/client');
+        if (version) {
+            runCmd(`git fetch origin refs/tags/${version} && git checkout ${version}`);
+        }
+        else {
+            // Checkout latest release tag.
+            runCmd(`git fetch --tags && git checkout $(git describe --tags 'git rev-list --tags --max-count=1')`);
+        }
+        runCmd(`go build -o ~/client`);
+        process.chdir(cwd);
+        if (workingDirectory) {
+            process.chdir(workingDirectory);
+        }
         // Run the client with the specified parameters.
         runCmd([
-            !!workingDirectory ? `cd ${workingDirectory} &&` : '',
-            `client`,
+            `~/client`,
             `-output-file=${outputFile}`,
             `-type=${functionType}`,
             `-validate-mapping=${validateMapping}`,
@@ -574,6 +588,13 @@ module.exports = require("path");
 /***/ (function(module) {
 
 module.exports = require("fs");
+
+/***/ }),
+
+/***/ 765:
+/***/ (function(module) {
+
+module.exports = require("process");
 
 /***/ })
 

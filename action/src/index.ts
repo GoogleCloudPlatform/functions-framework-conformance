@@ -1,6 +1,7 @@
 import * as core from '@actions/core';
 import * as childProcess from 'child_process';
 import * as fs from 'fs';
+import * as process from 'process';
 
 /**
  * writeFileToConsole contents of file to console.
@@ -21,6 +22,7 @@ function writeFileToConsole(path: string) {
  */
 function runCmd(cmd: string) {
   try {
+    console.log(`RUNNING: "${cmd}"`)
     childProcess.execSync(cmd);
   } catch (error) {
     writeFileToConsole('serverlog_stdout.txt');
@@ -44,18 +46,29 @@ async function run() {
   const startDelay = core.getInput('startDelay');
   const workingDirectory = core.getInput('workingDirectory');
 
-  // Install conformance client binary.
-  let versionTag = ''
-  if (version) {
-    versionTag = `@${version}`
-  }
-  runCmd(
-      `go get github.com/GoogleCloudPlatform/functions-framework-conformance/client${versionTag} && go install github.com/GoogleCloudPlatform/functions-framework-conformance/client`);
+  let cwd = process.cwd();
 
+  // Build conformance client binary from source.
+  let repo = 'functions-framework-conformance';
+  if (!fs.existsSync(repo)) {
+    runCmd(`git clone https://github.com/GoogleCloudPlatform/functions-framework-conformance.git`);
+  }
+  process.chdir('functions-framework-conformance/client');
+  if (version) {
+    runCmd(`git fetch origin refs/tags/${version} && git checkout ${version}`);
+  } else {
+    // Checkout latest release tag.
+    runCmd(`git fetch --tags && git checkout $(git describe --tags 'git rev-list --tags --max-count=1')`)
+  }
+  runCmd(`go build -o ~/client`);
+
+  process.chdir(cwd);
+  if (workingDirectory) {
+    process.chdir(workingDirectory);
+  }
   // Run the client with the specified parameters.
   runCmd([
-    !!workingDirectory ? `cd ${workingDirectory} &&` : '',
-    `client`,
+    `~/client`,
     `-output-file=${outputFile}`,
     `-type=${functionType}`,
     `-validate-mapping=${validateMapping}`,
