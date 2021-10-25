@@ -74,6 +74,6 @@
     "eventId": "aaaaaa-1111-bbbb-2222-cccccccccccc",
     "eventType": "providers/cloud.firestore/eventTypes/document.write",
     "resource": "projects/project-id/databases/(default)/documents/gcf-test/IH75dRdeYJKd4uuQiqch",
-    "timestamp": "2020-09-29T11:32:00.000Z"
+    "timestamp": "2020-09-29T11:32:00.123Z"
   }
 }

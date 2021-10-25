@@ -25,7 +25,7 @@ validation test case.
 Generally, try to stay consistent across tests for the following fields (arbitrary values, but consistent ones):
 
 - EventID: "aaaaaa-1111-bbbb-2222-cccccccccccc"
-- Timestamp: "2020-09-29T11:32:00.000Z"
+- Timestamp: "2020-09-29T11:32:00.123Z"
 - Project ID: my-project-id
 
 The `output-converted.json` suffix can be used to override the expected output
