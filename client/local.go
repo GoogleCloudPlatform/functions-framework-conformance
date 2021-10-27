@@ -19,6 +19,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"strings"
 	"time"
 )
 
@@ -28,7 +29,8 @@ type localFunctionServer struct {
 }
 
 func (l *localFunctionServer) Start() (func(), error) {
-	cmd := exec.Command(l.cmd)
+	args := strings.Fields(l.cmd)
+	cmd := exec.Command(args[0], args[1:]...)
 
 	stdout, err := os.Create(stdoutFile)
 	if err != nil {
