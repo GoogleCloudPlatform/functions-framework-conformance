@@ -7,6 +7,10 @@ Requires Go to be installed prior to running (e.g. actions/setup-go).
 
 ## Inputs
 
+### `version`
+
+The version of conformance tests to run. Default to latest release if unspecified.
+
 ### `cmd`
 
 The command to be run.
@@ -27,6 +31,7 @@ Whether or not to validate legacy->cloudevent mapping and vice versa. Default
 uses: actions/setup-go@v1
 uses: GoogleCloudPlatform/functions-framework-conformance/actions@v1
 with:
+  version: 'v1.0.0'
   functionType: 'http'
   validateMapping: false
   source: 'testdata/testfunc.go'

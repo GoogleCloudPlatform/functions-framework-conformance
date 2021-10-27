@@ -1,8 +1,11 @@
 name: 'Run conformance tests'
 description: 'Run the functions framework conformance tests with specified parameters.'
 inputs:
+  version:
+    description: 'version of the conformance tests to run. Defaults to latest release if unspecified.'
+    default: ''
   outputFile:
-    description: 'output file from funciton'
+    description: 'output file from function'
     default: 'function_output.json'
   functionType:
     description: 'type of function'
@@ -31,6 +34,9 @@ inputs:
   startDelay:
     description: 'GCR tag to use for builder image'
     default: 1
+  workingDirectory:
+    description: 'The subdirectory in which the conformance tests should run'
+    default: ""
 runs:
   using: 'node12'
   main: 'dist/index.js'

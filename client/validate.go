@@ -17,6 +17,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 
 	"github.com/GoogleCloudPlatform/functions-framework-conformance/events"
@@ -39,12 +40,16 @@ type validator struct {
 	funcServer      functionServer
 	validateMapping bool
 	functionType    string
+	stdoutFile      string
+	stderrFile      string
 }
 
 func newValidator(params validatorParams) *validator {
 	v := validator{
 		validateMapping: params.validateMapping,
 		functionType:    params.functionType,
+		stdoutFile:      defaultStdoutFile,
+		stderrFile:      defaultStderrFile,
 	}
 
 	if !params.useBuildpacks {
@@ -73,21 +78,41 @@ func newValidator(params validatorParams) *validator {
 func (v validator) runValidation() error {
 	log.Printf("Validating for %s...", *functionType)
 
-	shutdown, err := v.funcServer.Start()
+	shutdown, err := v.funcServer.Start(v.stdoutFile, v.stderrFile)
 	if shutdown != nil {
 		defer shutdown()
 	}
 
 	if err != nil {
-		return fmt.Errorf("unable to start server: %v", err)
+		return v.errorWithLogsf("unable to start server: %v", err)
 	}
 
 	if err := v.validate("http://localhost:8080"); err != nil {
-		return fmt.Errorf("Validation failure: %v", err)
+		return v.errorWithLogsf("validation failure: %v", err)
+	}
+	return nil
+}
+
+func (v validator) errorWithLogsf(errorFmt string, paramsFmts ...interface{}) error {
+	logs, readErr := v.readLogs()
+	if readErr != nil {
+		logs = readErr.Error()
+	}
+	return fmt.Errorf("%s, server logs: %s", fmt.Sprintf(errorFmt, paramsFmts...), logs)
+}
+
+func (v validator) readLogs() (string, error) {
+	stdout, err := ioutil.ReadFile(v.stdoutFile)
+	if err != nil {
+		return "", fmt.Errorf("could not read stdout file %q: %w", v.stdoutFile, err)
 	}
 
-	log.Printf("All validation passed!")
-	return nil
+	stderr, err := ioutil.ReadFile(v.stderrFile)
+	if err != nil {
+		return "", fmt.Errorf("could not read stderr file %q: %w", v.stdoutFile, err)
+	}
+
+	return fmt.Sprintf("\n[%s]: '%s'\n[%s]: '%s'", v.stdoutFile, stdout, v.stderrFile, stderr), nil
 }
 
 // The HTTP function should copy the contents of the request into the response.
@@ -146,7 +171,7 @@ func (v validator) validateEvents(url string, inputType, outputType events.Event
 	}
 
 	logStr, err := events.PrintValidationInfos(vis)
-	log.Printf(logStr)
+	log.Println(logStr)
 	return err
 }
 
@@ -189,5 +214,5 @@ func (v validator) validate(url string) error {
 		log.Printf("Legacy event validation passed!")
 		return nil
 	}
-	return fmt.Errorf("Expected type to be one of 'http', 'cloudevent', or 'legacyevent', got %s", v.functionType)
+	return fmt.Errorf("expected type to be one of 'http', 'cloudevent', or 'legacyevent', got %s", v.functionType)
 }

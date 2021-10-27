@@ -21,7 +21,7 @@ import (
 
 func TestValidateLegacyEvent(t *testing.T) {
 	testName := "firebase-auth"
-	data := OutputData(testName, LegacyEvent)
+	data := OutputData(testName, LegacyEvent, false)
 	if data == nil {
 		t.Fatalf("no legacy event data")
 	}

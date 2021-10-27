@@ -18,27 +18,30 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"os/exec"
 	"strings"
 	"time"
 )
 
 type localFunctionServer struct {
-	output string
-	cmd    string
+	output     string
+	cmd        string
+	stdoutFile string
+	stderrFile string
 }
 
-func (l *localFunctionServer) Start() (func(), error) {
+func (l *localFunctionServer) Start(stdoutFile, stderrFile string) (func(), error) {
+	l.stdoutFile = stdoutFile
+	l.stderrFile = stderrFile
 	args := strings.Fields(l.cmd)
-	cmd := exec.Command(args[0], args[1:]...)
+	cmd := newCmd(args)
 
-	stdout, err := os.Create(stdoutFile)
+	stdout, err := os.Create(l.stdoutFile)
 	if err != nil {
 		return nil, err
 	}
 	cmd.Stdout = stdout
 
-	stderr, err := os.Create(stderrFile)
+	stderr, err := os.Create(l.stderrFile)
 	if err != nil {
 		return nil, err
 	}
@@ -53,13 +56,14 @@ func (l *localFunctionServer) Start() (func(), error) {
 	time.Sleep(time.Duration(*startDelay) * time.Second)
 
 	shutdown := func() {
-		// TODO: kill processes properly.
-		if err := cmd.Process.Kill(); err != nil {
-			log.Fatalf("failed to kill process: %v", err)
-		}
 		stdout.Close()
 		stderr.Close()
-		log.Printf("Framework server shut down. Wrote logs to %v and %v.", stdoutFile, stderrFile)
+
+		if err := stopCmd(cmd); err != nil {
+			log.Fatalf("Failed to shut down framework server: %v", err)
+		}
+
+		log.Printf("Framework server shut down. Wrote logs to %v and %v.", l.stdoutFile, l.stderrFile)
 	}
 	return shutdown, nil
 }

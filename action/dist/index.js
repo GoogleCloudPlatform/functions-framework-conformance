@@ -493,36 +493,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(__webpack_require__(470));
 const childProcess = __importStar(__webpack_require__(129));
 const fs = __importStar(__webpack_require__(747));
-/**
- * writeFileToConsole contents of file to console.
- * @param {string} path - filepath to write to the console
- */
-function writeFileToConsole(path) {
-    try {
-        const data = fs.readFileSync(path, 'utf8');
-        console.log(`${path}: ${data}`);
-    }
-    catch (e) {
-        console.log(`$unable to read {path}, skipping: ${e}`);
-    }
-}
+const process = __importStar(__webpack_require__(765));
 /**
  * Run a specified command.
  * @param {string} cmd - command to run
  */
 function runCmd(cmd) {
     try {
+        console.log(`RUNNING: "${cmd}"`);
         childProcess.execSync(cmd);
     }
     catch (error) {
-        writeFileToConsole('serverlog_stdout.txt');
-        writeFileToConsole('serverlog_stderr.txt');
-        writeFileToConsole('function_output.json');
         core.setFailed(error.message);
     }
 }
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
+        const version = core.getInput('version');
         const outputFile = core.getInput('outputFile');
         const functionType = core.getInput('functionType');
         const validateMapping = core.getInput('validateMapping');
@@ -533,11 +520,29 @@ function run() {
         const useBuildpacks = core.getInput('useBuildpacks');
         const cmd = core.getInput('cmd');
         const startDelay = core.getInput('startDelay');
-        // Install conformance client binary.
-        runCmd('GO111MODULE=on go get -v github.com/GoogleCloudPlatform/functions-framework-conformance/client');
+        const workingDirectory = core.getInput('workingDirectory');
+        let cwd = process.cwd();
+        // Build conformance client binary from source.
+        let repo = 'functions-framework-conformance';
+        if (!fs.existsSync(repo)) {
+            runCmd(`git clone https://github.com/GoogleCloudPlatform/functions-framework-conformance.git`);
+        }
+        process.chdir('functions-framework-conformance/client');
+        if (version) {
+            runCmd(`git fetch origin refs/tags/${version} && git checkout ${version}`);
+        }
+        else {
+            // Checkout latest release tag.
+            runCmd('git fetch --tags && git checkout $(git describe --tags $(git rev-list --tags --max-count=1))');
+        }
+        runCmd(`go build -o ~/client`);
+        process.chdir(cwd);
+        if (workingDirectory) {
+            process.chdir(workingDirectory);
+        }
         // Run the client with the specified parameters.
         runCmd([
-            `client`,
+            `~/client`,
             `-output-file=${outputFile}`,
             `-type=${functionType}`,
             `-validate-mapping=${validateMapping}`,
@@ -548,7 +553,7 @@ function run() {
             `-buildpacks=${useBuildpacks}`,
             `-cmd=${cmd}`,
             `-start-delay=${startDelay}`,
-        ].join(' '));
+        ].filter((x) => !!x).join(' '));
     });
 }
 run();
@@ -567,6 +572,13 @@ module.exports = require("path");
 /***/ (function(module) {
 
 module.exports = require("fs");
+
+/***/ }),
+
+/***/ 765:
+/***/ (function(module) {
+
+module.exports = require("process");
 
 /***/ })
 

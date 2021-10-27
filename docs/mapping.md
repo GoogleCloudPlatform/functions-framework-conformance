@@ -39,13 +39,13 @@ All relevant information in the GCF HTTP representation is within
 the HTTP body, as a JSON object. Note that context information can
 come from either the root of the JSON, or within a `context`
 property. The description below uses paths within the JSON to
-represent nested information. For example, the path `context/type`
-refers to "the `type` property within the `context` property of the root
+represent nested information. For example, the path `context/eventType`
+refers to "the `eventType` property within the `context` property of the root
 object".
 
 First obtain the following information from the JSON:
 
-- *gcf_event_type*: from `context/type` or `type`
+- *gcf_event_type*: from `context/eventType` or `eventType`
 - *gcf_service*: from `context/resource/service`, or mapped from the
   GCF event type if absent (see below).
 - *gcf_resource_name*: from `context/resource/name` or `resource`
@@ -65,9 +65,9 @@ match of *gcf_event_type* against the table below.
 |*gcf_event_type* prefix|*gcf_service*|
 |-|-|
 |providers/cloud.firestore/|firestore.googleapis.com|
-|providers/google.firebase.analytics/|firebase.googleapis.com|
-|providers/firebase.auth/|firebase.googleapis.com|
-|providers/google.firebase.database/|firebase.googleapis.com|
+|providers/google.firebase.analytics/|firebaseanalytics.googleapis.com|
+|providers/firebase.auth/|firebaseauth.googleapis.com|
+|providers/google.firebase.database/|firebasedatabase.googleapis.com|
 |providers/cloud.pubsub/|pubsub.googleapis.com|
 |providers/cloud.storage/|storage.googleapis.com|
 
@@ -82,7 +82,6 @@ Next, determine the *ce_type* based on an exact match of
 |google.storage.object.delete|google.cloud.storage.object.v1.deleted|
 |google.storage.object.archive|google.cloud.storage.object.v1.archived|
 |google.storage.object.metadataUpdate|google.cloud.storage.object.v1.metadataUpdated|
-|**Mappings below here are tentative**|
 |providers/cloud.firestore/eventTypes/document.write|google.cloud.firestore.document.v1.written|
 |providers/cloud.firestore/eventTypes/document.create|google.cloud.firestore.document.v1.created|
 |providers/cloud.firestore/eventTypes/document.update|google.cloud.firestore.document.v1.updated|
@@ -141,8 +140,8 @@ This will lead to CloudEvent attributes of:
 
 ### Cloud PubSub events
 
-The GCF HTTP representation of Cloud Storage events (events with a
-*gcf_service* of `storage.googleapis.com`) contain a `data` property
+The GCF HTTP representation of Cloud PubSub events (events with a
+*gcf_service* of `pubsub.googleapis.com`) contain a `data` property
 which needs to be wrapped in an extra JSON object in the CloudEvent
 `data` attribute, to conform with the [expected CloudEvent
 representation](https://github.com/googleapis/google-cloudevents/blob/master/proto/google/events/cloud/pubsub/v1/data.proto).
@@ -156,6 +155,12 @@ should not be populated at the moment. If the subscription name
 becomes available in the GCF HTTP representation, this document will
 be updated, along with the conformance tests.)
 
+Additionally, two properties should be populated in the message,
+based on the context:
+
+- The `messageId` property in the `message` object should be set to *gcf_event_id*
+- The `publishTime` property in the `message` object should be set to *gcf_timestamp*
+
 The conversion should **not** parse *gcf_data* to ensure that only
 expected properties are present. (For example, the GCF HTTP
 representation usually includes a `@type` property, always with a
@@ -164,11 +169,26 @@ The inclusion or removal of the extra properties should make little
 difference to users, it's simpler to write conformance tests if all
 Functions Frameworks behave consistently.
 
-### Firebase RTDB events (tentative)
+### Firebase RTDB events
 
-(This information is still actively being worked on.)
+The `resource` in the GCF HTTP representation is of the form
+`projects/_/instances/{instance-id}/refs/{ref-path}`. Additionally,
+there is a top-level `domain` property, which is used to determine the `location` part
+of the CloudEvent representation:
 
-### Firebase analytics events (tentative)
+- The `domain` property must be present as a string; if it's missing, the conversion should fail.
+- If the `domain` value is `firebaseio.com`, the location is `us-central1`.
+- Otherwise, the location is the value of `domain` before the first period. For example,
+  a `domain` value of `europe-west1.firebasedatabase.app` would lead to a location value
+  of `europe-west1`.
+
+In the CloudEvent representation, this information is split between
+the `source` and the `subject`:
+
+- `source`: `//firestore.googleapis.com/projects/_/locations/{location}/instances/{instance-id}`
+- `subject: refs/{ref-path}`
+
+### Firebase analytics events
 
 The `resource` property in the GCF HTTP representation is of the
 form `projects/{project-id}/events/{event-name}`. As part of
@@ -178,9 +198,11 @@ the `source` attributes:
 - `source`: `//firebaseanalytics.googleapis.com/projects/{project-id}/apps/{app-id}`
 - `subject`: `events/{event-name}`
 
-TBD: Where the `app-id` part comes from.
+The `app-id` part it obtained from the data within the GCF HTTP representation, from
+a path of `userDim.appInfo.appId` (both the `userDim` and `appInfo` properties are
+expected to have object values; the `appId` property is expected to have a string value.)
 
-### Firebase auth events (tentative)
+### Firebase auth events
 
 The `subject` attribute of the CloudEvent is of the form `users/{uid}` where the
 `uid` value is taken from the `uid` property within the original
@@ -193,10 +215,10 @@ names of `createdAt` and `lastSignedInAt`; in the CloudEvent
 representation the names are `createTime` and `lastSignInTime`
 respectively.
 
-### Firestore document events (tentative)
+### Firestore document events
 
 The `resource` in the GCF HTTP representation is of the form
-`projects/{project-id}/databases/{database-id}/documents/{path-to-document}".
+`projects/{project-id}/databases/{database-id}/documents/{path-to-document}`.
 In the CloudEvent representation, this information is split between
 the `source` and the `subject`:
 
@@ -213,7 +235,7 @@ of raw JSON or a deserialized in-lanuage representation. The
 - `timestamp`: The date/time this event was created. (String)
 - `eventType`: The type of the event.
   For example: "google.pubsub.topic.publish". (String) 
-- `resource": The resource that emitted the event. (The format of this
+- `resource`: The resource that emitted the event. (The format of this
   varies by language.)
 
 The Java Functions Framework additionally includes an `attributes`
@@ -229,7 +251,7 @@ The "context" is populated as follows:
 - `eventId` from the CloudEvent `id` attribute
 - `timestamp` from the CloudEvent `timestamp` attribute
 - `eventType` from the CloudEvent `type` attribute, with a reverse
-  mapping of the *gcf_type* to *ce_type* table earlier applied.
+  mapping of the *gcf_event_type* to *ce_type* table earlier applied.
 - `resource`: TBD
 
 ### Cloud Storage events

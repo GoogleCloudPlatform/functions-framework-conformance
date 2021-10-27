@@ -79,11 +79,17 @@ func InputData(name string, t EventType) []byte {
 }
 
 // OutputData returns the contents of the output event for a particular event name and type.
-func OutputData(name string, t EventType) []byte {
+func OutputData(name string, t EventType, isConversion bool) []byte {
 	switch t {
 	case LegacyEvent:
+		if isConversion && Events[name].ConvertedOutput.LegacyEvent != nil {
+			return Events[name].ConvertedOutput.LegacyEvent
+		}
 		return Events[name].Output.LegacyEvent
 	case CloudEvent:
+		if isConversion && Events[name].ConvertedOutput.CloudEvent != nil {
+			return Events[name].ConvertedOutput.CloudEvent
+		}
 		return Events[name].Output.CloudEvent
 	}
 	return nil

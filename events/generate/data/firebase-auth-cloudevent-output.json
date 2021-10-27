@@ -4,7 +4,7 @@
   "source": "//firebaseauth.googleapis.com/projects/my-project-id",
   "subject": "users/UUpby3s4spZre6kHsgVSPetzQ8l2",
   "id": "aaaaaa-1111-bbbb-2222-cccccccccccc",
-  "time": "2020-09-29T11:32:00.000Z",
+  "time": "2020-09-29T11:32:00.123Z",
   "datacontenttype": "application/json",
   "data": {
     "email": "test@nowhere.com",

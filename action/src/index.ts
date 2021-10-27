@@ -1,20 +1,7 @@
 import * as core from '@actions/core';
-import * as github from '@actions/github';
 import * as childProcess from 'child_process';
 import * as fs from 'fs';
-
-/**
- * writeFileToConsole contents of file to console.
- * @param {string} path - filepath to write to the console
- */
-function writeFileToConsole(path: string) {
-  try {
-    const data = fs.readFileSync(path, 'utf8');
-    console.log(`${path}: ${data}`);
-  } catch (e) {
-    console.log(`$unable to read {path}, skipping: ${e}`);
-  }
-}
+import * as process from 'process';
 
 /**
  * Run a specified command.
@@ -22,16 +9,15 @@ function writeFileToConsole(path: string) {
  */
 function runCmd(cmd: string) {
   try {
+    console.log(`RUNNING: "${cmd}"`)
     childProcess.execSync(cmd);
   } catch (error) {
-    writeFileToConsole('serverlog_stdout.txt');
-    writeFileToConsole('serverlog_stderr.txt');
-    writeFileToConsole('function_output.json');
     core.setFailed(error.message);
   }
 }
 
 async function run() {
+  const version = core.getInput('version');
   const outputFile = core.getInput('outputFile');
   const functionType = core.getInput('functionType');
   const validateMapping = core.getInput('validateMapping');
@@ -42,14 +28,31 @@ async function run() {
   const useBuildpacks = core.getInput('useBuildpacks');
   const cmd = core.getInput('cmd');
   const startDelay = core.getInput('startDelay');
+  const workingDirectory = core.getInput('workingDirectory');
 
-  // Install conformance client binary.
-  runCmd(
-      'GO111MODULE=on go get -v github.com/GoogleCloudPlatform/functions-framework-conformance/client');
+  let cwd = process.cwd();
 
+  // Build conformance client binary from source.
+  let repo = 'functions-framework-conformance';
+  if (!fs.existsSync(repo)) {
+    runCmd(`git clone https://github.com/GoogleCloudPlatform/functions-framework-conformance.git`);
+  }
+  process.chdir('functions-framework-conformance/client');
+  if (version) {
+    runCmd(`git fetch origin refs/tags/${version} && git checkout ${version}`);
+  } else {
+    // Checkout latest release tag.
+    runCmd('git fetch --tags && git checkout $(git describe --tags $(git rev-list --tags --max-count=1))')
+  }
+  runCmd(`go build -o ~/client`);
+
+  process.chdir(cwd);
+  if (workingDirectory) {
+    process.chdir(workingDirectory);
+  }
   // Run the client with the specified parameters.
   runCmd([
-    `client`,
+    `~/client`,
     `-output-file=${outputFile}`,
     `-type=${functionType}`,
     `-validate-mapping=${validateMapping}`,
@@ -60,7 +63,7 @@ async function run() {
     `-buildpacks=${useBuildpacks}`,
     `-cmd=${cmd}`,
     `-start-delay=${startDelay}`,
-  ].join(' '));
+  ].filter((x) => !!x).join(' '));
 }
 
 run();

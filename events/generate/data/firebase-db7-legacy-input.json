@@ -6,6 +6,7 @@
   "auth": {
     "admin": true
   },
+  "domain": "firebaseio.com",
   "data": {
     "data": {
       "deeply": {
@@ -20,6 +21,6 @@
     }
   },
   "resource": "projects/_/instances/my-project-id/refs/gcf-test/xyz",
-  "timestamp": "2020-09-29T11:32:00.000Z",
+  "timestamp": "2020-09-29T11:32:00.123Z",
   "eventId": "aaaaaa-1111-bbbb-2222-cccccccccccc"
 }

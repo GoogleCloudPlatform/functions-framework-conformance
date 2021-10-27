@@ -1,7 +1,7 @@
 {
    "context": {
       "eventId": "aaaaaa-1111-bbbb-2222-cccccccccccc",
-      "timestamp": "2020-09-29T11:32:00.000Z",
+      "timestamp": "2020-09-29T11:32:00.123Z",
       "eventType": "google.storage.object.finalize",
       "resource": {
          "service": "storage.googleapis.com",

@@ -57,4 +57,6 @@ func main() {
 	if err := v.runValidation(); err != nil {
 		log.Fatalf("%v", err)
 	}
+
+	log.Printf("All validation passed!")
 }
