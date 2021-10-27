@@ -21,7 +21,7 @@ import (
 )
 
 var (
-	runCmd          = flag.String("cmd", "", "command to run a Functions Framework server at localhost:8080. Ignored if -buildpacks=true.")
+	runCmd          = flag.String("cmd", "", "string with command to run a Functions Framework server at localhost:8080. Ignored if -buildpacks=true.")
 	functionType    = flag.String("type", "http", "type of function to validate (must be 'http', 'cloudevent', or 'legacyevent'")
 	validateMapping = flag.Bool("validate-mapping", true, "whether to validate mapping from legacy->cloud events and vice versa (as applicable)")
 	outputFile      = flag.String("output-file", "function_output.json", "name of file output by function")
