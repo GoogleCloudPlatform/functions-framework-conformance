@@ -35,7 +35,7 @@ Frameworks to the Functions Framework contract.
 
         ```sh
         $HOME/functions-framework-conformance/client/client \
-          -cmd "go run ." \
+          -cmd "'go run .'" \
           -type http \
           -builder-source testdata \
           -buildpacks false
@@ -45,7 +45,7 @@ Frameworks to the Functions Framework contract.
 
         ```sh
         $HOME/functions-framework-conformance/client/client \
-          -cmd "dotnet run MyFunction" \
+          -cmd "'dotnet run MyFunction'" \
           -type cloudevent \
           -buildpacks false
         ```
@@ -54,7 +54,7 @@ Frameworks to the Functions Framework contract.
 
         ```sh
         $HOME/functions-framework-conformance/client/client \
-          -cmd "npx @google-cloud/functions-framework --target MyFunction --signature-type=event" \
+          -cmd "'npx @google-cloud/functions-framework --target MyFunction --signature-type=event'" \
           -type legacyevent \
           -buildpacks false
         ```
@@ -67,7 +67,7 @@ Frameworks to the Functions Framework contract.
 
 | Configuration flag | Type | Default | Description |
 | --- | --- | --- | --- |
-| `-cmd` | string | `""` | Command to run a Functions Framework server at `localhost:8080`. Ignored if `-buildpacks=true`. |
+| `-cmd` | string | `"''"` | A string with the command to run a Functions Framework server at `localhost:8080`. Must be wrapped in quotes. Ignored if `-buildpacks=true`. |
 | `-type` | string | `"http"` | Type of function to validate (must be `"http"`, `"cloudevent"`, or `"legacyevent"`). |
 | `-validate-mapping` | boolean | `true` | Whether to validate mapping from legacy->cloud events and vice versa (as applicable). |
 | `-output-file` | string | `"function_output.json"` | Name of file output by function. |
