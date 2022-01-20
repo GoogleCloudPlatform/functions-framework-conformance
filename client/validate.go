@@ -25,31 +25,34 @@ import (
 )
 
 type validatorParams struct {
-	useBuildpacks   bool
-	validateMapping bool
-	runCmd          string
-	outputFile      string
-	source          string
-	target          string
-	runtime         string
-	tag             string
-	functionType    string
+	useBuildpacks       bool
+	validateMapping     bool
+	runCmd              string
+	outputFile          string
+	source              string
+	target              string
+	runtime             string
+	tag                 string
+	functionType        string
+	validateConcurrency bool
 }
 
 type validator struct {
-	funcServer      functionServer
-	validateMapping bool
-	functionType    string
-	stdoutFile      string
-	stderrFile      string
+	funcServer          functionServer
+	validateMapping     bool
+	validateConcurrency bool
+	functionType        string
+	stdoutFile          string
+	stderrFile          string
 }
 
 func newValidator(params validatorParams) *validator {
 	v := validator{
-		validateMapping: params.validateMapping,
-		functionType:    params.functionType,
-		stdoutFile:      defaultStdoutFile,
-		stderrFile:      defaultStderrFile,
+		validateMapping:     params.validateMapping,
+		validateConcurrency: params.validateConcurrency,
+		functionType:        params.functionType,
+		stdoutFile:          defaultStdoutFile,
+		stderrFile:          defaultStderrFile,
 	}
 
 	if !params.useBuildpacks {
@@ -129,6 +132,7 @@ func (v validator) validateHTTP(url string) error {
 	if err := sendHTTP(url, req); err != nil {
 		return fmt.Errorf("failed to get response from HTTP function: %v", err)
 	}
+
 	output, err := v.funcServer.OutputFile()
 	if err != nil {
 		return fmt.Errorf("reading output file from HTTP function: %v", err)
@@ -176,6 +180,9 @@ func (v validator) validateEvents(url string, inputType, outputType events.Event
 }
 
 func (v validator) validate(url string) error {
+	if v.validateConcurrency {
+		return validateConcurrency(url, v.functionType)
+	}
 	switch v.functionType {
 	case "http":
 		// Validate HTTP signature, if provided
