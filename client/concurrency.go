@@ -40,7 +40,7 @@ func validateConcurrency(url string, functionType string) error {
 	switch functionType {
 	case "http":
 		sendFn = func() error {
-			return sendHTTP(url, []byte("hello"))
+			return sendHTTP(url, []byte(`{"data": "hello"}`))
 		}
 	case "cloudevent":
 		// Arbitrary payload that conforms to CloudEvent schema
