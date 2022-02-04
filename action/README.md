@@ -25,6 +25,10 @@ Default `http`.
 Whether or not to validate legacy->cloudevent mapping and vice versa. Default
 `true`.
 
+### `validateConcurrency`
+
+Whether or not to validate concurrent requests are handled. Default `false`.
+
 ## Example usage
 
 ```yaml
@@ -34,6 +38,7 @@ with:
   version: 'v1.0.0'
   functionType: 'http'
   validateMapping: false
+  validateConcurrency: true
   source: 'testdata/testfunc.go'
   target: 'HTTP'
   runtime: 'go113'

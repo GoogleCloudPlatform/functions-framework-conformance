@@ -21,6 +21,7 @@ async function run() {
   const outputFile = core.getInput('outputFile');
   const functionType = core.getInput('functionType');
   const validateMapping = core.getInput('validateMapping');
+  const validateConcurrency = core.getInput('validateConcurrency');
   const source = core.getInput('source');
   const target = core.getInput('target');
   const runtime = core.getInput('runtime');
@@ -56,6 +57,7 @@ async function run() {
     `-output-file=${outputFile}`,
     `-type=${functionType}`,
     `-validate-mapping=${validateMapping}`,
+    `-validate-concurrency=${validateConcurrency}`,
     `-builder-source=${source}`,
     `-builder-target=${target}`,
     `-builder-runtime=${runtime}`,
