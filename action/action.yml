@@ -15,6 +15,7 @@ inputs:
     default: true
   validateConcurrency:
     description: 'whether to validate concurrent requests can be handled, requires a function that sleeps for 1 second'
+    default: false
   source:
     description: 'function source code'
     default: ''
