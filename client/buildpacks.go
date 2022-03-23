@@ -24,7 +24,7 @@ import (
 	"os/exec"
 	"time"
 
-	"github.com/buildpacks/pack"
+	pack "github.com/buildpacks/pack/pkg/client"
 )
 
 const (
