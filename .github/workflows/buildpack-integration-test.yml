@@ -30,6 +30,10 @@ on:
         description: Background function target
         type: string
         required: false
+      prerun:
+        description: Bash script to run before test; relative to repo root
+        type: string
+        required: false
       builder-tag:
         description: GCF builder image tag
         type: string
@@ -129,6 +133,9 @@ jobs:
       - name: Check out repository
         if: ${{ matrix.builder-source }}
         uses: actions/checkout@v3
+      - name: Prerun script
+        if: ${{ matrix.builder-source && inputs.prerun }}
+        run: bash -x ${{ inputs.prerun }}
       - name: Buildpack integration test
         if: ${{ matrix.builder-source }}
         run: |
