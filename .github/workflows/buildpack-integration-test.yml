@@ -138,8 +138,4 @@ jobs:
           -builder-target=${{ matrix.builder-target }} \
           -builder-runtime=${{ inputs.builder-runtime }} \
           -builder-tag=${{ inputs.builder-tag }} \
-<<<<<<< HEAD
           -validate-mapping=false
-=======
-          -validate-mapping=false
->>>>>>> d52a913 (fix: Fix relative paths to helper actions)
