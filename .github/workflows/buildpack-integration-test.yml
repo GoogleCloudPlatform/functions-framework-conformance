@@ -74,7 +74,7 @@ jobs:
       - name: Resolve latest conformance test client version
         if: ${{ inputs.conformance-client-version == 'latest' }}
         id: conformance-client-latest
-        uses: ./actions/client/resolve-latest
+        uses: ./.github/actions/client/resolve-latest
       - name: Set conformance test client version from latest
         if: ${{ inputs.conformance-client-version == 'latest' }}
         run: echo CLIENT_VERSION=${{ steps.conformance-client-latest.outputs.version }} >> $GITHUB_ENV
@@ -92,7 +92,7 @@ jobs:
       # Cache miss, need to download conformance test client using Go tooling
       - name: Download conformance test client
         if: ${{ steps.check-for-cached-client.outputs.cache-hit != 'true' }}
-        uses: ./actions/client/install
+        uses: ./.github/actions/client/install
         with:
           client-version: ${{ env.CLIENT_VERSION }}
           cache-key: ${{ steps.set-cached-client-version.outputs.key }}
