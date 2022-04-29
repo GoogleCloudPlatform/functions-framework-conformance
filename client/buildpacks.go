@@ -28,8 +28,9 @@ import (
 )
 
 const (
-	image      = "conformance-test-func"
-	builderURL = "us.gcr.io/fn-img/buildpacks/%s/builder:%s"
+	image             = "conformance-test-func"
+	builderURL        = "us.gcr.io/fn-img/buildpacks/%s/builder:%s"
+	gcfTargetPlatform = "gcf"
 )
 
 type buildpacksFunctionServer struct {
@@ -97,6 +98,7 @@ func (b *buildpacksFunctionServer) build(ctx context.Context) error {
 		Env: map[string]string{
 			"GOOGLE_FUNCTION_TARGET":         b.target,
 			"GOOGLE_FUNCTION_SIGNATURE_TYPE": b.funcType,
+			"X_GOOGLE_TARGET_PLATFORM":       gcfTargetPlatform,
 		},
 	})
 	if err != nil {
