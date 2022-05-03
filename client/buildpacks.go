@@ -25,11 +25,12 @@ import (
 	"time"
 
 	pack "github.com/buildpacks/pack/pkg/client"
+	"github.com/buildpacks/pack/pkg/logging"
 )
 
 const (
 	image             = "conformance-test-func"
-	builderURL        = "us.gcr.io/fn-img/buildpacks/%s/builder:%s"
+	builderURL        = "gcr.io/fn-img/buildpacks/%s/builder:%s"
 	gcfTargetPlatform = "gcf"
 )
 
@@ -86,7 +87,8 @@ func (b *buildpacksFunctionServer) build(ctx context.Context) error {
 		return fmt.Errorf("failed to pull builder image %s: %v: %s", builder, err, string(output))
 	}
 
-	packClient, err := pack.NewClient()
+	logger := logging.NewLogWithWriters(os.Stdout, os.Stderr, logging.WithVerbose())
+	packClient, err := pack.NewClient(pack.WithLogger(logger))
 	if err != nil {
 		return fmt.Errorf("getting pack client: %v", err)
 	}
@@ -98,6 +100,7 @@ func (b *buildpacksFunctionServer) build(ctx context.Context) error {
 		Env: map[string]string{
 			"GOOGLE_FUNCTION_TARGET":         b.target,
 			"GOOGLE_FUNCTION_SIGNATURE_TYPE": b.funcType,
+			"GOOGLE_RUNTIME":                 b.runtime,
 			"X_GOOGLE_TARGET_PLATFORM":       gcfTargetPlatform,
 		},
 	})
