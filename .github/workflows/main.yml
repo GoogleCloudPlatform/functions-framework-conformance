@@ -32,6 +32,7 @@ jobs:
     - name: Run conformance tests
       uses: ./action
       with:
+        version: ${{ github.sha }}
         functionType: 'http'
         validateMapping: false
         source: 'testdata'
