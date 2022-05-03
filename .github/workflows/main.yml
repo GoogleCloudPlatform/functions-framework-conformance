@@ -29,13 +29,15 @@ jobs:
     - name: Verify generation
       run: "./check_go_generate.sh"
 
+    - name: Install client
+      run: go install github.com/GoogleCloudPlatform/functions-framework-conformance/client@${{ github.sha }}
+      
     - name: Run conformance tests
-      uses: ./action
-      with:
-        version: ${{ github.sha }}
-        functionType: 'http'
-        validateMapping: false
-        source: 'testdata'
-        target: 'HTTP'
-        runtime: 'go113'
-        tag: 'go113_20201005_20_RC00'
+      run: |
+        client
+        -type='http'
+        -validate-mapping=false
+        -builder-source='testdata'
+        -builder-target='HTTP'
+        -builder-runtime='go113'
+        -builder-target='go113_20220501_1_13_15_RC00'
