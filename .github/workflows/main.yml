@@ -34,10 +34,10 @@ jobs:
       
     - name: Run conformance tests
       run: |
-        ./cl
-        -type='http'
-        -validate-mapping=false
-        -builder-source='testdata'
-        -builder-target='HTTP'
-        -builder-runtime='go113'
-        -builder-target='go113_20220501_1_13_15_RC00'
+        ./cl \
+        -type='http' \
+        -validate-mapping=false \
+        -builder-source='testdata' \
+        -builder-target='HTTP' \
+        -builder-runtime='go113' \
+        -builder-tag='go113_20220501_1_13_15_RC00'
