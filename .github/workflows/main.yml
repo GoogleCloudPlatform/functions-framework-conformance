@@ -29,12 +29,15 @@ jobs:
     - name: Verify generation
       run: "./check_go_generate.sh"
 
+    - name: Build client
+      run: $(cd client && go build -o ../cl) && chmod +x cl
+      
     - name: Run conformance tests
-      uses: ./action
-      with:
-        functionType: 'http'
-        validateMapping: false
-        source: 'testdata'
-        target: 'HTTP'
-        runtime: 'go113'
-        tag: 'go113_20201005_20_RC00'
+      run: |
+        ./cl \
+        -type='http' \
+        -validate-mapping=false \
+        -builder-source='testdata' \
+        -builder-target='HTTP' \
+        -builder-runtime='go113' \
+        -builder-tag='go113_20220501_1_13_15_RC00'
