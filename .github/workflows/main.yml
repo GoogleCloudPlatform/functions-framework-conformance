@@ -30,7 +30,7 @@ jobs:
       run: "./check_go_generate.sh"
 
     - name: Build client
-      run: $(cd client && go build -o ../cl) && mv client/cl . && chmod +x cl
+      run: $(cd client && go build -o ../cl) && chmod +x cl
       
     - name: Run conformance tests
       run: |
