@@ -34,7 +34,7 @@ jobs:
       
     - name: Run conformance tests
       run: |
-        cl
+        ./cl
         -type='http'
         -validate-mapping=false
         -builder-source='testdata'
