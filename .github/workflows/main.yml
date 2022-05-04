@@ -29,12 +29,12 @@ jobs:
     - name: Verify generation
       run: "./check_go_generate.sh"
 
-    - name: Install client
-      run: go install github.com/GoogleCloudPlatform/functions-framework-conformance/client@${{ github.sha }}
+    - name: Build client
+      run: $(cd client && go build -o ../cl) && mv client/cl . && chmod +x cl
       
     - name: Run conformance tests
       run: |
-        client
+        cl
         -type='http'
         -validate-mapping=false
         -builder-source='testdata'
