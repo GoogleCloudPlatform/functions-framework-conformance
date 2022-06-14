@@ -18,8 +18,8 @@ on:
         description: CloudEvent function target
         type: string
         required: true
-      builder-runtime:
-        description: GCF runtime (e.g. 'go116')
+      builder-runtimes:
+        description: JSON array of GCF runtimes to test (e.g. '["go113", "go116"]')
         type: string
         required: true
       event-builder-source:
@@ -35,7 +35,7 @@ on:
         type: string
         required: false
       builder-tag:
-        description: GCF builder image tag
+        description: GCF builder image tag; the image tag must exist for each of the builder versions specified in the `builder-runtimes` field
         type: string
         default: 'latest'
         required: false
@@ -101,7 +101,7 @@ jobs:
           client-version: ${{ env.CLIENT_VERSION }}
           cache-key: ${{ steps.set-cached-client-version.outputs.key }}
 
-  run-buildpack-integration-test:
+  test:
     needs:
       - download-conformance-client
     runs-on: ubuntu-latest
@@ -109,6 +109,7 @@ jobs:
     strategy:
       matrix:
         type: [http, cloudevent, event]
+        builder-runtime: ${{ fromJSON(inputs.builder-runtimes) }}
         include:
           - type: http
             builder-source: ${{ inputs.http-builder-source }}
@@ -143,6 +144,6 @@ jobs:
           -type=${{ matrix.type }} \
           -builder-source=${{ matrix.builder-source }} \
           -builder-target=${{ matrix.builder-target }} \
-          -builder-runtime=${{ inputs.builder-runtime }} \
+          -builder-runtime=${{ matrix.builder-runtime }} \
           -builder-tag=${{ inputs.builder-tag }} \
           -validate-mapping=false
