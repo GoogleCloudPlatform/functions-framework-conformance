@@ -34,6 +34,11 @@ on:
         description: Bash script to run before test; relative to repo root
         type: string
         required: false
+      start-delay:
+        description: Start delay, in seconds, between starting the containerized function and sending test requests
+        type: number
+        required: false
+        default: 1
       builder-tag:
         description: GCF builder image tag
         type: string
@@ -145,4 +150,5 @@ jobs:
           -builder-target=${{ matrix.builder-target }} \
           -builder-runtime=${{ inputs.builder-runtime }} \
           -builder-tag=${{ inputs.builder-tag }} \
+          -start-delay=${{ inputs.start-delay }} \
           -validate-mapping=false
