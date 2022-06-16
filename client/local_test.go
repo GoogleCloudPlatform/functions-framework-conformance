@@ -41,6 +41,7 @@ func TestStartAndShutdown(t *testing.T) {
 	if err := ioutil.WriteFile(f, []byte(testProgram), 0644); err != nil {
 		t.Fatalf("Failed to write file: %v", err)
 	}
+	outputFile := filepath.Join(dir, "function_output.json")
 
 	server := localFunctionServer{
 		// `go run` compiles the program and then execs it, which allows us to test that
@@ -49,7 +50,7 @@ func TestStartAndShutdown(t *testing.T) {
 		cmd: fmt.Sprintf("go run %s", f),
 	}
 
-	shutdown, err := server.Start(defaultStdoutFile, defaultStderrFile)
+	shutdown, err := server.Start(defaultStdoutFile, defaultStderrFile, outputFile)
 	if shutdown != nil {
 		defer shutdown()
 	}

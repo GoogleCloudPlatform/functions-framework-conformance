@@ -23,15 +23,16 @@ import (
 )
 
 type localFunctionServer struct {
-	output     string
-	cmd        string
-	stdoutFile string
-	stderrFile string
+	functionOutputFile string
+	cmd                string
+	stdoutFile         string
+	stderrFile         string
 }
 
-func (l *localFunctionServer) Start(stdoutFile, stderrFile string) (func(), error) {
+func (l *localFunctionServer) Start(stdoutFile, stderrFile, functionOutputFile string) (func(), error) {
 	l.stdoutFile = stdoutFile
 	l.stderrFile = stderrFile
+	l.functionOutputFile = functionOutputFile
 	args := strings.Fields(l.cmd)
 	cmd := newCmd(args)
 
@@ -69,5 +70,5 @@ func (l *localFunctionServer) Start(stdoutFile, stderrFile string) (func(), erro
 }
 
 func (l *localFunctionServer) OutputFile() ([]byte, error) {
-	return ioutil.ReadFile(l.output)
+	return ioutil.ReadFile(l.functionOutputFile)
 }

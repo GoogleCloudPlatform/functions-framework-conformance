@@ -33,7 +33,7 @@ var (
 )
 
 type functionServer interface {
-	Start(stdoutFile, stderrFile string) (func(), error)
+	Start(stdoutFile, stderrFile, functionOutputFile string) (func(), error)
 	OutputFile() ([]byte, error)
 }
 
