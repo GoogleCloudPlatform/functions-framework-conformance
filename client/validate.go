@@ -42,6 +42,7 @@ type validator struct {
 	validateMapping     bool
 	validateConcurrency bool
 	functionType        string
+	functionOutputFile  string
 	stdoutFile          string
 	stderrFile          string
 }
@@ -51,14 +52,14 @@ func newValidator(params validatorParams) *validator {
 		validateMapping:     params.validateMapping,
 		validateConcurrency: params.validateConcurrency,
 		functionType:        params.functionType,
+		functionOutputFile:  params.outputFile,
 		stdoutFile:          defaultStdoutFile,
 		stderrFile:          defaultStderrFile,
 	}
 
 	if !params.useBuildpacks {
 		v.funcServer = &localFunctionServer{
-			output: params.outputFile,
-			cmd:    params.runCmd,
+			cmd: params.runCmd,
 		}
 		return &v
 	}
@@ -68,7 +69,6 @@ func newValidator(params validatorParams) *validator {
 	}
 
 	v.funcServer = &buildpacksFunctionServer{
-		output:   params.outputFile,
 		source:   params.source,
 		target:   params.target,
 		runtime:  params.runtime,
@@ -81,7 +81,7 @@ func newValidator(params validatorParams) *validator {
 func (v validator) runValidation() error {
 	log.Printf("Validating for %s...", *functionType)
 
-	shutdown, err := v.funcServer.Start(v.stdoutFile, v.stderrFile)
+	shutdown, err := v.funcServer.Start(v.stdoutFile, v.stderrFile, v.functionOutputFile)
 	if shutdown != nil {
 		defer shutdown()
 	}
@@ -101,7 +101,7 @@ func (v validator) errorWithLogsf(errorFmt string, paramsFmts ...interface{}) er
 	if readErr != nil {
 		logs = readErr.Error()
 	}
-	return fmt.Errorf("%s, server logs: %s", fmt.Sprintf(errorFmt, paramsFmts...), logs)
+	return fmt.Errorf("%s\nServer logs: %s", fmt.Sprintf(errorFmt, paramsFmts...), logs)
 }
 
 func (v validator) readLogs() (string, error) {
@@ -120,9 +120,10 @@ func (v validator) readLogs() (string, error) {
 
 // The HTTP function should copy the contents of the request into the response.
 func (v validator) validateHTTP(url string) error {
-	want := map[string]string{
-		"res": "PASS",
+	type test struct {
+		Res string `json:"res"`
 	}
+	want := test{Res: "PASS"}
 
 	req, err := json.Marshal(want)
 	if err != nil {
@@ -138,13 +139,13 @@ func (v validator) validateHTTP(url string) error {
 		return fmt.Errorf("reading output file from HTTP function: %v", err)
 	}
 
-	got := make(map[string]string)
+	got := test{}
 	if err = json.Unmarshal(output, &got); err != nil {
-		return fmt.Errorf("failed to unmarshal json: %v", err)
+		return fmt.Errorf("failed to unmarshal function output JSON: %v, function output: %q", err, output)
 	}
 
 	if !cmp.Equal(got, want) {
-		return fmt.Errorf("unexpected HTTP output data: got %v, want %v", got, want)
+		return fmt.Errorf("unexpected HTTP output data (format does not matter), got: %s, want: %s", output, req)
 	}
 	return nil
 }

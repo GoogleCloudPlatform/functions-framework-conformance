@@ -35,20 +35,21 @@ const (
 )
 
 type buildpacksFunctionServer struct {
-	output     string
-	source     string
-	target     string
-	funcType   string
-	runtime    string
-	tag        string
-	ctID       string
-	logStdout  *os.File
-	logStderr  *os.File
-	stdoutFile string
-	stderrFile string
+	functionOutputFile string
+	source             string
+	target             string
+	funcType           string
+	runtime            string
+	tag                string
+	ctID               string
+	logStdout          *os.File
+	logStderr          *os.File
+	stdoutFile         string
+	stderrFile         string
 }
 
-func (b *buildpacksFunctionServer) Start(stdoutFile, stderrFile string) (func(), error) {
+func (b *buildpacksFunctionServer) Start(stdoutFile, stderrFile, functionOutputFile string) (func(), error) {
+	b.functionOutputFile = functionOutputFile
 	b.stdoutFile = stdoutFile
 	b.stderrFile = stderrFile
 	typ := *functionType
@@ -70,12 +71,12 @@ func (b *buildpacksFunctionServer) Start(stdoutFile, stderrFile string) (func(),
 }
 
 func (b *buildpacksFunctionServer) OutputFile() ([]byte, error) {
-	cmd := exec.Command("docker", "cp", fmt.Sprintf("%s:/workspace/%s", b.containerID(), b.output), ".")
+	cmd := exec.Command("docker", "cp", fmt.Sprintf("%s:/workspace/%s", b.containerID(), b.functionOutputFile), ".")
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		return nil, fmt.Errorf("failed to copy output file from the container: %v: %s", err, string(output))
 	}
-	return ioutil.ReadFile(b.output)
+	return ioutil.ReadFile(b.functionOutputFile)
 }
 
 func (b *buildpacksFunctionServer) build(ctx context.Context) error {
