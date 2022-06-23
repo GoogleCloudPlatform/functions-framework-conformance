@@ -22,6 +22,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"time"
 
 	pack "github.com/buildpacks/pack/pkg/client"
@@ -71,12 +72,12 @@ func (b *buildpacksFunctionServer) Start(stdoutFile, stderrFile, functionOutputF
 }
 
 func (b *buildpacksFunctionServer) OutputFile() ([]byte, error) {
-	cmd := exec.Command("docker", "cp", fmt.Sprintf("%s:/workspace/%s", b.containerID(), b.functionOutputFile), ".")
+	cmd := exec.Command("docker", "cp", filepath.Join(fmt.Sprintf("%s:/workspace", b.containerID()), b.functionOutputFile), os.TempDir())
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		return nil, fmt.Errorf("failed to copy output file from the container: %v: %s", err, string(output))
 	}
-	return ioutil.ReadFile(b.functionOutputFile)
+	return ioutil.ReadFile(filepath.Join(os.TempDir(), filepath.Base(b.functionOutputFile)))
 }
 
 func (b *buildpacksFunctionServer) build(ctx context.Context) error {
