@@ -82,17 +82,20 @@ func (v validator) runValidation() error {
 	log.Printf("Validating for %s...", *functionType)
 
 	shutdown, err := v.funcServer.Start(v.stdoutFile, v.stderrFile, v.functionOutputFile)
-	if shutdown != nil {
-		defer shutdown()
-	}
-
 	if err != nil {
 		return v.errorWithLogsf("unable to start server: %v", err)
 	}
+	if shutdown == nil {
+		shutdown = func() {}
+	}
 
 	if err := v.validate("http://localhost:8080"); err != nil {
+		// shutdown to ensure all the logs are flushed
+		shutdown()
 		return v.errorWithLogsf("validation failure: %v", err)
 	}
+
+	shutdown()
 	return nil
 }
 
