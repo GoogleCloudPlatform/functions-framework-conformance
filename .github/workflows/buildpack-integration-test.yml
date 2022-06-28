@@ -43,6 +43,7 @@ on:
         description: The output file conformance test files should write to for verification; relative to the source code directory
         type: string
         required: false
+        default: 'function_output.json'
       builder-tag:
         description: GCF builder image tag
         type: string
