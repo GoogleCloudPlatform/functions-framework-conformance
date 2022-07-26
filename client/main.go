@@ -32,7 +32,8 @@ var (
 	tag                 = flag.String("builder-tag", "latest", "builder image tag to use in building")
 	startDelay          = flag.Uint("start-delay", 1, "Seconds to wait before sending HTTP request to command process")
 	validateConcurrencyFlag = flag.Bool("validate-concurrency", false, "whether to validate concurrent requests can be handled, requires a function that sleeps for 1 second ")
-)
+	functionConcurrency = flag.Uint("function-concurrency", 10, "Max concurrent requests handled per instance")
+	)
 
 func main() {
 	flag.Parse()
@@ -54,6 +55,7 @@ func main() {
 		functionType:        *functionType,
 		tag:                 *tag,
 		validateConcurrency: *validateConcurrencyFlag,
+		functionConcurrency: *functionConcurrency,
 	})
 
 	if err := v.runValidation(); err != nil {

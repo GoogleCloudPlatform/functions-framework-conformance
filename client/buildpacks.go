@@ -47,6 +47,7 @@ type buildpacksFunctionServer struct {
 	logStderr          *os.File
 	stdoutFile         string
 	stderrFile         string
+	functionConcurrency	   uint
 }
 
 func (b *buildpacksFunctionServer) Start(stdoutFile, stderrFile, functionOutputFile string) (func(), error) {
@@ -125,12 +126,13 @@ func (b *buildpacksFunctionServer) run() (func(), error) {
 	if err != nil {
 		return nil, err
 	}
-
+	
 	args := []string{"docker", "run",
 		"--network=host",
 		// TODO: figure out why these aren't getting set in the buildpack.
 		"--env=FUNCTION_TARGET=" + b.target,
 		"--env=FUNCTION_SIGNATURE_TYPE=" + b.funcType,
+		"--env=FUNCTION_CONCURRENCY=" + fmt.Sprintf("%d", b.functionConcurrency),
 		image,
 	}
 	cmd := exec.Command(args[0], args[1:]...)
