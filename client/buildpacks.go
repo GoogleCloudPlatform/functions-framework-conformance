@@ -126,7 +126,7 @@ func (b *buildpacksFunctionServer) run() (func(), error) {
 	if err != nil {
 		return nil, err
 	}
-	
+
 	args := []string{"docker", "run",
 		"--network=host",
 		// TODO: figure out why these aren't getting set in the buildpack.
