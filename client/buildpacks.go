@@ -126,17 +126,20 @@ func (b *buildpacksFunctionServer) run() (func(), error) {
 	if err != nil {
 		return nil, err
 	}
-
+	var temp = b.envs.String()
+	log.Printf("Extra variable s%se",temp)
 	args := []string{"docker", "run",
 		"--network=host",
 		// TODO: figure out why these aren't getting set in the buildpack.
 		"--env=FUNCTION_TARGET=" + b.target,
 		"--env=FUNCTION_SIGNATURE_TYPE=" + b.funcType,
-		b.envs.String(),
-		image,
 	}
+	if len(*b.envs) != 0 {
+		args = append(args, *b.envs...)
+	}
+	args = append(args, image)
+	log.Printf("Docker command #%s",args)
 	cmd := exec.Command(args[0], args[1:]...)
-
 	err = cmd.Start()
 
 	// TODO: figure out why this isn't picking up errors.

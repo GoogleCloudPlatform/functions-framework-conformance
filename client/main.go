@@ -19,18 +19,15 @@ import (
 	"flag"
 	"log"
 	"fmt"
+	"strings"
 )
 type envars []string
 func (i *envars) String() string {
-	var runtimeVars=""
-	for _,s :=range *i  {
-		runtimeVars = fmt.Sprintf("%s --env=%s",runtimeVars,s)
-	}
-	return runtimeVars
+	return strings.Join(*i," ")
 }
 
 func (i *envars) Set(value string) error {
-	*i = append(*i, value)
+	*i = append(*i, fmt.Sprintf("--env=%s",value))
 	return nil
 }
 var runtimeVars envars
