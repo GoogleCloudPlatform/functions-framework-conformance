@@ -135,7 +135,6 @@ func (b *buildpacksFunctionServer) run() (func(), error) {
 		b.envs.String(),
 		image,
 	}
-	log.Printf("docker command: #%s", args)
 	cmd := exec.Command(args[0], args[1:]...)
 
 	err = cmd.Start()
