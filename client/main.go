@@ -18,7 +18,22 @@ package main
 import (
 	"flag"
 	"log"
+	"fmt"
 )
+type envars []string
+func (i *envars) String() string {
+	var runtimeVars=""
+	for _,s :=range *i  {
+		runtimeVars = fmt.Sprintf("%s --env=%s",runtimeVars,s)
+	}
+	return runtimeVars
+}
+
+func (i *envars) Set(value string) error {
+	*i = append(*i, value)
+	return nil
+}
+var runtimeVars envars
 
 var (
 	runCmd              = flag.String("cmd", "", "string with command to run a Functions Framework server at localhost:8080. Ignored if -buildpacks=true.")
@@ -32,10 +47,10 @@ var (
 	tag                 = flag.String("builder-tag", "latest", "builder image tag to use in building")
 	startDelay          = flag.Uint("start-delay", 1, "Seconds to wait before sending HTTP request to command process")
 	validateConcurrencyFlag = flag.Bool("validate-concurrency", false, "whether to validate concurrent requests can be handled, requires a function that sleeps for 1 second ")
-	functionConcurrency = flag.Uint("function-concurrency", 10, "Max concurrent requests handled per instance")
 )
 
 func main() {
+	flag.Var(&runtimeVars, "envs", "Runtime environment variables")
 	flag.Parse()
 
 	if *useBuildpacks {
@@ -55,7 +70,7 @@ func main() {
 		functionType:        *functionType,
 		tag:                 *tag,
 		validateConcurrency: *validateConcurrencyFlag,
-		functionConcurrency: *functionConcurrency,
+		envs: &runtimeVars,
 	})
 
 	if err := v.runValidation(); err != nil {

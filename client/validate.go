@@ -35,7 +35,7 @@ type validatorParams struct {
 	tag                 string
 	functionType        string
 	validateConcurrency bool
-	functionConcurrency uint
+	envs *envars
 }
 
 type validator struct {
@@ -46,7 +46,7 @@ type validator struct {
 	functionOutputFile  string
 	stdoutFile          string
 	stderrFile          string
-	functionConcurrency uint
+	envs *envars
 }
 
 func newValidator(params validatorParams) *validator {
@@ -57,7 +57,7 @@ func newValidator(params validatorParams) *validator {
 		functionOutputFile:  params.outputFile,
 		stdoutFile:          defaultStdoutFile,
 		stderrFile:          defaultStderrFile,
-		functionConcurrency: params.functionConcurrency,
+		envs: params.envs,
 	}
 
 	if !params.useBuildpacks {
@@ -77,7 +77,7 @@ func newValidator(params validatorParams) *validator {
 		runtime:  params.runtime,
 		tag:      params.tag,
 		funcType: params.functionType,
-		functionConcurrency: params.functionConcurrency,
+		envs: params.envs,
 	}
 	return &v
 }
