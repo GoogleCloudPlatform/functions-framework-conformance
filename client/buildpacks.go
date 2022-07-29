@@ -24,6 +24,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"time"
+	"strings"
 
 	pack "github.com/buildpacks/pack/pkg/client"
 	"github.com/buildpacks/pack/pkg/logging"
@@ -47,7 +48,7 @@ type buildpacksFunctionServer struct {
 	logStderr          *os.File
 	stdoutFile         string
 	stderrFile         string
-	envs	   *envars
+	envs	   		   string
 }
 
 func (b *buildpacksFunctionServer) Start(stdoutFile, stderrFile, functionOutputFile string) (func(), error) {
@@ -126,20 +127,8 @@ func (b *buildpacksFunctionServer) run() (func(), error) {
 	if err != nil {
 		return nil, err
 	}
-	var temp = b.envs.String()
-	log.Printf("Extra variable s%se",temp)
-	args := []string{"docker", "run",
-		"--network=host",
-		// TODO: figure out why these aren't getting set in the buildpack.
-		"--env=FUNCTION_TARGET=" + b.target,
-		"--env=FUNCTION_SIGNATURE_TYPE=" + b.funcType,
-	}
-	if len(*b.envs) != 0 {
-		args = append(args, *b.envs...)
-	}
-	args = append(args, image)
-	log.Printf("Docker command #%s",args)
-	cmd := exec.Command(args[0], args[1:]...)
+	var envVars = b.getRuntimeVars()
+	cmd := exec.Command("docker", envVars...)
 	err = cmd.Start()
 
 	// TODO: figure out why this isn't picking up errors.
@@ -164,6 +153,22 @@ func (b *buildpacksFunctionServer) run() (func(), error) {
 		}
 		log.Printf("Framework server shut down. Wrote logs to %v and %v.", b.stdoutFile, b.stderrFile)
 	}, nil
+}
+
+func (b *buildpacksFunctionServer) getRuntimeVars() []string {
+	var variables = strings.Split(b.envs, ",")
+	runtimeVars := []string {"run",
+	// TODO: figure out why these aren't getting set in the buildpack.
+	"--env=FUNCTION_TARGET=" + b.target,
+	"--env=FUNCTION_SIGNATURE_TYPE=" + b.funcType,}
+
+	for _,s := range variables{
+		if s != "" {
+			runtimeVars = append(runtimeVars, fmt.Sprintf("--env=%s",s))
+		}
+	}
+	
+	return append(runtimeVars, image)
 }
 
 func (b *buildpacksFunctionServer) containerID() string {

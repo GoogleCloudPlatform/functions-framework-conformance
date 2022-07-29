@@ -35,7 +35,7 @@ type validatorParams struct {
 	tag                 string
 	functionType        string
 	validateConcurrency bool
-	envs *envars
+	envs 				string
 }
 
 type validator struct {
@@ -46,7 +46,7 @@ type validator struct {
 	functionOutputFile  string
 	stdoutFile          string
 	stderrFile          string
-	envs *envars
+	envs 				string
 }
 
 func newValidator(params validatorParams) *validator {
@@ -63,6 +63,7 @@ func newValidator(params validatorParams) *validator {
 	if !params.useBuildpacks {
 		v.funcServer = &localFunctionServer{
 			cmd: params.runCmd,
+			envs: params.envs,
 		}
 		return &v
 	}
