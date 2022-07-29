@@ -158,6 +158,7 @@ func (b *buildpacksFunctionServer) run() (func(), error) {
 func (b *buildpacksFunctionServer) getRuntimeVars() []string {
 	var variables = strings.Split(b.envs, ",")
 	runtimeVars := []string {"run",
+	"--network=host",
 	// TODO: figure out why these aren't getting set in the buildpack.
 	"--env=FUNCTION_TARGET=" + b.target,
 	"--env=FUNCTION_SIGNATURE_TYPE=" + b.funcType,}
