@@ -49,7 +49,7 @@ func (l *localFunctionServer) Start(stdoutFile, stderrFile, functionOutputFile s
 	}
 	cmd.Stderr = stderr
 	cmd.Env = os.Environ()
-	for _,s := range l.envs{
+	for _, s := range l.envs {
 		if s != "" {
 			cmd.Env = append(cmd.Env, s)
 		}
