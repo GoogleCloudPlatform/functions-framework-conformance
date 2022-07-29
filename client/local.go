@@ -27,7 +27,7 @@ type localFunctionServer struct {
 	cmd                string
 	stdoutFile         string
 	stderrFile         string
-	envs               string
+	envs               []string
 }
 
 func (l *localFunctionServer) Start(stdoutFile, stderrFile, functionOutputFile string) (func(), error) {
@@ -49,8 +49,7 @@ func (l *localFunctionServer) Start(stdoutFile, stderrFile, functionOutputFile s
 	}
 	cmd.Stderr = stderr
 	cmd.Env = os.Environ()
-	var variables = strings.Split(l.envs,",")
-	for _,s := range variables{
+	for _,s := range l.envs{
 		if s != "" {
 			cmd.Env = append(cmd.Env, s)
 		}

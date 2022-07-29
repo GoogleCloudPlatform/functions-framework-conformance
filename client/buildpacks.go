@@ -24,7 +24,6 @@ import (
 	"os/exec"
 	"path/filepath"
 	"time"
-	"strings"
 
 	pack "github.com/buildpacks/pack/pkg/client"
 	"github.com/buildpacks/pack/pkg/logging"
@@ -48,7 +47,7 @@ type buildpacksFunctionServer struct {
 	logStderr          *os.File
 	stdoutFile         string
 	stderrFile         string
-	envs               string
+	envs               []string
 }
 
 func (b *buildpacksFunctionServer) Start(stdoutFile, stderrFile, functionOutputFile string) (func(), error) {
@@ -127,8 +126,8 @@ func (b *buildpacksFunctionServer) run() (func(), error) {
 	if err != nil {
 		return nil, err
 	}
-	var envVars = b.getRuntimeVars()
-	cmd := exec.Command("docker", envVars...)
+	var args = b.getDockerRunCommand()
+	cmd := exec.Command(args[0], args[1:]...)
 	err = cmd.Start()
 
 	// TODO: figure out why this isn't picking up errors.
@@ -155,20 +154,20 @@ func (b *buildpacksFunctionServer) run() (func(), error) {
 	}, nil
 }
 
-func (b *buildpacksFunctionServer) getRuntimeVars() []string {
-	var variables = strings.Split(b.envs, ",")
-	runtimeVars := []string {"run",
-	"--network=host",
-	// TODO: figure out why these aren't getting set in the buildpack.
-	"--env=FUNCTION_TARGET=" + b.target,
-	"--env=FUNCTION_SIGNATURE_TYPE=" + b.funcType,}
+func (b *buildpacksFunctionServer) getDockerRunCommand() []string {
+	runtimeVars := []string{"docker",
+		"run",
+		"--network=host",
+		// TODO: figure out why these aren't getting set in the buildpack.
+		"--env=FUNCTION_TARGET=" + b.target,
+		"--env=FUNCTION_SIGNATURE_TYPE=" + b.funcType}
 
-	for _,s := range variables{
+	for _, s := range b.envs {
 		if s != "" {
-			runtimeVars = append(runtimeVars, fmt.Sprintf("--env=%s",s))
+			runtimeVars = append(runtimeVars, fmt.Sprintf("--env=%s", s))
 		}
 	}
-	
+
 	return append(runtimeVars, image)
 }
 

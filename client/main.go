@@ -18,6 +18,7 @@ package main
 import (
 	"flag"
 	"log"
+	"strings"
 )
 
 var (
@@ -55,7 +56,7 @@ func main() {
 		functionType:        *functionType,
 		tag:                 *tag,
 		validateConcurrency: *validateConcurrencyFlag,
-		envs: *envs,
+		envs: strings.Split(*envs,","),
 	})
 
 	if err := v.runValidation(); err != nil {
