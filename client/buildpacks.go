@@ -48,7 +48,7 @@ type buildpacksFunctionServer struct {
 	logStderr          *os.File
 	stdoutFile         string
 	stderrFile         string
-	envs	   		   string
+	envs               string
 }
 
 func (b *buildpacksFunctionServer) Start(stdoutFile, stderrFile, functionOutputFile string) (func(), error) {

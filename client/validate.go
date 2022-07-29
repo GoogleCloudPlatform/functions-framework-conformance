@@ -35,7 +35,7 @@ type validatorParams struct {
 	tag                 string
 	functionType        string
 	validateConcurrency bool
-	envs 				string
+	envs                string
 }
 
 type validator struct {
@@ -46,7 +46,7 @@ type validator struct {
 	functionOutputFile  string
 	stdoutFile          string
 	stderrFile          string
-	envs 				string
+	envs                string
 }
 
 func newValidator(params validatorParams) *validator {

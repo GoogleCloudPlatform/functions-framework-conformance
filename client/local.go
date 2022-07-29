@@ -27,7 +27,7 @@ type localFunctionServer struct {
 	cmd                string
 	stdoutFile         string
 	stderrFile         string
-	envs			   string
+	envs               string
 }
 
 func (l *localFunctionServer) Start(stdoutFile, stderrFile, functionOutputFile string) (func(), error) {
