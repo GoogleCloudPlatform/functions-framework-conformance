@@ -27,6 +27,7 @@ type localFunctionServer struct {
 	cmd                string
 	stdoutFile         string
 	stderrFile         string
+	envs               []string
 }
 
 func (l *localFunctionServer) Start(stdoutFile, stderrFile, functionOutputFile string) (func(), error) {
@@ -47,6 +48,12 @@ func (l *localFunctionServer) Start(stdoutFile, stderrFile, functionOutputFile s
 		return nil, err
 	}
 	cmd.Stderr = stderr
+	cmd.Env = os.Environ()
+	for _, s := range l.envs {
+		if s != "" {
+			cmd.Env = append(cmd.Env, s)
+		}
+	}
 	err = cmd.Start()
 	if err != nil {
 		return nil, err
