@@ -164,7 +164,7 @@ func sendConcurrentRequests(sendFn func() error) error {
 	// the requests were handled serially, using the single request time
 	// as a benchmark. The concurrent time should be less than half of the
 	// time it would have taken to execute all requests serially.
-	if conReqTime*2 > numConReqs*singleReqTime {
+	if conReqTime > 2*singleReqTime {
 		return fmt.Errorf("function took too long to complete %d concurrent requests. %d concurrent request time: %s, single request time: %s", numConReqs, numConReqs, conReqTime, singleReqTime)
 	}
 	log.Printf("Concurrent request response time benchmarked, took %s for %d requests", conReqTime, numConReqs)
