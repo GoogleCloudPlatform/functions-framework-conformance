@@ -162,8 +162,7 @@ func sendConcurrentRequests(sendFn func() error) error {
 
 	// Validate that the concurrent requests were handled faster than if all
 	// the requests were handled serially, using the single request time
-	// as a benchmark. The concurrent time should be less than half of the
-	// time it would have taken to execute all requests serially.
+	// as a benchmark. Some buffer is provided by doubling the single request time.
 	if conReqTime > 2*singleReqTime {
 		return fmt.Errorf("function took too long to complete %d concurrent requests. %d concurrent request time: %s, single request time: %s", numConReqs, numConReqs, conReqTime, singleReqTime)
 	}
