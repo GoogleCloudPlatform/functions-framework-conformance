@@ -17,7 +17,6 @@ package main
 import (
 	"fmt"
 	"log"
-	"strings"
 	"sync"
 	"time"
 
@@ -124,7 +123,7 @@ func sendConcurrentRequests(sendFn func() error) error {
 	log.Printf("Single request response time benchmarked, took %s for 1 request", singleReqTime)
 
 	// Get a benchmark for the time it takes for concurrent requests
-	const numConReqs = 1000
+	const numConReqs = 10
 	log.Printf("Starting %d concurrent workers to send requests", numConReqs)
 
 	type workerResponse struct {
@@ -148,26 +147,24 @@ func sendConcurrentRequests(sendFn func() error) error {
 	})
 
 	maybeErrMessage := ""
-	first10Workers := []string{}
 	for i := 0; i < numConReqs; i++ {
 		resp := <-respCh
 		if resp.err != nil {
 			maybeErrMessage += fmt.Sprintf("error #%d: %v\n", i, resp.err)
-		}
-		if i < 10 {
-			first10Workers = append(first10Workers, fmt.Sprintf("Worker #%d", resp.id))
+		} else {
+			log.Printf("Worker #%d done", resp.id)
 		}
 	}
+
 	if maybeErrMessage != "" {
 		return fmt.Errorf("at least one concurrent request failed:\n%s", maybeErrMessage)
 	}
 
-	log.Printf("First 10 workers done:\n%s", strings.Join(first10Workers, "\n"))
-
 	// Validate that the concurrent requests were handled faster than if all
 	// the requests were handled serially, using the single request time
-	// as a benchmark. Some buffer is provided by doubling the single request time.
-	if conReqTime > 2*singleReqTime {
+	// as a benchmark. The concurrent time should be less than half of the
+	// time it would have taken to execute all requests serially.
+	if conReqTime*2 > numConReqs*singleReqTime {
 		return fmt.Errorf("function took too long to complete %d concurrent requests. %d concurrent request time: %s, single request time: %s", numConReqs, numConReqs, conReqTime, singleReqTime)
 	}
 	log.Printf("Concurrent request response time benchmarked, took %s for %d requests", conReqTime, numConReqs)
