@@ -7,6 +7,9 @@ inputs:
   cache-key:
     description: 'Cache key for storing client'
     default: conformance-client-latest
+  cache-path:
+    description: 'Filepath where the client is installed'
+    default: ~/go/bin/client
 runs:
   using: "composite"
   steps:
@@ -17,8 +20,12 @@ runs:
     - name: Install client
       run: go install github.com/GoogleCloudPlatform/functions-framework-conformance/client@${{ inputs.client-version }}
       shell: bash
+    - name: Move client to cache-path
+      # 'mv' fails if the src and dest path are the same, so move it to a temp first just in case
+      run: mv ~/go/bin/client /tmp/client && mv /tmp/client ${{ inputs.cache-path }}
+      shell: bash
     - name: Cache client
       uses: actions/cache@v3
       with:
-        path: ~/go/bin/client
+        path: ${{ inputs.cache-path }}
         key: ${{ inputs.cache-key }}
