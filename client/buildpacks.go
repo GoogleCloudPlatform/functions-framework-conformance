@@ -31,7 +31,7 @@ import (
 
 const (
 	image             = "conformance-test-func"
-	builderURL        = "us.gcr.io/fn-img/buildpacks/%s/builder:%s"
+	builderURL        = "gcr.io/gae-runtimes/buildpacks/%s/builder:%s"
 	gcfTargetPlatform = "gcf"
 )
 
