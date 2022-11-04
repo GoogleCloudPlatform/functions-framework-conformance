@@ -39,5 +39,4 @@ jobs:
         -validate-mapping=false \
         -builder-source='testdata' \
         -builder-target='HTTP' \
-        -builder-runtime='go113' \
-        -builder-tag='go113_20220501_1_13_15_RC00'
+        -builder-runtime='go113'
