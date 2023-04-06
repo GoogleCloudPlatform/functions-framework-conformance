@@ -31,7 +31,7 @@ import (
 
 const (
 	image             = "conformance-test-func"
-	builderURL        = "us.gcr.io/fn-img/buildpacks/%s/builder:%s"
+	builderURL        = "gcr.io/buildpacks/builder:%s"
 	gcfTargetPlatform = "gcf"
 )
 
@@ -82,7 +82,7 @@ func (b *buildpacksFunctionServer) OutputFile() ([]byte, error) {
 }
 
 func (b *buildpacksFunctionServer) build(ctx context.Context) error {
-	builder := fmt.Sprintf(builderURL, b.runtime, b.tag)
+	builder := fmt.Sprintf(builderURL, b.tag)
 
 	cmd := exec.Command("docker", "pull", builder)
 	output, err := cmd.CombinedOutput()
