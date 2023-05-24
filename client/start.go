@@ -28,8 +28,8 @@ import (
 )
 
 var (
-	defaultStdoutFile = path.Join(os.TempDir(), "serverlog_stdout.txt")
-	defaultStderrFile = path.Join(os.TempDir(), "serverlog_stderr.txt")
+	defaultStdoutFile = path.Join(os.TempDir(), "/ff_serverlog_stdout.txt")
+	defaultStderrFile = path.Join(os.TempDir(), "/ff_serverlog_stderr.txt")
 )
 
 type functionServer interface {

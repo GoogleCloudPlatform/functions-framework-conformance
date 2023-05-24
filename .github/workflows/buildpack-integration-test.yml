@@ -151,11 +151,18 @@ jobs:
         if: ${{ matrix.builder-source }}
         run: |
           client \
-          -type=${{ matrix.type }} \
-          -builder-source=${{ matrix.builder-source }} \
-          -builder-target=${{ matrix.builder-target }} \
-          -builder-runtime=${{ inputs.builder-runtime }} \
-          -builder-tag=${{ inputs.builder-tag }} \
-          -start-delay=${{ inputs.start-delay }} \
-          -output-file=${{ inputs.output-file }} \
-          -validate-mapping=false
+            -type=${{ matrix.type }} \
+            -builder-source=${{ matrix.builder-source }} \
+            -builder-target=${{ matrix.builder-target }} \
+            -builder-runtime=${{ inputs.builder-runtime }} \
+            -builder-tag=${{ inputs.builder-tag }} \
+            -start-delay=${{ inputs.start-delay }} \
+            -output-file=${{ inputs.output-file }} \
+            -validate-mapping=false
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: ${{ matrix.type }}_buildpack_integ_logs
+          path: /tmp/ff_*
+          retention-days: 5
