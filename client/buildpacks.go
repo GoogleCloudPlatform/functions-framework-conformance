@@ -144,13 +144,14 @@ func (b *buildpacksFunctionServer) run() (func(), error) {
 		if err := b.logs(); err != nil {
 			log.Fatalf("getting container logs: %v", err)
 		}
+		log.Printf("Wrote logs to %v and %v.", b.stdoutFile, b.stderrFile)
 		if err := cmd.Process.Kill(); err != nil {
 			log.Fatalf("failed to kill process: %v", err)
 		}
 		if err := b.killContainer(); err != nil {
 			log.Fatalf("failed to kill container: %v", err)
 		}
-		log.Printf("Framework server shut down. Wrote logs to %v and %v.", b.stdoutFile, b.stderrFile)
+		log.Print("Framework server shut down.")
 	}, nil
 }
 
