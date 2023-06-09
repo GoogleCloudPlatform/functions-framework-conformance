@@ -23,6 +23,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"time"
 
 	pack "github.com/buildpacks/pack/pkg/client"
@@ -31,7 +32,7 @@ import (
 
 const (
 	image             = "conformance-test-func"
-	builderURL        = "gcr.io/buildpacks/builder:%s"
+	builderURL        = "gcr.io/gae-runtimes/buildpacks/%s/builder:%s"
 	gcfTargetPlatform = "gcf"
 )
 
@@ -82,7 +83,10 @@ func (b *buildpacksFunctionServer) OutputFile() ([]byte, error) {
 }
 
 func (b *buildpacksFunctionServer) build(ctx context.Context) error {
-	builder := fmt.Sprintf(builderURL, b.tag)
+	builder, err := b.buildpackBuilderImage()
+	if err != nil {
+		return err
+	}
 
 	cmd := exec.Command("docker", "pull", builder)
 	output, err := cmd.CombinedOutput()
@@ -112,6 +116,16 @@ func (b *buildpacksFunctionServer) build(ctx context.Context) error {
 	}
 
 	return nil
+}
+
+var runtimeLanguageRegexp = regexp.MustCompile(`^[a-zA-Z]+`)
+
+func (b *buildpacksFunctionServer) buildpackBuilderImage() (string, error) {
+	runtimeLanguage := runtimeLanguageRegexp.FindString(b.runtime)
+	if runtimeLanguage == "" {
+		return "", fmt.Errorf("Invalid runtime format. Runtime should start with language followed by version. Example: go119, python311. Got %q", b.runtime)
+	}
+	return fmt.Sprintf(builderURL, runtimeLanguage, b.tag), nil
 }
 
 func (b *buildpacksFunctionServer) run() (func(), error) {
