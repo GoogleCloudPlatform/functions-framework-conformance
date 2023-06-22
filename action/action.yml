@@ -11,7 +11,7 @@ inputs:
     description: 'invocation signature type of function'
     default: 'http'
   declarativeType:
-    description: 'declarative type of the function as defined in code i.e. a \'typed\' declarative function uses the \'http\' invocation type'
+    description: 'declarative type of the function as defined in code i.e. a typed declarative function uses the http invocation type'
     default: ''
   validateMapping:
     description: 'whether to validate mapping from legacy->cloud event and vice versa'
