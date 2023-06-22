@@ -20,6 +20,7 @@ async function run() {
   const version = core.getInput('version');
   const outputFile = core.getInput('outputFile');
   const functionType = core.getInput('functionType');
+  const declarativeType = core.getInput('declarativeType');
   const validateMapping = core.getInput('validateMapping');
   const validateConcurrency = core.getInput('validateConcurrency');
   const source = core.getInput('source');
@@ -56,6 +57,7 @@ async function run() {
     `~/client`,
     `-output-file=${outputFile}`,
     `-type=${functionType}`,
+    `-declarative-type=${declarativeType}`,
     `-validate-mapping=${validateMapping}`,
     `-validate-concurrency=${validateConcurrency}`,
     `-builder-source=${source}`,

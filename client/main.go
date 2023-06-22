@@ -22,8 +22,11 @@ import (
 )
 
 var (
-	runCmd                  = flag.String("cmd", "", "string with command to run a Functions Framework server at localhost:8080. Ignored if -buildpacks=true.")
-	functionType            = flag.String("type", "http", "type of function to validate (must be 'http', 'cloudevent', or 'legacyevent'")
+	runCmd = flag.String("cmd", "", "string with command to run a Functions Framework server at localhost:8080. Ignored if -buildpacks=true.")
+	// functionSignature is the function's signature as signature in GCF i.e. will be set in the `GOOGLE_FUNCTION_SIGNATURE_TYPE` env variable.
+	functionSignature = flag.String("type", "http", "the function signature to use (must be 'http', 'cloudevent', or 'legacyevent'")
+	// declarativeSignature indicates the declarative function signature that is being tested. This is used to test `typed` functions which are exposed to GCF as the `http` signature type.
+	declarativeSignature    = flag.String("declarative-type", "", "the declarative signature type of the function (must be 'http', 'cloudevent', 'legacyevent', or 'typed'), default matches -type")
 	validateMapping         = flag.Bool("validate-mapping", true, "whether to validate mapping from legacy->cloud events and vice versa (as applicable)")
 	outputFile              = flag.String("output-file", "function_output.json", "name of file output by function")
 	useBuildpacks           = flag.Bool("buildpacks", true, "whether to use the current release of buildpacks to run the validation. If true, -cmd is ignored and --builder-* flags must be set.")
@@ -45,18 +48,23 @@ func main() {
 		}
 	}
 
+	if *declarativeSignature == "" {
+		*declarativeSignature = *functionSignature
+	}
+
 	v := newValidator(validatorParams{
-		validateMapping:     *validateMapping,
-		useBuildpacks:       *useBuildpacks,
-		runCmd:              *runCmd,
-		outputFile:          *outputFile,
-		source:              *source,
-		target:              *target,
-		runtime:             *runtime,
-		functionType:        *functionType,
-		tag:                 *tag,
-		validateConcurrency: *validateConcurrencyFlag,
-		envs:                strings.Split(*envs, ","),
+		validateMapping:      *validateMapping,
+		useBuildpacks:        *useBuildpacks,
+		runCmd:               *runCmd,
+		outputFile:           *outputFile,
+		source:               *source,
+		target:               *target,
+		runtime:              *runtime,
+		functionSignature:    *functionSignature,
+		declarativeSignature: *declarativeSignature,
+		tag:                  *tag,
+		validateConcurrency:  *validateConcurrencyFlag,
+		envs:                 strings.Split(*envs, ","),
 	})
 
 	if err := v.runValidation(); err != nil {
