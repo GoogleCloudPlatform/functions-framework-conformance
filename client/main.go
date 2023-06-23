@@ -52,6 +52,10 @@ func main() {
 		*declarativeSignature = *functionSignature
 	}
 
+	// Set runtime env vars that reflect https://cloud.google.com/functions/docs/configuring/env-var
+	validationRuntimeEnv := []string{"FUNCTION_SIGNATURE_TYPE=" + *functionSignature}
+	validationRuntimeEnv = append(validationRuntimeEnv, strings.Split(*envs, ",")...)
+
 	v := newValidator(validatorParams{
 		validateMapping:      *validateMapping,
 		useBuildpacks:        *useBuildpacks,
@@ -64,7 +68,7 @@ func main() {
 		declarativeSignature: *declarativeSignature,
 		tag:                  *tag,
 		validateConcurrency:  *validateConcurrencyFlag,
-		envs:                 strings.Split(*envs, ","),
+		envs:                 validationRuntimeEnv,
 	})
 
 	if err := v.runValidation(); err != nil {
