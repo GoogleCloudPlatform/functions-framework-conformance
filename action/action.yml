@@ -43,6 +43,9 @@ inputs:
   workingDirectory:
     description: 'The subdirectory in which the conformance tests should run'
     default: ""
+  runtimeEnvs:
+    description: 'A comma separated list of runtime environment variable overrides'
+    default: ""
 runs:
   using: 'node12'
   main: 'dist/index.js'
