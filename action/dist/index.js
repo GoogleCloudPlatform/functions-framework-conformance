@@ -68,6 +68,7 @@ function run() {
         const cmd = core.getInput('cmd');
         const startDelay = core.getInput('startDelay');
         const workingDirectory = core.getInput('workingDirectory');
+        const runtimeEnvs = core.getInput('runtimeEnvs');
         let cwd = process.cwd();
         // Build conformance client binary from source.
         let repo = 'functions-framework-conformance';
@@ -102,6 +103,7 @@ function run() {
             `-buildpacks=${useBuildpacks}`,
             `-cmd=${cmd}`,
             `-start-delay=${startDelay}`,
+            `-envs=${runtimeEnvs}`,
         ].filter((x) => !!x).join(' '));
     });
 }

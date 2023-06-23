@@ -91,6 +91,7 @@ Frameworks to the Functions Framework contract.
 | `-builder-runtime` | string | `""` | Runtime to use in building. Required if `-buildpacks=true`. |
 | `-builder-tag` | string | `"latest"` | Builder image tag to use in building. |
 | `-start-delay` | uint | `1` | Seconds to wait before sending HTTP request to command process. |
+| `-envs` | string | `""` | A comma separated string of additional runtime environment variables. |
 
 </nobr>
 
