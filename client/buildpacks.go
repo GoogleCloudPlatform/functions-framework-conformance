@@ -55,7 +55,7 @@ func (b *buildpacksFunctionServer) Start(stdoutFile, stderrFile, functionOutputF
 	b.functionOutputFile = functionOutputFile
 	b.stdoutFile = stdoutFile
 	b.stderrFile = stderrFile
-	typ := *functionType
+	typ := *functionSignature
 	if typ == "legacyevent" {
 		typ = "event"
 	}

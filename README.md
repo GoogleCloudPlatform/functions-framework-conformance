@@ -17,6 +17,10 @@ Frameworks to the Functions Framework contract.
      parameters to JSON in the format:
        `{"data": ...data..., "context": ...context...}`
      and write the resulting string.
+    - The `typed` function should accept a JSON request object and should echo
+      the request object back in the "payload" field of the response. I.e. if
+      the request is `{"a":"b"}` the response should be `{"payload":{"a":
+      "b"}}`.
 
 1.  Build the test client:
 
@@ -58,6 +62,15 @@ Frameworks to the Functions Framework contract.
           -type=legacyevent \
           -buildpacks=false
         ```
+    - **Ruby __typed http__** function Example:
+
+        ```sh
+        $HOME/functions-framework-conformance/client/client \
+          -cmd="bundle exec functions-framework-ruby --source test/conformance/app.rb --target typed_func --signature-type http" \
+          --type=http \
+          --declarative-type=typed \
+          -buildpacks=false
+        ```
 
     If there are validation errors, an error will be logged in the output, causing your conformance test to fail.
 
@@ -68,7 +81,8 @@ Frameworks to the Functions Framework contract.
 | Configuration flag | Type | Default | Description |
 | --- | --- | --- | --- |
 | `-cmd` | string | `"''"` | A string with the command to run a Functions Framework server at `localhost:8080`. Must be wrapped in quotes. Ignored if `-buildpacks=true`. |
-| `-type` | string | `"http"` | Type of function to validate (must be `"http"`, `"cloudevent"`, or `"legacyevent"`). |
+| `-type` | string | `"http"` | The function signature to use (must be `"http"`, `"cloudevent"`, or `"legacyevent"`). |
+| `-declarative-type` | string | `""` | The declarative signature type of the function (must be 'http', 'cloudevent', 'legacyevent', or 'typed'), default matches -type |
 | `-validate-mapping` | boolean | `true` | Whether to validate mapping from legacy->cloud events and vice versa (as applicable). |
 | `-output-file` | string | `"function_output.json"` | Name of file output by function. |
 | `-buildpacks` | boolean | `true` | Whether to use the current release of buildpacks to run the validation. If `true`, `-cmd` is ignored and `--builder-*` flags must be set. |

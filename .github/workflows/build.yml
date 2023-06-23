@@ -12,7 +12,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v1
       with:
-        node-version: 14.x
+        node-version: 18.x
     - name: Build Action
       run: cd action && npm i && npm run all
     - name: Check if there's a diff

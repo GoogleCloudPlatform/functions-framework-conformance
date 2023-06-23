@@ -40,7 +40,8 @@ type functionServer interface {
 func send(url string, t events.EventType, data []byte) error {
 	switch t {
 	case events.LegacyEvent:
-		return sendHTTP(url, data)
+		_, err := sendHTTP(url, data)
+		return err
 	case events.CloudEvent:
 		ce, err := events.BuildCloudEvent(data)
 		if err != nil {
@@ -51,19 +52,19 @@ func send(url string, t events.EventType, data []byte) error {
 	return nil
 }
 
-func sendHTTP(url string, data []byte) error {
+func sendHTTP(url string, data []byte) ([]byte, error) {
 	resp, err := http.Post(url, "application/json", bytes.NewBuffer(data))
 	if err != nil {
-		return fmt.Errorf("failed to send HTTP request: %v", err)
+		return nil, fmt.Errorf("failed to send HTTP request: %v", err)
 	}
 	body, err := ioutil.ReadAll(resp.Body)
 	if resp.StatusCode < 200 || resp.StatusCode > 299 {
 		if err != nil {
-			return fmt.Errorf("reading HTTP response body: %v", err)
+			return nil, fmt.Errorf("reading HTTP response body: %v", err)
 		}
-		return fmt.Errorf("validation failed with exit code %d: %v", resp.StatusCode, string(body))
+		return nil, fmt.Errorf("validation failed with exit code %d: %v", resp.StatusCode, string(body))
 	}
-	return nil
+	return body, nil
 }
 
 func sendCE(url string, e cloudevents.Event) error {
