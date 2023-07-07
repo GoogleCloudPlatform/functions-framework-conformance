@@ -89,6 +89,7 @@ Frameworks to the Functions Framework contract.
 | `-builder-source` | string | `""` | Function source directory to use in building. Required if `-buildpacks=true`. |
 | `-builder-target` | string | `""` | Function target to use in building. Required if `-buildpacks=true`. |
 | `-builder-runtime` | string | `""` | Runtime to use in building. Required if `-buildpacks=true`. |
+| `-builder-runtime-version` | string | `""` | Runtime version used while building. Buildpack will use the latest version if flag is not specified. |
 | `-builder-tag` | string | `"latest"` | Builder image tag to use in building. |
 | `-start-delay` | uint | `1` | Seconds to wait before sending HTTP request to command process. |
 | `-envs` | string | `""` | A comma separated string of additional runtime environment variables. |

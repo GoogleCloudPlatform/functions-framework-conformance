@@ -42,6 +42,7 @@ type buildpacksFunctionServer struct {
 	target             string
 	funcType           string
 	runtime            string
+	runtimeVersion     string
 	tag                string
 	ctID               string
 	logStdout          *os.File
@@ -108,6 +109,7 @@ func (b *buildpacksFunctionServer) build(ctx context.Context) error {
 			"GOOGLE_FUNCTION_TARGET":         b.target,
 			"GOOGLE_FUNCTION_SIGNATURE_TYPE": b.funcType,
 			"GOOGLE_RUNTIME":                 b.runtime,
+			"GOOGLE_RUNTIME_VERSION":         b.runtimeVersion,
 			"X_GOOGLE_TARGET_PLATFORM":       gcfTargetPlatform,
 		},
 	})
