@@ -22,6 +22,11 @@ on:
         description: GCF runtime (e.g. 'go116')
         type: string
         required: true
+      builder-runtime-version:
+        description: GCF runtime version (e.g. 3.7.0 for python37 runtime or 1.16 for go116)
+        type: string
+        default: ''
+        required: false
       event-builder-source:
         description: Background function source; relative to repo root
         type: string
@@ -155,6 +160,7 @@ jobs:
             -builder-source=${{ matrix.builder-source }} \
             -builder-target=${{ matrix.builder-target }} \
             -builder-runtime=${{ inputs.builder-runtime }} \
+            -builder-runtime-version=${{ inputs.builder-runtime-version }}
             -builder-tag=${{ inputs.builder-tag }} \
             -start-delay=${{ inputs.start-delay }} \
             -output-file=${{ inputs.output-file }} \

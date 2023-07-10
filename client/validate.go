@@ -33,6 +33,7 @@ type validatorParams struct {
 	source               string
 	target               string
 	runtime              string
+	runtimeVersion       string
 	tag                  string
 	functionSignature    string
 	declarativeSignature string
@@ -53,13 +54,13 @@ type validator struct {
 
 func newValidator(params validatorParams) *validator {
 	v := validator{
-		validateMapping:     params.validateMapping,
-		validateConcurrency: params.validateConcurrency,
-		functionSignature:   params.functionSignature,
+		validateMapping:      params.validateMapping,
+		validateConcurrency:  params.validateConcurrency,
+		functionSignature:    params.functionSignature,
 		declarativeSignature: params.declarativeSignature,
-		functionOutputFile:  params.outputFile,
-		stdoutFile:          defaultStdoutFile,
-		stderrFile:          defaultStderrFile,
+		functionOutputFile:   params.outputFile,
+		stdoutFile:           defaultStdoutFile,
+		stderrFile:           defaultStderrFile,
 	}
 
 	if !params.useBuildpacks {
@@ -75,12 +76,13 @@ func newValidator(params validatorParams) *validator {
 	}
 
 	v.funcServer = &buildpacksFunctionServer{
-		source:   params.source,
-		target:   params.target,
-		runtime:  params.runtime,
-		tag:      params.tag,
-		funcType: params.functionSignature,
-		envs:     params.envs,
+		source:         params.source,
+		target:         params.target,
+		runtime:        params.runtime,
+		runtimeVersion: params.runtimeVersion,
+		tag:            params.tag,
+		funcType:       params.functionSignature,
+		envs:           params.envs,
 	}
 	return &v
 }
@@ -194,7 +196,7 @@ func (v validator) validateTyped(url string) error {
 	if !reflect.DeepEqual(resJson.Payload, req) {
 		return fmt.Errorf("Got response.Payload = %v, wanted %v", resJson.Payload, req)
 	}
-	
+
 	return nil
 }
 
