@@ -160,7 +160,7 @@ jobs:
             -builder-source=${{ matrix.builder-source }} \
             -builder-target=${{ matrix.builder-target }} \
             -builder-runtime=${{ inputs.builder-runtime }} \
-            -builder-runtime-version=${{ inputs.builder-runtime-version }}
+            -builder-runtime-version=${{ inputs.builder-runtime-version }} \
             -builder-tag=${{ inputs.builder-tag }} \
             -start-delay=${{ inputs.start-delay }} \
             -output-file=${{ inputs.output-file }} \
