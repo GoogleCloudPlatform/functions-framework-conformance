@@ -31,9 +31,9 @@ import (
 )
 
 const (
-	image             = "conformance-test-func"
-	builderURL        = "gcr.io/gae-runtimes/buildpacks/%s/builder:%s"
-	gcfTargetPlatform = "gcf"
+	image                     = "conformance-test-func"
+	defaultBuilderURLTemplate = "gcr.io/gae-runtimes/buildpacks/%s/builder:%s"
+	gcfTargetPlatform         = "gcf"
 )
 
 type buildpacksFunctionServer struct {
@@ -49,6 +49,7 @@ type buildpacksFunctionServer struct {
 	logStderr          *os.File
 	stdoutFile         string
 	stderrFile         string
+	builderURL         string
 	envs               []string
 }
 
@@ -123,11 +124,14 @@ func (b *buildpacksFunctionServer) build(ctx context.Context) error {
 var runtimeLanguageRegexp = regexp.MustCompile(`^[a-zA-Z]+`)
 
 func (b *buildpacksFunctionServer) buildpackBuilderImage() (string, error) {
+	if b.builderURL != "" {
+		return b.builderURL, nil
+	}
 	runtimeLanguage := runtimeLanguageRegexp.FindString(b.runtime)
 	if runtimeLanguage == "" {
-		return "", fmt.Errorf("Invalid runtime format. Runtime should start with language followed by version. Example: go119, python311. Got %q", b.runtime)
+		return "", fmt.Errorf("invalid runtime format. Runtime should start with language followed by version. Example: go119, python311. Got %q", b.runtime)
 	}
-	return fmt.Sprintf(builderURL, runtimeLanguage, b.tag), nil
+	return fmt.Sprintf(defaultBuilderURLTemplate, runtimeLanguage, b.tag), nil
 }
 
 func (b *buildpacksFunctionServer) run() (func(), error) {

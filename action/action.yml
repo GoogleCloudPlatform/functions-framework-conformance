@@ -31,6 +31,9 @@ inputs:
   runtimeVersion:
     description: 'function runtime version, uses the latest version if not specified (e.g. 3.7.4 for python37 runtime)'
     default: ''
+  builderURL:
+    description: 'builder url to use when building'
+    default: ''
   tag:
     description: 'GCR tag to use for builder image'
     default: 'latest'
