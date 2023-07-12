@@ -1,0 +1,21 @@
+name: Buildpack Integration Test Workflow Validation
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+jobs:
+    validate-workflow:
+        strategy:
+            matrix:
+                builder-url: ['gcr.io/gae-runtimes/buildpacks/go/builder:latest', '']
+        uses: ./.github/workflows/buildpack-integration-test.yml
+        with:
+            builder-runtime: 'go113'
+            builder-runtime-version: '1.13'
+            http-builder-source: 'testdata'
+            http-builder-target: 'HTTP'
+            cloudevent-builder-source: ''
+            cloudevent-builder-target: ''
+            builder-url: ${{ matrix.builder-url }}
+            conformance-client-version: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}

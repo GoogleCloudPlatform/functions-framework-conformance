@@ -40,4 +40,5 @@ jobs:
         -builder-source='testdata' \
         -builder-target='HTTP' \
         -builder-runtime='go113' \
-        -builder-runtime-version='1.13'
+        -builder-runtime-version='1.13' \
+        -builder-url='gcr.io/gae-runtimes/buildpacks/go/builder:latest'

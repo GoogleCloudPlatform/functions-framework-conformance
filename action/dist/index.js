@@ -64,6 +64,7 @@ function run() {
         const target = core.getInput('target');
         const runtime = core.getInput('runtime');
         const runtimeVersion = core.getInput('runtimeVersion');
+        const builderURL = core.getInput('builderURL');
         const tag = core.getInput('tag');
         const useBuildpacks = core.getInput('useBuildpacks');
         const cmd = core.getInput('cmd');
@@ -102,6 +103,7 @@ function run() {
             `-builder-runtime=${runtime}`,
             `-builder-runtime-version=${runtimeVersion}`,
             `-builder-tag=${tag}`,
+            `-builder-url=${builderURL}`,
             `-buildpacks=${useBuildpacks}`,
             `-cmd=${cmd}`,
             `-start-delay=${startDelay}`,

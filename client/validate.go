@@ -34,6 +34,7 @@ type validatorParams struct {
 	target               string
 	runtime              string
 	runtimeVersion       string
+	builderURL           string
 	tag                  string
 	functionSignature    string
 	declarativeSignature string
@@ -83,6 +84,7 @@ func newValidator(params validatorParams) *validator {
 		tag:            params.tag,
 		funcType:       params.functionSignature,
 		envs:           params.envs,
+		builderURL:     params.builderURL,
 	}
 	return &v
 }
