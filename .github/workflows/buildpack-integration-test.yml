@@ -71,7 +71,7 @@ on:
         # breaking changes
         description: Conformance GitHub Actions version by git ref
         type: string
-        default: 'master'
+        default: 'main'
         required: false
 jobs:
   # Download and cache the Functions Framework conformance test client
