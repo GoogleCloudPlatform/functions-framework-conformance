@@ -11,8 +11,8 @@ jobs:
                 builder-url: ['gcr.io/gae-runtimes/buildpacks/go/builder:latest', '']
         uses: ./.github/workflows/buildpack-integration-test.yml
         with:
-            builder-runtime: 'go113'
-            builder-runtime-version: '1.13'
+            builder-runtime: 'go121'
+            builder-runtime-version: '1.21'
             http-builder-source: 'testdata'
             http-builder-target: 'HTTP'
             cloudevent-builder-source: ''
