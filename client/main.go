@@ -54,6 +54,9 @@ func main() {
 		*declarativeSignature = *functionSignature
 	}
 
+	if *functionSignature == "legacyevent" {
+		*functionSignature = "event"
+	}
 	// Set runtime env vars that reflect https://cloud.google.com/functions/docs/configuring/env-var
 	validationRuntimeEnv := []string{"FUNCTION_SIGNATURE_TYPE=" + *functionSignature}
 	validationRuntimeEnv = append(validationRuntimeEnv, strings.Split(*envs, ",")...)
