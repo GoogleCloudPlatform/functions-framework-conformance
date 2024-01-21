@@ -104,7 +104,7 @@ jobs:
         run: echo CLIENT_VERSION=${{ steps.conformance-client-latest.outputs.version }} >> $GITHUB_ENV
       - name: Set cache key for client version
         id: set-cached-client-version
-        run: echo "::set-output name=key::conformance-client-${{ env.CLIENT_VERSION }}"
+        run: echo "key=conformance-client-${{ env.CLIENT_VERSION }}" >> "$GITHUB_OUTPUT"
 
       # INSTALL CONFORMANCE CLIENT
       - name: Check for cached conformance test client
