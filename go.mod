@@ -4,7 +4,7 @@ go 1.21
 
 require (
 	github.com/buildpacks/pack v0.30.0
-	github.com/cloudevents/sdk-go/v2 v2.0.0
+	github.com/cloudevents/sdk-go/v2 v2.15.2
 	github.com/google/go-cmp v0.6.0
 )
 
@@ -71,9 +71,9 @@ require (
 	github.com/heroku/color v0.0.6 // indirect
 	github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
+	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/kevinburke/ssh_config v1.2.0 // indirect
 	github.com/klauspost/compress v1.16.5 // indirect
-	github.com/lightstep/tracecontext.go v0.0.0-20181129014701-1757c391b1ac // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.19 // indirect
@@ -84,6 +84,8 @@ require (
 	github.com/moby/patternmatcher v0.5.0 // indirect
 	github.com/moby/sys/sequential v0.5.0 // indirect
 	github.com/moby/term v0.5.0 // indirect
+	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
+	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/morikuni/aec v1.0.0 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.1.0-rc4 // indirect
@@ -99,7 +101,6 @@ require (
 	github.com/skeema/knownhosts v1.2.1 // indirect
 	github.com/vbatts/tar-split v0.11.3 // indirect
 	github.com/xanzy/ssh-agent v0.3.3 // indirect
-	go.opencensus.io v0.24.0 // indirect
 	go.uber.org/atomic v1.4.0 // indirect
 	go.uber.org/multierr v1.1.0 // indirect
 	go.uber.org/zap v1.10.0 // indirect
