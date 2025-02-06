@@ -2,7 +2,7 @@ name: Check compiled action script CI
 on:
   push:
     branches:
-    - master
+    - main
   pull_request:
 jobs:
   compile:
@@ -12,7 +12,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v1
       with:
-        node-version: 14.x
+        node-version: 18.x
     - name: Build Action
       run: cd action && npm i && npm run all
     - name: Check if there's a diff
@@ -26,5 +26,5 @@ jobs:
     - name: Lint Code Base
       uses: github/super-linter@v4
       env:
-        DEFAULT_BRANCH: master
+        DEFAULT_BRANCH: main
         VALIDATE_JSON: true

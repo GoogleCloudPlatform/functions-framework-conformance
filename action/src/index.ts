@@ -20,16 +20,20 @@ async function run() {
   const version = core.getInput('version');
   const outputFile = core.getInput('outputFile');
   const functionType = core.getInput('functionType');
+  const declarativeType = core.getInput('declarativeType');
   const validateMapping = core.getInput('validateMapping');
   const validateConcurrency = core.getInput('validateConcurrency');
   const source = core.getInput('source');
   const target = core.getInput('target');
   const runtime = core.getInput('runtime');
+  const runtimeVersion = core.getInput('runtimeVersion');
+  const builderURL = core.getInput('builderURL');
   const tag = core.getInput('tag');
   const useBuildpacks = core.getInput('useBuildpacks');
   const cmd = core.getInput('cmd');
   const startDelay = core.getInput('startDelay');
   const workingDirectory = core.getInput('workingDirectory');
+  const runtimeEnvs = core.getInput('runtimeEnvs');
 
   let cwd = process.cwd();
 
@@ -56,15 +60,19 @@ async function run() {
     `~/client`,
     `-output-file=${outputFile}`,
     `-type=${functionType}`,
+    `-declarative-type=${declarativeType}`,
     `-validate-mapping=${validateMapping}`,
     `-validate-concurrency=${validateConcurrency}`,
     `-builder-source=${source}`,
     `-builder-target=${target}`,
     `-builder-runtime=${runtime}`,
+    `-builder-runtime-version=${runtimeVersion}`,
     `-builder-tag=${tag}`,
+    `-builder-url=${builderURL}`,
     `-buildpacks=${useBuildpacks}`,
     `-cmd=${cmd}`,
     `-start-delay=${startDelay}`,
+    `-envs=${runtimeEnvs}`,
   ].filter((x) => !!x).join(' '));
 }
 
