@@ -8,8 +8,11 @@ inputs:
     description: 'output file from function'
     default: 'function_output.json'
   functionType:
-    description: 'type of function'
+    description: 'invocation signature type of function'
     default: 'http'
+  declarativeType:
+    description: 'declarative type of the function as defined in code i.e. a typed declarative function uses the http invocation type'
+    default: ''
   validateMapping:
     description: 'whether to validate mapping from legacy->cloud event and vice versa'
     default: true
@@ -25,6 +28,12 @@ inputs:
   runtime:
     description: 'function runtime (e.g. nodejs10, go113)'
     default: ''
+  runtimeVersion:
+    description: 'function runtime version, uses the latest version if not specified (e.g. 3.7.4 for python37 runtime)'
+    default: ''
+  builderURL:
+    description: 'builder url to use when building'
+    default: ''
   tag:
     description: 'GCR tag to use for builder image'
     default: 'latest'
@@ -39,6 +48,9 @@ inputs:
     default: 1
   workingDirectory:
     description: 'The subdirectory in which the conformance tests should run'
+    default: ""
+  runtimeEnvs:
+    description: 'A comma separated list of runtime environment variable overrides'
     default: ""
 runs:
   using: 'node12'

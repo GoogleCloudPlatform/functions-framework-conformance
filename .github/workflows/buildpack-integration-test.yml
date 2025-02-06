@@ -22,6 +22,16 @@ on:
         description: GCF runtime (e.g. 'go116')
         type: string
         required: true
+      builder-runtime-version:
+        description: GCF runtime version (e.g. 3.7.0 for python37 runtime or 1.16 for go116)
+        type: string
+        default: ''
+        required: false
+      builder-url:
+        description: Builder image including builder tag to use while building. (e.g. gcr.io/gae-runtimes/buildpacks/go/builder:latest or gcr.io/buildpacks/builder:latest )
+        type: string
+        default: ''
+        required: false
       event-builder-source:
         description: Background function source; relative to repo root
         type: string
@@ -61,7 +71,7 @@ on:
         # breaking changes
         description: Conformance GitHub Actions version by git ref
         type: string
-        default: 'master'
+        default: 'main'
         required: false
 jobs:
   # Download and cache the Functions Framework conformance test client
@@ -151,11 +161,20 @@ jobs:
         if: ${{ matrix.builder-source }}
         run: |
           client \
-          -type=${{ matrix.type }} \
-          -builder-source=${{ matrix.builder-source }} \
-          -builder-target=${{ matrix.builder-target }} \
-          -builder-runtime=${{ inputs.builder-runtime }} \
-          -builder-tag=${{ inputs.builder-tag }} \
-          -start-delay=${{ inputs.start-delay }} \
-          -output-file=${{ inputs.output-file }} \
-          -validate-mapping=false
+            -type=${{ matrix.type }} \
+            -builder-source=${{ matrix.builder-source }} \
+            -builder-target=${{ matrix.builder-target }} \
+            -builder-runtime=${{ inputs.builder-runtime }} \
+            -builder-runtime-version=${{ inputs.builder-runtime-version }} \
+            -builder-tag=${{ inputs.builder-tag }} \
+            -builder-url=${{ inputs.builder-url }} \
+            -start-delay=${{ inputs.start-delay }} \
+            -output-file=${{ inputs.output-file }} \
+            -validate-mapping=false
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: ${{ matrix.type }}_buildpack_integ_logs
+          path: /tmp/ff_*
+          retention-days: 5

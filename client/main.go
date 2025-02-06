@@ -22,8 +22,11 @@ import (
 )
 
 var (
-	runCmd                  = flag.String("cmd", "", "string with command to run a Functions Framework server at localhost:8080. Ignored if -buildpacks=true.")
-	functionType            = flag.String("type", "http", "type of function to validate (must be 'http', 'cloudevent', or 'legacyevent'")
+	runCmd = flag.String("cmd", "", "string with command to run a Functions Framework server at localhost:8080. Ignored if -buildpacks=true.")
+	// functionSignature is the function's signature as signature in GCF i.e. will be set in the `GOOGLE_FUNCTION_SIGNATURE_TYPE` env variable.
+	functionSignature = flag.String("type", "http", "the function signature to use (must be 'http', 'cloudevent', or 'legacyevent'")
+	// declarativeSignature indicates the declarative function signature that is being tested. This is used to test `typed` functions which are exposed to GCF as the `http` signature type.
+	declarativeSignature    = flag.String("declarative-type", "", "the declarative signature type of the function (must be 'http', 'cloudevent', 'legacyevent', or 'typed'), default matches -type")
 	validateMapping         = flag.Bool("validate-mapping", true, "whether to validate mapping from legacy->cloud events and vice versa (as applicable)")
 	outputFile              = flag.String("output-file", "function_output.json", "name of file output by function")
 	useBuildpacks           = flag.Bool("buildpacks", true, "whether to use the current release of buildpacks to run the validation. If true, -cmd is ignored and --builder-* flags must be set.")
@@ -31,6 +34,8 @@ var (
 	target                  = flag.String("builder-target", "", "function target to use in building. Required if -buildpacks=true")
 	runtime                 = flag.String("builder-runtime", "", "runtime to use in building. Required if -buildpacks=true")
 	tag                     = flag.String("builder-tag", "latest", "builder image tag to use in building")
+	runtimeVersion          = flag.String("builder-runtime-version", "", "runtime version used when building.")
+	builderURL              = flag.String("builder-url", "", "builder image url used when building docker container with pack.")
 	startDelay              = flag.Uint("start-delay", 1, "Seconds to wait before sending HTTP request to command process")
 	validateConcurrencyFlag = flag.Bool("validate-concurrency", false, "whether to validate concurrent requests can be handled, requires a function that sleeps for 1 second ")
 	envs                    = flag.String("envs", "", "a comma separated string of additional runtime environment variables")
@@ -45,18 +50,32 @@ func main() {
 		}
 	}
 
+	if *declarativeSignature == "" {
+		*declarativeSignature = *functionSignature
+	}
+
+	if *functionSignature == "legacyevent" {
+		*functionSignature = "event"
+	}
+	// Set runtime env vars that reflect https://cloud.google.com/functions/docs/configuring/env-var
+	validationRuntimeEnv := []string{"FUNCTION_SIGNATURE_TYPE=" + *functionSignature}
+	validationRuntimeEnv = append(validationRuntimeEnv, strings.Split(*envs, ",")...)
+
 	v := newValidator(validatorParams{
-		validateMapping:     *validateMapping,
-		useBuildpacks:       *useBuildpacks,
-		runCmd:              *runCmd,
-		outputFile:          *outputFile,
-		source:              *source,
-		target:              *target,
-		runtime:             *runtime,
-		functionType:        *functionType,
-		tag:                 *tag,
-		validateConcurrency: *validateConcurrencyFlag,
-		envs:                strings.Split(*envs, ","),
+		validateMapping:      *validateMapping,
+		useBuildpacks:        *useBuildpacks,
+		runCmd:               *runCmd,
+		outputFile:           *outputFile,
+		source:               *source,
+		target:               *target,
+		runtime:              *runtime,
+		runtimeVersion:       *runtimeVersion,
+		functionSignature:    *functionSignature,
+		declarativeSignature: *declarativeSignature,
+		tag:                  *tag,
+		validateConcurrency:  *validateConcurrencyFlag,
+		envs:                 validationRuntimeEnv,
+		builderURL:           *builderURL,
 	})
 
 	if err := v.runValidation(); err != nil {

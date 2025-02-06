@@ -23,6 +23,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"time"
 
 	pack "github.com/buildpacks/pack/pkg/client"
@@ -30,9 +31,9 @@ import (
 )
 
 const (
-	image             = "conformance-test-func"
-	builderURL        = "gcr.io/buildpacks/builder:%s"
-	gcfTargetPlatform = "gcf"
+	image                     = "conformance-test-func"
+	defaultBuilderURLTemplate = "gcr.io/gae-runtimes/buildpacks/%s/builder:%s"
+	gcfTargetPlatform         = "gcf"
 )
 
 type buildpacksFunctionServer struct {
@@ -41,12 +42,14 @@ type buildpacksFunctionServer struct {
 	target             string
 	funcType           string
 	runtime            string
+	runtimeVersion     string
 	tag                string
 	ctID               string
 	logStdout          *os.File
 	logStderr          *os.File
 	stdoutFile         string
 	stderrFile         string
+	builderURL         string
 	envs               []string
 }
 
@@ -54,7 +57,7 @@ func (b *buildpacksFunctionServer) Start(stdoutFile, stderrFile, functionOutputF
 	b.functionOutputFile = functionOutputFile
 	b.stdoutFile = stdoutFile
 	b.stderrFile = stderrFile
-	typ := *functionType
+	typ := *functionSignature
 	if typ == "legacyevent" {
 		typ = "event"
 	}
@@ -82,7 +85,10 @@ func (b *buildpacksFunctionServer) OutputFile() ([]byte, error) {
 }
 
 func (b *buildpacksFunctionServer) build(ctx context.Context) error {
-	builder := fmt.Sprintf(builderURL, b.tag)
+	builder, err := b.buildpackBuilderImage()
+	if err != nil {
+		return err
+	}
 
 	cmd := exec.Command("docker", "pull", builder)
 	output, err := cmd.CombinedOutput()
@@ -104,6 +110,7 @@ func (b *buildpacksFunctionServer) build(ctx context.Context) error {
 			"GOOGLE_FUNCTION_TARGET":         b.target,
 			"GOOGLE_FUNCTION_SIGNATURE_TYPE": b.funcType,
 			"GOOGLE_RUNTIME":                 b.runtime,
+			"GOOGLE_RUNTIME_VERSION":         b.runtimeVersion,
 			"X_GOOGLE_TARGET_PLATFORM":       gcfTargetPlatform,
 		},
 	})
@@ -112,6 +119,19 @@ func (b *buildpacksFunctionServer) build(ctx context.Context) error {
 	}
 
 	return nil
+}
+
+var runtimeLanguageRegexp = regexp.MustCompile(`^[a-zA-Z]+`)
+
+func (b *buildpacksFunctionServer) buildpackBuilderImage() (string, error) {
+	if b.builderURL != "" {
+		return b.builderURL, nil
+	}
+	runtimeLanguage := runtimeLanguageRegexp.FindString(b.runtime)
+	if runtimeLanguage == "" {
+		return "", fmt.Errorf("invalid runtime format. Runtime should start with language followed by version. Example: go119, python311. Got %q", b.runtime)
+	}
+	return fmt.Sprintf(defaultBuilderURLTemplate, runtimeLanguage, b.tag), nil
 }
 
 func (b *buildpacksFunctionServer) run() (func(), error) {
@@ -144,13 +164,14 @@ func (b *buildpacksFunctionServer) run() (func(), error) {
 		if err := b.logs(); err != nil {
 			log.Fatalf("getting container logs: %v", err)
 		}
+		log.Printf("Wrote logs to %v and %v.", b.stdoutFile, b.stderrFile)
 		if err := cmd.Process.Kill(); err != nil {
 			log.Fatalf("failed to kill process: %v", err)
 		}
 		if err := b.killContainer(); err != nil {
 			log.Fatalf("failed to kill container: %v", err)
 		}
-		log.Printf("Framework server shut down. Wrote logs to %v and %v.", b.stdoutFile, b.stderrFile)
+		log.Print("Framework server shut down.")
 	}, nil
 }
 

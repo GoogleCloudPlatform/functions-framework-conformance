@@ -38,9 +38,11 @@ func validateConcurrency(url string, functionType string) error {
 	log.Printf("%s validation with concurrent requests...", functionType)
 	var sendFn func() error
 	switch functionType {
-	case "http":
+	case "http", "typed":
+		// Arbitrary JSON payload for compatibility with 'http' and typed JSON tests
 		sendFn = func() error {
-			return sendHTTP(url, []byte(`{"data": "hello"}`))
+			_, err := sendHTTP(url, []byte(`{"data": "hello"}`))
+			return err
 		}
 	case "cloudevent":
 		// Arbitrary payload that conforms to CloudEvent schema

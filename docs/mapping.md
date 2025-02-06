@@ -144,7 +144,7 @@ The GCF HTTP representation of Cloud PubSub events (events with a
 *gcf_service* of `pubsub.googleapis.com`) contain a `data` property
 which needs to be wrapped in an extra JSON object in the CloudEvent
 `data` attribute, to conform with the [expected CloudEvent
-representation](https://github.com/googleapis/google-cloudevents/blob/master/proto/google/events/cloud/pubsub/v1/data.proto).
+representation](https://github.com/googleapis/google-cloudevents/blob/main/proto/google/events/cloud/pubsub/v1/data.proto).
 
 So the CloudEvent should have:
 

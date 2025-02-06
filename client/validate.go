@@ -19,43 +19,49 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"reflect"
 
 	"github.com/GoogleCloudPlatform/functions-framework-conformance/events"
 	"github.com/google/go-cmp/cmp"
 )
 
 type validatorParams struct {
-	useBuildpacks       bool
-	validateMapping     bool
-	runCmd              string
-	outputFile          string
-	source              string
-	target              string
-	runtime             string
-	tag                 string
-	functionType        string
-	validateConcurrency bool
-	envs                []string
+	useBuildpacks        bool
+	validateMapping      bool
+	runCmd               string
+	outputFile           string
+	source               string
+	target               string
+	runtime              string
+	runtimeVersion       string
+	builderURL           string
+	tag                  string
+	functionSignature    string
+	declarativeSignature string
+	validateConcurrency  bool
+	envs                 []string
 }
 
 type validator struct {
-	funcServer          functionServer
-	validateMapping     bool
-	validateConcurrency bool
-	functionType        string
-	functionOutputFile  string
-	stdoutFile          string
-	stderrFile          string
+	funcServer           functionServer
+	validateMapping      bool
+	validateConcurrency  bool
+	functionSignature    string
+	declarativeSignature string
+	functionOutputFile   string
+	stdoutFile           string
+	stderrFile           string
 }
 
 func newValidator(params validatorParams) *validator {
 	v := validator{
-		validateMapping:     params.validateMapping,
-		validateConcurrency: params.validateConcurrency,
-		functionType:        params.functionType,
-		functionOutputFile:  params.outputFile,
-		stdoutFile:          defaultStdoutFile,
-		stderrFile:          defaultStderrFile,
+		validateMapping:      params.validateMapping,
+		validateConcurrency:  params.validateConcurrency,
+		functionSignature:    params.functionSignature,
+		declarativeSignature: params.declarativeSignature,
+		functionOutputFile:   params.outputFile,
+		stdoutFile:           defaultStdoutFile,
+		stderrFile:           defaultStderrFile,
 	}
 
 	if !params.useBuildpacks {
@@ -66,23 +72,25 @@ func newValidator(params validatorParams) *validator {
 		return &v
 	}
 
-	if params.functionType == "legacyevent" {
-		params.functionType = "event"
+	if params.functionSignature == "legacyevent" {
+		params.functionSignature = "event"
 	}
 
 	v.funcServer = &buildpacksFunctionServer{
-		source:   params.source,
-		target:   params.target,
-		runtime:  params.runtime,
-		tag:      params.tag,
-		funcType: params.functionType,
-		envs:     params.envs,
+		source:         params.source,
+		target:         params.target,
+		runtime:        params.runtime,
+		runtimeVersion: params.runtimeVersion,
+		tag:            params.tag,
+		funcType:       params.functionSignature,
+		envs:           params.envs,
+		builderURL:     params.builderURL,
 	}
 	return &v
 }
 
 func (v validator) runValidation() error {
-	log.Printf("Validating for %s...", *functionType)
+	log.Printf("Validating for %s...", *functionSignature)
 
 	shutdown, err := v.funcServer.Start(v.stdoutFile, v.stderrFile, v.functionOutputFile)
 	if err != nil {
@@ -136,7 +144,7 @@ func (v validator) validateHTTP(url string) error {
 		return fmt.Errorf("failed to marshal json: %v", err)
 	}
 
-	if err := sendHTTP(url, req); err != nil {
+	if _, err := sendHTTP(url, req); err != nil {
 		return fmt.Errorf("failed to get response from HTTP function: %v", err)
 	}
 
@@ -153,6 +161,44 @@ func (v validator) validateHTTP(url string) error {
 	if !cmp.Equal(got, want) {
 		return fmt.Errorf("unexpected HTTP output data (format does not matter), got: %s, want: %s", output, req)
 	}
+	return nil
+}
+
+// The Typed function should echo the request object in the "payload" field of the response.
+func (v validator) validateTyped(url string) error {
+	type request struct {
+		Message string `json:"message"`
+	}
+
+	req := request{
+		Message: "Hello world!",
+	}
+
+	reqJson, err := json.Marshal(req)
+
+	if err != nil {
+		return fmt.Errorf("failed to marshal json: %v", err)
+	}
+
+	body, err := sendHTTP(url, reqJson)
+
+	if err != nil {
+		return fmt.Errorf("failed to get response from HTTP function: %v", err)
+	}
+
+	type response struct {
+		Payload request `json:"payload"`
+	}
+
+	var resJson response
+	if err := json.Unmarshal(body, &resJson); err != nil {
+		return fmt.Errorf("failed to unmarshal function output JSON: %v, function output: %q", err, string(body))
+	}
+
+	if !reflect.DeepEqual(resJson.Payload, req) {
+		return fmt.Errorf("Got response.Payload = %v, wanted %v", resJson.Payload, req)
+	}
+
 	return nil
 }
 
@@ -188,9 +234,9 @@ func (v validator) validateEvents(url string, inputType, outputType events.Event
 
 func (v validator) validate(url string) error {
 	if v.validateConcurrency {
-		return validateConcurrency(url, v.functionType)
+		return validateConcurrency(url, v.declarativeSignature)
 	}
-	switch v.functionType {
+	switch v.declarativeSignature {
 	case "http":
 		// Validate HTTP signature, if provided
 		log.Printf("HTTP validation started...")
@@ -198,6 +244,14 @@ func (v validator) validate(url string) error {
 			return err
 		}
 		log.Printf("HTTP validation passed!")
+		return nil
+	case "typed":
+		// Validate a typed declarartive function signature
+		log.Printf("Typed validation started...")
+		if err := v.validateTyped(url); err != nil {
+			return err
+		}
+		log.Printf("Typed validation passed!")
 		return nil
 	case "cloudevent":
 		// Validate CloudEvent signature, if provided
@@ -228,5 +282,5 @@ func (v validator) validate(url string) error {
 		log.Printf("Legacy event validation passed!")
 		return nil
 	}
-	return fmt.Errorf("expected type to be one of 'http', 'cloudevent', or 'legacyevent', got %s", v.functionType)
+	return fmt.Errorf("expected --declarative-type to be one of 'http', 'cloudevent', 'legacyevent', or 'typed' got %q", v.declarativeSignature)
 }
