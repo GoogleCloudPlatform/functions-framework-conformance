@@ -1,6 +1,6 @@
 module github.com/GoogleCloudPlatform/functions-framework-conformance
 
-go 1.21
+go 1.21.13
 
 require (
 	github.com/buildpacks/pack v0.30.0
