@@ -175,7 +175,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: ${{ matrix.type }}_${{ inputs.builder-runtime }}_buildpack_integ_logs
+          name: ${{ matrix.type }}_${{ inputs.builder-runtime }}_${{ inputs.builder-url == '' && 'no_builder_url' || 'with_builder_url' }}_buildpack_integ_logs
           path: /tmp/ff_*
           retention-days: 5
           
