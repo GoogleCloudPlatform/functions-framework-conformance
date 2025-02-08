@@ -24,7 +24,7 @@ jobs:
           exit 1
         fi
     - name: Lint Code Base
-      uses: github/super-linter@v4
+      uses: github/super-linter@v7
       env:
         DEFAULT_BRANCH: main
         VALIDATE_JSON: true
