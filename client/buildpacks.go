@@ -32,7 +32,7 @@ import (
 
 const (
 	image                     = "conformance-test-func"
-	defaultBuilderURLTemplate = "gcr.io/gae-runtimes/buildpacks/%s/builder:%s"
+	defaultBuilderURLTemplate = "us-docker.pkg.dev/serverless-runtimes/google-22-full/builder/%s:%s"
 	gcfTargetPlatform         = "gcf"
 )
 
