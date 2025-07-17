@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
     - name: Setup Node.js
       uses: actions/setup-node@v1
       with:
@@ -24,7 +26,8 @@ jobs:
           exit 1
         fi
     - name: Lint Code Base
-      uses: github/super-linter@v4
+      uses: github/super-linter@v7
       env:
         DEFAULT_BRANCH: main
         VALIDATE_JSON: true
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
