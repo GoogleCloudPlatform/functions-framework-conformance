@@ -16,6 +16,7 @@ package events
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"reflect"
 	"time"
@@ -61,7 +62,7 @@ func PrintValidationInfos(vis []*ValidationInfo) (string, error) {
 	}
 
 	if errsOccurred {
-		return logStr, fmt.Errorf(errStr)
+		return logStr, errors.New(errStr)
 	}
 	return logStr, nil
 }
