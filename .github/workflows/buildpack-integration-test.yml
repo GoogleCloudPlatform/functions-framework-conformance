@@ -91,7 +91,7 @@ jobs:
           GITHUB_CONTEXT: ${{ toJSON(github) }}
         run: echo "$GITHUB_CONTEXT"
       - name: Checkout functions-framework-conformance
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: 'GoogleCloudPlatform/functions-framework-conformance'
           ref: ${{ inputs.conformance-action-version }}
@@ -157,7 +157,7 @@ jobs:
         run: echo "$HOME/go/bin" >> $GITHUB_PATH
       - name: Check out repository
         if: ${{ matrix.builder-source }}
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Prerun script
         if: ${{ matrix.builder-source && inputs.prerun }}
         run: bash -x ${{ inputs.prerun }}
