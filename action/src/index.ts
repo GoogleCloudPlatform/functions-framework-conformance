@@ -11,8 +11,12 @@ function runCmd(cmd: string) {
   try {
     console.log(`RUNNING: "${cmd}"`)
     childProcess.execSync(cmd);
-  } catch (error) {
-    core.setFailed(error.message);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      core.setFailed(error.message);
+    } else {
+      core.setFailed(String(error));
+    }
   }
 }
 
