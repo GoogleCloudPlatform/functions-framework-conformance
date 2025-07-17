@@ -86,8 +86,12 @@ jobs:
       # included GitHub Actions by local path. This effectively "versions"
       # this Workflow by enforcing the the Actions and Workflow are at the
       # same commit.
+      - name: Write GitHub context to log
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CONTEXT"
       - name: Checkout functions-framework-conformance
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: 'GoogleCloudPlatform/functions-framework-conformance'
           ref: ${{ inputs.conformance-action-version }}
@@ -153,7 +157,7 @@ jobs:
         run: echo "$HOME/go/bin" >> $GITHUB_PATH
       - name: Check out repository
         if: ${{ matrix.builder-source }}
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Prerun script
         if: ${{ matrix.builder-source && inputs.prerun }}
         run: bash -x ${{ inputs.prerun }}
@@ -175,6 +179,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: ${{ matrix.type }}_buildpack_integ_logs
+          name: ${{ matrix.type }}_${{ inputs.builder-runtime }}_${{ inputs.builder-url == '' && 'no_builder_url' || 'with_builder_url' }}_buildpack_integ_logs
           path: /tmp/ff_*
           retention-days: 5
+          
