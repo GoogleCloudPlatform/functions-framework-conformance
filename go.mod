@@ -3,7 +3,7 @@ module github.com/GoogleCloudPlatform/functions-framework-conformance
 go 1.23.0
 
 require (
-	github.com/buildpacks/pack v0.30.0
+	github.com/buildpacks/pack v0.38.2
 	github.com/cloudevents/sdk-go/v2 v2.16.1
 	github.com/google/go-cmp v0.7.0
 )
