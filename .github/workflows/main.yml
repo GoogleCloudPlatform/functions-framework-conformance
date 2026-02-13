@@ -39,6 +39,6 @@ jobs:
         -validate-mapping=false \
         -builder-source='testdata' \
         -builder-target='HTTP' \
-        -builder-runtime='go120' \
-        -builder-runtime-version='1.20' \
+        -builder-runtime='go121' \
+        -builder-runtime-version='1.21' \
         -builder-url='us.gcr.io/serverless-runtimes/google-22-full/builder/go:latest'
