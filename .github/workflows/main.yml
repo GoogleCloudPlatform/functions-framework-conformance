@@ -40,5 +40,4 @@ jobs:
         -builder-source='testdata' \
         -builder-target='HTTP' \
         -builder-runtime='go125' \
-        -builder-runtime-version='1.25' \
         -builder-url='us.gcr.io/serverless-runtimes/google-22-full/builder/go:latest'
