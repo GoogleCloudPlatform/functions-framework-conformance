@@ -41,4 +41,4 @@ jobs:
         -builder-target='HTTP' \
         -builder-runtime='go125' \
         -builder-runtime-version='1.25.7' \
-        -builder-url='gcr.io/buildpacks/builder:google-22'
+        -builder-url='us.gcr.io/serverless-runtimes/google-22-full/builder/go:latest'
