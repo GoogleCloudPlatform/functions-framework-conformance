@@ -113,7 +113,7 @@ jobs:
       # INSTALL CONFORMANCE CLIENT
       - name: Check for cached conformance test client
         id: check-for-cached-client
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/go/bin/client
           key: ${{ steps.set-cached-client-version.outputs.key }}
@@ -148,7 +148,7 @@ jobs:
       # if-condition on each step will effectively skip optional tests
       - name: Retrieve conformance client
         if: ${{ matrix.builder-source }}
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/go/bin/client
           key: ${{ needs.download-conformance-client.outputs.cache-key }}
