@@ -110,6 +110,8 @@ github.com/chrismellard/docker-credential-acr-env v0.0.0-20230304212654-82a0ddb2
 github.com/chrismellard/docker-credential-acr-env v0.0.0-20230304212654-82a0ddb27589/go.mod h1:OuDyvmLnMCwa2ep4Jkm6nyA0ocJuZlGyk2gGseVzERM=
 github.com/cloudevents/sdk-go/v2 v2.16.1 h1:G91iUdqvl88BZ1GYYr9vScTj5zzXSyEuqbfE63gbu9Q=
 github.com/cloudevents/sdk-go/v2 v2.16.1/go.mod h1:v/kVOaWjNfbvc6tkhhlkhvLapj8Aa8kvXiH5GiOHCKI=
+github.com/cloudevents/sdk-go/v2 v2.16.2 h1:ZYDFrYke4FD+jM8TZTJJO6JhKHzOQl2oqpFK1D+NnQM=
+github.com/cloudevents/sdk-go/v2 v2.16.2/go.mod h1:laOcGImm4nVJEU+PHnUrKL56CKmRL65RlQF0kRmW/kg=
 github.com/cloudflare/circl v1.6.1 h1:zqIqSPIndyBh1bjLVVDHMPpVKqp8Su/V+6MeDzzQBQ0=
 github.com/cloudflare/circl v1.6.1/go.mod h1:uddAzsPgqdMAYatqJ0lsjX1oECcQLIlRpzZh3pJrofs=
 github.com/containerd/errdefs v1.0.0 h1:tg5yIfIlQIrxYtu9ajqY42W3lpS19XqdxRQeEwYG8PI=
