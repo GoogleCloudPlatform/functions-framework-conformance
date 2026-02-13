@@ -61,7 +61,7 @@ func PrintValidationInfos(vis []*ValidationInfo) (string, error) {
 	}
 
 	if errsOccurred {
-		return logStr, fmt.Errorf(errStr)
+		return logStr, fmt.Errorf("%s", errStr)
 	}
 	return logStr, nil
 }

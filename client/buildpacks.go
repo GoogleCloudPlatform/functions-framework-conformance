@@ -113,6 +113,7 @@ func (b *buildpacksFunctionServer) build(ctx context.Context) error {
 			"GOOGLE_RUNTIME_VERSION":         b.runtimeVersion,
 			"X_GOOGLE_TARGET_PLATFORM":       gcfTargetPlatform,
 		},
+		TrustBuilder: func(string) bool { return true },
 	})
 	if err != nil {
 		return fmt.Errorf("building function image: %v", err)
