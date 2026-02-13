@@ -12,7 +12,6 @@ jobs:
         uses: ./.github/workflows/buildpack-integration-test.yml
         with:
             builder-runtime: 'go125'
-            builder-runtime-version: '1.25'
             http-builder-source: 'testdata'
             http-builder-target: 'HTTP'
             cloudevent-builder-source: ''
