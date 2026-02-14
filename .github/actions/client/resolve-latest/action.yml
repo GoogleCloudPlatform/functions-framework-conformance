@@ -7,8 +7,17 @@ outputs:
 runs:
   using: "composite"
   steps:
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: 1.x
     - name: Resolve latest conformance test client version
       id: resolve-latest-client
       run: |
-        echo "::set-output name=version::$(curl --silent "https://api.github.com/repos/GoogleCloudPlatform/functions-framework-conformance/releases/latest" | jq -r '.tag_name')"
+        VERSION=$(go list -m -json github.com/GoogleCloudPlatform/functions-framework-conformance@latest | jq -r '.Version')
+        if [ "$VERSION" = "null" ] || [ -z "$VERSION" ]; then
+          echo "Failed to resolve latest version"
+          exit 1
+        fi
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
       shell: bash
