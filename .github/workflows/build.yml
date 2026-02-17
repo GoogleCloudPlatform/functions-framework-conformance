@@ -14,7 +14,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: 22.x
+        node-version: 24.x
     - name: Build Action
       run: cd action && npm i && npm run all
     - name: Check if there's a diff
