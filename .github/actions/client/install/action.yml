@@ -18,12 +18,16 @@ runs:
       with:
         go-version: 1.x
     - name: Install client
-      run: go install github.com/GoogleCloudPlatform/functions-framework-conformance/client@${{ inputs.client-version }}
+      run: go install github.com/GoogleCloudPlatform/functions-framework-conformance/client@${INPUTS_CLIENT_VERSION}
       shell: bash
+      env:
+        INPUTS_CLIENT_VERSION: ${{ inputs.client-version }}
     - name: Move client to cache-path
       # 'mv' fails if the src and dest path are the same, so move it to a temp first just in case
-      run: mv ~/go/bin/client /tmp/client && mv /tmp/client ${{ inputs.cache-path }}
+      run: mv ~/go/bin/client /tmp/client && mv /tmp/client ${INPUTS_CACHE_PATH}
       shell: bash
+      env:
+        INPUTS_CACHE_PATH: ${{ inputs.cache-path }}
     - name: Cache client
       uses: actions/cache@v4
       with:

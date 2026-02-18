@@ -98,17 +98,21 @@ jobs:
 
       # RESOLVE CONFORMANCE CLIENT VERSION
       - name: Set conformance test client version from Workflow input
-        run: echo CLIENT_VERSION=${{ inputs.conformance-client-version }} >> $GITHUB_ENV
+        run: echo CLIENT_VERSION=${INPUTS_CONFORMANCE_CLIENT_VERSION} >> $GITHUB_ENV
+        env:
+          INPUTS_CONFORMANCE_CLIENT_VERSION: ${{ inputs.conformance-client-version }}
       - name: Resolve latest conformance test client version
         if: ${{ inputs.conformance-client-version == 'latest' }}
         id: conformance-client-latest
         uses: ./.github/actions/client/resolve-latest
       - name: Set conformance test client version from latest
         if: ${{ inputs.conformance-client-version == 'latest' }}
-        run: echo CLIENT_VERSION=${{ steps.conformance-client-latest.outputs.version }} >> $GITHUB_ENV
+        run: echo CLIENT_VERSION=${STEPS_CONFORMANCE_CLIENT_LATEST_OUTPUTS_VERSION} >> $GITHUB_ENV
+        env:
+          STEPS_CONFORMANCE_CLIENT_LATEST_OUTPUTS_VERSION: ${{ steps.conformance-client-latest.outputs.version }}
       - name: Set cache key for client version
         id: set-cached-client-version
-        run: echo "::set-output name=key::conformance-client-${{ env.CLIENT_VERSION }}"
+        run: echo "::set-output name=key::conformance-client-${CLIENT_VERSION}"
 
       # INSTALL CONFORMANCE CLIENT
       - name: Check for cached conformance test client
@@ -160,21 +164,31 @@ jobs:
         uses: actions/checkout@v4
       - name: Prerun script
         if: ${{ matrix.builder-source && inputs.prerun }}
-        run: bash -x ${{ inputs.prerun }}
+        run: bash -x ${INPUTS_PRERUN}
+        env:
+          INPUTS_PRERUN: ${{ inputs.prerun }}
       - name: Buildpack integration test
         if: ${{ matrix.builder-source }}
         run: |
           client \
             -type=${{ matrix.type }} \
-            -builder-source=${{ matrix.builder-source }} \
-            -builder-target=${{ matrix.builder-target }} \
-            -builder-runtime=${{ inputs.builder-runtime }} \
-            -builder-runtime-version=${{ inputs.builder-runtime-version }} \
-            -builder-tag=${{ inputs.builder-tag }} \
-            -builder-url=${{ inputs.builder-url }} \
+            -builder-source=${MATRIX_BUILDER_SOURCE} \
+            -builder-target=${MATRIX_BUILDER_TARGET} \
+            -builder-runtime=${INPUTS_BUILDER_RUNTIME} \
+            -builder-runtime-version=${INPUTS_BUILDER_RUNTIME_VERSION} \
+            -builder-tag=${INPUTS_BUILDER_TAG} \
+            -builder-url=${INPUTS_BUILDER_URL} \
             -start-delay=${{ inputs.start-delay }} \
-            -output-file=${{ inputs.output-file }} \
+            -output-file=${INPUTS_OUTPUT_FILE} \
             -validate-mapping=false
+        env:
+          MATRIX_BUILDER_SOURCE: ${{ matrix.builder-source }}
+          MATRIX_BUILDER_TARGET: ${{ matrix.builder-target }}
+          INPUTS_BUILDER_RUNTIME: ${{ inputs.builder-runtime }}
+          INPUTS_BUILDER_RUNTIME_VERSION: ${{ inputs.builder-runtime-version }}
+          INPUTS_BUILDER_TAG: ${{ inputs.builder-tag }}
+          INPUTS_BUILDER_URL: ${{ inputs.builder-url }}
+          INPUTS_OUTPUT_FILE: ${{ inputs.output-file }}
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v4
         if: always()
