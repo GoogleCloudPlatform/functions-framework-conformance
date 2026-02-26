@@ -190,7 +190,7 @@ jobs:
           INPUTS_BUILDER_URL: ${{ inputs.builder-url }}
           INPUTS_OUTPUT_FILE: ${{ inputs.output-file }}
       - name: 'Upload Artifact'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: ${{ matrix.type }}_${{ inputs.builder-runtime }}_${{ inputs.builder-url == '' && 'no_builder_url' || 'with_builder_url' }}_buildpack_integ_logs
