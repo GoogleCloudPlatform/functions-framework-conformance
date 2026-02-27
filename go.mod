@@ -4,7 +4,7 @@ go 1.25.5
 
 require (
 	github.com/buildpacks/pack v0.40.0
-	github.com/cloudevents/sdk-go/v2 v2.16.1
+	github.com/cloudevents/sdk-go/v2 v2.16.2
 	github.com/google/go-cmp v0.7.0
 )
 
