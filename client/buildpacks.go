@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -34,6 +35,8 @@ const (
 	image                     = "conformance-test-func"
 	defaultBuilderURLTemplate = "us-docker.pkg.dev/serverless-runtimes/google-22-full/builder/%s:%s"
 	gcfTargetPlatform         = "gcf"
+	serverAddr                = "localhost:8080"
+	serverReadyTimeout        = 30 * time.Second
 )
 
 type buildpacksFunctionServer struct {
@@ -159,6 +162,13 @@ func (b *buildpacksFunctionServer) run() (func(), error) {
 	// Give it some time to do its setup.
 	time.Sleep(time.Duration(*startDelay) * time.Second)
 
+	// The container may still be starting after the delay on a slow machine.
+	// If it never accepts connections, carry on so validation reports the
+	// failure and the container logs are still collected.
+	if err := waitForServer(serverAddr, serverReadyTimeout); err != nil {
+		log.Printf("WARNING: %v", err)
+	}
+
 	log.Printf("Framework container %q started.", b.containerID())
 
 	return func() {
@@ -174,6 +184,22 @@ func (b *buildpacksFunctionServer) run() (func(), error) {
 		}
 		log.Print("Framework server shut down.")
 	}, nil
+}
+
+// waitForServer waits until addr accepts TCP connections, or until timeout.
+func waitForServer(addr string, timeout time.Duration) error {
+	deadline := time.Now().Add(timeout)
+	for {
+		conn, err := net.DialTimeout("tcp", addr, time.Second)
+		if err == nil {
+			conn.Close()
+			return nil
+		}
+		if time.Now().After(deadline) {
+			return fmt.Errorf("server at %s not accepting connections after %v: %v", addr, timeout, err)
+		}
+		time.Sleep(250 * time.Millisecond)
+	}
 }
 
 func (b *buildpacksFunctionServer) getDockerRunCommand() []string {
