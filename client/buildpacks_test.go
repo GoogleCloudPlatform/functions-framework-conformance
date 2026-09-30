@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"net"
 	"testing"
+	"time"
 )
 
 func TestBuildpackBuilderImage(t *testing.T) {
@@ -62,5 +64,44 @@ func TestBuildpackBuilderImage(t *testing.T) {
 				t.Errorf("buildpackBuilderImage() = %q, want %q", builderImage, tc.wantBuilderURL)
 			}
 		})
+	}
+}
+
+func TestWaitForServer(t *testing.T) {
+	ln, err := net.Listen("tcp", "localhost:0")
+	if err != nil {
+		t.Fatalf("listen: %v", err)
+	}
+	addr := ln.Addr().String()
+
+	if err := waitForServer(addr, time.Second); err != nil {
+		t.Errorf("waitForServer(%q) with a listening server: got %v, want nil", addr, err)
+	}
+
+	ln.Close()
+	if err := waitForServer(addr, 500*time.Millisecond); err == nil {
+		t.Errorf("waitForServer(%q) with no server: got nil, want error", addr)
+	}
+}
+
+func TestWaitForServerStartsLate(t *testing.T) {
+	ln, err := net.Listen("tcp", "localhost:0")
+	if err != nil {
+		t.Fatalf("listen: %v", err)
+	}
+	addr := ln.Addr().String()
+	ln.Close()
+
+	go func() {
+		time.Sleep(500 * time.Millisecond)
+		late, err := net.Listen("tcp", addr)
+		if err != nil {
+			return
+		}
+		t.Cleanup(func() { late.Close() })
+	}()
+
+	if err := waitForServer(addr, 5*time.Second); err != nil {
+		t.Errorf("waitForServer(%q) with a server that starts late: got %v, want nil", addr, err)
 	}
 }
